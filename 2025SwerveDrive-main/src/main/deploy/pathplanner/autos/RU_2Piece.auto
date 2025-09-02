@@ -1,0 +1,67 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RU_PreloadPath"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AEI_Scoring_L4_OCR_FIX"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RU_Preload2SourcePath"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Elevator_Source"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm_Source_Happy"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake_Source"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AEI_Zero"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RU_Source2ReefPath"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AEI_Scoring_L4_OCR_FIX"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "REDAUTO",
+  "choreoAuto": false
+}
