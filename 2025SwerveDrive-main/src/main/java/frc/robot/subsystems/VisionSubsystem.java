@@ -28,7 +28,7 @@ public class VisionSubsystem extends SubsystemBase {
       new Translation3d(VisionConstants.L_X, VisionConstants.L_Y, VisionConstants.L_Z),
       new Rotation3d(VisionConstants.L_ROLL, VisionConstants.L_PITCH, VisionConstants.L_YAW));
 
-  // Cached results
+  // images stored
   private volatile PhotonPipelineResult rRes = new PhotonPipelineResult();
   private volatile PhotonPipelineResult lRes = new PhotonPipelineResult();
 
@@ -37,8 +37,6 @@ public class VisionSubsystem extends SubsystemBase {
     rRes = rightCam.getLatestResult();
     lRes = leftCam.getLatestResult();
   }
-
-  // ---------------------- Public API (relative-only) ----------------------
 
   /** Best single Robot to Goal transform, relative to the robot (2D). */
   public Optional<Transform2d> getBestRobotToGoal() {
@@ -68,12 +66,11 @@ public class VisionSubsystem extends SubsystemBase {
     return out;
   }
 
-  // -------------------------- Internal logic -----------------------------
 
   private static final class Candidate {
     final Transform2d rToGoal;  // Robot to Goal (2D)
-    final double ambiguity;     // smaller is better (0..1); if PhotonVision gives -1, treat as 1
-    final double dist;          // camera to tag distance for tie-break
+    final double ambiguity;     // smaller is better (0..1);
+    final double dist;          // camera to tag distance for tie-breakers
     final String camName;
     final int tagId;
 
@@ -90,24 +87,24 @@ public class VisionSubsystem extends SubsystemBase {
     var list = new ArrayList<Candidate>();
     if (res == null || !res.hasTargets()) return list;
 
-    // Convert R to C (3D) to planar Transform2d
+    // Convert 3d to planar Transform2d
     Transform2d rToCam2d = transform3dTo2d(robotToCam3d);
 
     for (PhotonTrackedTarget t : res.getTargets()) {
       int id = t.getFiducialId();
       if (id <= 0) continue;
 
-      Transform3d camToTag3d = t.getBestCameraToTarget(); // may be null if PnP failed
+      Transform3d camToTag3d = t.getBestCameraToTarget();
 
       Transform2d cToTag2d;
       double dist, amb = t.getPoseAmbiguity();
       if (camToTag3d != null) {
-        // Use full PnP, then project to 2D
+        // Use full Perspective n point, then project to 2D
         cToTag2d = transform3dTo2d(camToTag3d);
         dist = camToTag3d.getTranslation().getNorm();
-        if (amb < 0) amb = 1.0; // PhotonVis uses -1 when not computed: treat as “bad”
+        if (amb < 0) amb = 1.0;
       } else {
-        // estimate distance from pitch + heights: build a planar C to T from yaw.
+        // estimate distance from pitch + heights: build a planar cam to tag from yaw.
         double camH   = robotToCam3d.getTranslation().getZ();
         double tagH   = VisionConstants.TAG_HEIGHT_M;
         double camPit = robotToCam3d.getRotation().getY(); // pitch (rad)
@@ -118,14 +115,14 @@ public class VisionSubsystem extends SubsystemBase {
 
         Translation2d planar = new Translation2d(dist * Math.cos(yawCam), dist * Math.sin(yawCam));
         cToTag2d = new Transform2d(planar, new Rotation2d(yawCam));
-        amb = 1.0; // just in case
+        amb = 1.0;
       }
 
       Transform2d rToGoal = rToCam2d.plus(cToTag2d).plus(VisionConstants.TAG_TO_GOAL);
 
   
-      if (amb > 0.35) continue;        // reject highly ambiguous
-      if (dist > 6.0) continue;        // reject far-away reads
+      if (amb > 0.35) continue;        // dont choose highly ambiguous
+      if (dist > 6.0) continue;        // dont choose far-away reads
 
       list.add(new Candidate(rToGoal, amb, dist, camName, id));
     }

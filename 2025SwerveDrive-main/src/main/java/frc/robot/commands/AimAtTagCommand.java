@@ -53,12 +53,9 @@ public class AimAtTagCommand extends Command {
     if (Math.abs(dtheta) < VisionConstants.TH_DEADBAND_RAD) dtheta = 0.0;
 
     // Proportional control to desired speeds
-    double vx = MathUtil.clamp(VisionConstants.KP_XY * dx,
-                               -VisionConstants.MAX_VX_M_PER_S, VisionConstants.MAX_VX_M_PER_S);
-    double vy = MathUtil.clamp(VisionConstants.KP_XY * dy,
-                               -VisionConstants.MAX_VX_M_PER_S, VisionConstants.MAX_VX_M_PER_S);
-    double omega = MathUtil.clamp(VisionConstants.KP_THETA * dtheta,
-                                  -VisionConstants.MAX_OMEGA_RAD_PER_S, VisionConstants.MAX_OMEGA_RAD_PER_S);
+    double vx = MathUtil.clamp(VisionConstants.KP_XY * dx,-VisionConstants.MAX_VX_M_PER_S, VisionConstants.MAX_VX_M_PER_S);
+    double vy = MathUtil.clamp(VisionConstants.KP_XY * dy,-VisionConstants.MAX_VX_M_PER_S, VisionConstants.MAX_VX_M_PER_S);
+    double omega = MathUtil.clamp(VisionConstants.KP_THETA * dtheta,-VisionConstants.MAX_OMEGA_RAD_PER_S, VisionConstants.MAX_OMEGA_RAD_PER_S);
 
     swerve.setControl(
         driveReq.withVelocityX(vx)
