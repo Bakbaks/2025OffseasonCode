@@ -34,8 +34,11 @@ public class AimAtTagCommand extends Command {
   @Override
   public void execute() {
     Optional<Transform2d> maybeR2G = vision.getBestRobotToGoal();
-    if (maybeR2G.isPresent()) lastGoal = maybeR2G;
-
+    if (maybeR2G.isPresent()) {
+      System.out.println("Checking if robot goal is present");
+      lastGoal = maybeR2G;
+    }
+    System.out.println("LastGoal: " + lastGoal);
     if (lastGoal.isEmpty()) {
       swerve.setControl(driveReq.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
       return;
