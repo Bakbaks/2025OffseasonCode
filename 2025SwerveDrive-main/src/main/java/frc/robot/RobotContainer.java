@@ -514,10 +514,15 @@ public class RobotContainer {
 
 
         /*Vision Button*/
-        Trigger visionHasGoal = new Trigger(() -> vision.getBestRobotToGoal().isPresent()).debounce(0.10);
-        driveLeftBumper.and(visionHasGoal).whileTrue(aimAtTag);
-        visionHasGoal.onTrue(Commands.runOnce(() -> System.out.println("[Vision] hasGoal = TRUE")));
-        visionHasGoal.onFalse(Commands.runOnce(() -> System.out.println("[Vision] hasGoal = FALSE")));
+        //Trigger visionHasGoal = new Trigger(() -> vision.getBestRobotToGoal().isPresent()).debounce(0.10);
+        //driveLeftBumper.and(visionHasGoal).whileTrue(aimAtTag);
+        //no checks
+        driveLeftBumper.whileTrue(
+                aimAtTag
+                .beforeStarting(() -> System.out.println("[Vision] AimAtTag START"))
+                .finallyDo(() -> System.out.println("[Vision] AimAtTag END"))
+        );
+        
 
 
         
@@ -578,5 +583,6 @@ public class RobotContainer {
             intake.stop();
             break;
     }
+
 }
 }
