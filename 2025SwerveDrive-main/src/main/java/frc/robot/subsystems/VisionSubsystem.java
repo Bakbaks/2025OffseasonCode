@@ -89,7 +89,7 @@ public class VisionSubsystem extends SubsystemBase {
       System.out.println((res == null) ? "CAMERA OFFLINE--------------------" : "CAMERA HAS NO TARGETS--------------------");
       return list;
     }
-
+      
     // Convert 3d to planar Transform2d
     Transform2d rToCam2d = transform3dTo2d(robotToCam3d);
 

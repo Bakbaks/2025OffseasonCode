@@ -57,6 +57,7 @@ public class AimAtTagCommand extends Command {
     double vy = MathUtil.clamp(VisionConstants.KP_XY * dy,-VisionConstants.MAX_VX_M_PER_S, VisionConstants.MAX_VX_M_PER_S);
     double omega = MathUtil.clamp(VisionConstants.KP_THETA * dtheta,-VisionConstants.MAX_OMEGA_RAD_PER_S, VisionConstants.MAX_OMEGA_RAD_PER_S);
 
+    System.out.println("sending commands to SWERVE DRIVE vx=" + vx + " vy=" + vy + " omega=" + omega);
     swerve.setControl(
         driveReq.withVelocityX(vx)
                 .withVelocityY(vy)

@@ -298,7 +298,7 @@ public final class Constants {
     
 
     //point to go to relative to the tag
-    public static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(-0.5, 0.0), new Rotation2d());
+    public static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(-0.5, 0.0), new Rotation2d());//meters
   
 
 
@@ -312,7 +312,7 @@ public final class Constants {
     public static final double MAX_VX_M_PER_S = 2.5;
     
     //tolerance
-    public static final double GOAL_POS_EPS_M = 0.05; //meters
+    public static final double GOAL_POS_EPS_M = 0.01; //meters
     public static final double GOAL_ANG_EPS_RAD = Math.toRadians(2.0);
     // Deadhands = no oscillation
     public static final double XY_DEADBAND_M = 0.01; //meters
