@@ -516,6 +516,9 @@ public class RobotContainer {
         /*Vision Button*/
         Trigger visionHasGoal = new Trigger(() -> vision.getBestRobotToGoal().isPresent()).debounce(0.10);
         driveLeftBumper.and(visionHasGoal).whileTrue(aimAtTag);
+        visionHasGoal.onTrue(Commands.print("[Vision] hasGoal = TRUE"));
+        visionHasGoal.onFalse(Commands.print("[Vision] hasGoal = FALSE"));
+
 
 
         

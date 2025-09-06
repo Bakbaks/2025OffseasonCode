@@ -305,7 +305,7 @@ public final class Constants {
 
     // PID gains and limits
     public static final double KP_XY = 2.0;// m/s per m error
-    public static final double KP_THETA = 4.0;    
+    public static final double KP_THETA = 2.0;    
   
   
     public static final double MAX_OMEGA_RAD_PER_S = Math.toRadians(180);
