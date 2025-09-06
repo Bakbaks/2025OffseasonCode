@@ -44,6 +44,7 @@ public class VisionSubsystem extends SubsystemBase {
     candidates.addAll(buildCandidates(rRes, robotToRight3d, VisionConstants.RIGHT_CAM_NAME));
     candidates.addAll(buildCandidates(lRes,  robotToLeft3d,  VisionConstants.LEFT_CAM_NAME));
 
+    System.out.println("comparing left and right goals - right goal: " + robotToRight3d + " left goal: " + robotToLeft3d);
     return candidates.stream()
         .min(Comparator
               .comparingDouble((Candidate c) -> c.ambiguity)
@@ -89,7 +90,7 @@ public class VisionSubsystem extends SubsystemBase {
       System.out.println((res == null) ? "CAMERA OFFLINE--------------------" : "CAMERA HAS NO TARGETS--------------------");
       return list;
     }
-      
+
     // Convert 3d to planar Transform2d
     Transform2d rToCam2d = transform3dTo2d(robotToCam3d);
 
