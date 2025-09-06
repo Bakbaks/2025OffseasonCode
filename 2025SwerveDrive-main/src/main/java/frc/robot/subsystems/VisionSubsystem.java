@@ -45,11 +45,15 @@ public class VisionSubsystem extends SubsystemBase {
     candidates.addAll(buildCandidates(lRes,  robotToLeft3d,  VisionConstants.LEFT_CAM_NAME));
 
     System.out.println("comparing left and right goals - right goal: " + robotToRight3d + " left goal: " + robotToLeft3d);
+    
+
     return candidates.stream()
         .min(Comparator
               .comparingDouble((Candidate c) -> c.ambiguity)
               .thenComparingDouble(c -> c.dist))
         .map(c -> c.rToGoal);
+
+
   }
 
   /** All viable Robot to Goal transforms (sorted from best to worst). */
@@ -64,7 +68,6 @@ public class VisionSubsystem extends SubsystemBase {
 
     var out = new ArrayList<Transform2d>();
     for (var c : candidates) out.add(c.rToGoal);
-    System.out.println("Sending vision subsystem to aimAtTag: " + out);
     return out;
   }
 
@@ -83,6 +86,7 @@ public class VisionSubsystem extends SubsystemBase {
       this.camName = camName;
       this.tagId = tagId;
     }
+
   }
 
   private List<Candidate> buildCandidates(PhotonPipelineResult res, Transform3d robotToCam3d, String camName) {
@@ -95,6 +99,7 @@ public class VisionSubsystem extends SubsystemBase {
     // Convert 3d to planar Transform2d
     Transform2d rToCam2d = transform3dTo2d(robotToCam3d);
 
+    
     for (PhotonTrackedTarget t : res.getTargets()) {
       int id = t.getFiducialId();
       if (id <= 0) continue;
@@ -126,12 +131,12 @@ public class VisionSubsystem extends SubsystemBase {
       Transform2d rToGoal = rToCam2d.plus(cToTag2d).plus(VisionConstants.TAG_TO_GOAL);
 
   
-      if (amb > 0.35) continue;        // dont choose highly ambiguous
-      if (dist > 6.0) continue;        // dont choose far-away reads
+      if (amb > 0.01) continue;        // dont choose highly ambiguous
+      if (Math.abs(dist) > 0) continue;        // dont choose far-away reads
 
       list.add(new Candidate(rToGoal, amb, dist, camName, id));
     }
-
+    
     return list;
     }
 
