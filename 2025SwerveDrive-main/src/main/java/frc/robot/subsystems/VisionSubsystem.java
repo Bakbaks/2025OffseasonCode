@@ -64,6 +64,7 @@ public class VisionSubsystem extends SubsystemBase {
 
     var out = new ArrayList<Transform2d>();
     for (var c : candidates) out.add(c.rToGoal);
+    System.out.println("Sending vision subsystem to aimAtTag: " + out);
     return out;
   }
 
