@@ -86,7 +86,7 @@ public class VisionSubsystem extends SubsystemBase {
   private List<Candidate> buildCandidates(PhotonPipelineResult res, Transform3d robotToCam3d, String camName) {
     var list = new ArrayList<Candidate>();
     if (res == null || !res.hasTargets()) {
-      System.out.println("NO RESULTS FROM CAMERA--------------------------");
+      System.out.println((res == null) ? "CAMERA OFFLINE--------------------" : "CAMERA HAS NO TARGETS--------------------");
       return list;
     }
 
