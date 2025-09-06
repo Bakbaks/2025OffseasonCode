@@ -85,7 +85,10 @@ public class VisionSubsystem extends SubsystemBase {
 
   private List<Candidate> buildCandidates(PhotonPipelineResult res, Transform3d robotToCam3d, String camName) {
     var list = new ArrayList<Candidate>();
-    if (res == null || !res.hasTargets()) return list;
+    if (res == null || !res.hasTargets()) {
+      System.out.println("NO RESULTS FROM CAMERA--------------------------");
+      return list;
+    }
 
     // Convert 3d to planar Transform2d
     Transform2d rToCam2d = transform3dTo2d(robotToCam3d);
