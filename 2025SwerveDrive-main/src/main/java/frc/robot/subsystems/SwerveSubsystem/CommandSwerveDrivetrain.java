@@ -328,4 +328,17 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
         }
     }
+
+    public Pose2d getPose() { 
+        return this.getState().Pose; 
+    }
+
+    public void resetOdometry(Pose2d pose) {
+        this.resetPose(pose);
+    }
+
+    public void stop() {
+        // Zero all motion
+        setControl(m_pathApplyRobotSpeeds.withSpeeds(new edu.wpi.first.math.kinematics.ChassisSpeeds()));
+    }
 }

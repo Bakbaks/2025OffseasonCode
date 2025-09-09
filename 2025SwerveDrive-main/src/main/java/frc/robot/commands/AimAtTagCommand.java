@@ -1,7 +1,15 @@
 package frc.robot.commands;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.Waypoint;
+
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -9,76 +17,92 @@ import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.SwerveSubsystem.CommandSwerveDrivetrain;
 import frc.robot.subsystems.VisionSubsystem;
 
+import java.util.List;
 import java.util.Optional;
 
 public class AimAtTagCommand extends Command {
 
-  private final CommandSwerveDrivetrain swerve;
+  //path planning
+  private final CommandSwerveDrivetrain drivetrain;
   private final VisionSubsystem vision;
+  private final PathConstraints limits;
+  private final double minPlanDistanceM;
 
-  private final SwerveRequest.RobotCentric driveReq = new SwerveRequest.RobotCentric();
+  private Command followCmd;
+  private Pose2d targetPose;
 
-  public AimAtTagCommand(CommandSwerveDrivetrain swerve, VisionSubsystem vision) {
-    this.swerve = swerve;
+  
+  public AimAtTagCommand(
+      CommandSwerveDrivetrain drivetrain,
+      VisionSubsystem vision,
+      PathConstraints limits,
+      double minPlanDistanceM) {
+    this.drivetrain = drivetrain;
     this.vision = vision;
-    addRequirements(swerve);
+    this.limits = limits;
+    this.minPlanDistanceM = minPlanDistanceM;
+    addRequirements(drivetrain);
   }
-
-  private Optional<Transform2d> lastGoal = Optional.empty();
 
   @Override
   public void initialize() {
-    lastGoal = Optional.empty();
+    followCmd = null;
+
+    
+    VisionSubsystem.PathPlan plan = vision.getPlan();
+    if (plan == null) {
+      System.out.println("No vision plan");
+      return;
+    }
+
+    
+    Pose2d start = drivetrain.getPose();
+    Transform2d robotToGoal = plan.robotToGoal;
+    Pose2d end = start.transformBy(robotToGoal);
+
+    Rotation2d finalHeading = end.getRotation();
+    targetPose = new Pose2d(end.getTranslation(), finalHeading);
+
+    double dx = targetPose.getX() - start.getX();
+    double dy = targetPose.getY() - start.getY();
+    double dist = Math.hypot(dx, dy);
+    if (dist < minPlanDistanceM) {
+      System.out.printf("close enouugh distance: ", dist);
+      return;
+    }
+
+    //path planner magic with waypoints
+    Rotation2d travelDir = new Rotation2d(dx, dy);
+    Pose2d startForPath = new Pose2d(start.getTranslation(), travelDir);
+    Pose2d endForPath   = new Pose2d(targetPose.getTranslation(), travelDir);
+    List<Waypoint> wps = PathPlannerPath.waypointsFromPoses(startForPath, endForPath);
+
+    
+    GoalEndState goal = new GoalEndState(0.0, finalHeading);
+
+    
+    PathPlannerPath path = new PathPlannerPath(wps, limits, null, goal, false);
+
+    followCmd = AutoBuilder.followPath(path);
+    System.out.println("Following path to tag " + plan.tagId + " via " + plan.cameraName);
+    followCmd.initialize();
   }
 
   @Override
   public void execute() {
-    Optional<Transform2d> maybeR2G = vision.getBestRobotToGoal();
-    if (maybeR2G.isPresent()) {
-      System.out.println("Checking if robot goal is present");
-      lastGoal = maybeR2G;
+    if (followCmd != null) {
+      followCmd.execute();
     }
-    System.out.println("LastGoal: " + lastGoal);
-    if (lastGoal.isEmpty()) {
-      swerve.setControl(driveReq.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
-      return;
-    }
-
-    Transform2d r2g = lastGoal.get();
-
-    double dx = r2g.getX();                          // +X forward
-    double dy = r2g.getY();                          // +Y left
-    double dtheta = r2g.getRotation().getRadians();  // +CCW
-
-    // Deadbands
-    if (Math.abs(dx) < VisionConstants.XY_DEADBAND_M) dx = 0.0;
-    if (Math.abs(dy) < VisionConstants.XY_DEADBAND_M) dy = 0.0;
-    if (Math.abs(dtheta) < VisionConstants.TH_DEADBAND_RAD) dtheta = 0.0;
-
-    // Proportional control to desired speeds
-    double vx = MathUtil.clamp(VisionConstants.KP_XY * dx,-VisionConstants.MAX_VX_M_PER_S, VisionConstants.MAX_VX_M_PER_S);
-    double vy = MathUtil.clamp(VisionConstants.KP_XY * dy,-VisionConstants.MAX_VX_M_PER_S, VisionConstants.MAX_VX_M_PER_S);
-    double omega = MathUtil.clamp(VisionConstants.KP_THETA * dtheta,-VisionConstants.MAX_OMEGA_RAD_PER_S, VisionConstants.MAX_OMEGA_RAD_PER_S);
-
-    System.out.println("sending commands to SWERVE DRIVE vx=" + vx + " vy=" + vy + " omega=" + omega);
-    swerve.setControl(
-        driveReq.withVelocityX(vx)
-                .withVelocityY(vy)
-                .withRotationalRate(omega));
-  }
-
-  @Override
-  public void end(boolean interrupted) {
-    swerve.setControl(driveReq.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
   }
 
   @Override
   public boolean isFinished() {
-    if (lastGoal.isEmpty()) return false;
-    var g = lastGoal.get();
-    Translation2d t = g.getTranslation();
-    boolean posDone = t.getNorm() < VisionConstants.GOAL_POS_EPS_M;
-    boolean angDone = Math.abs(g.getRotation().getRadians()) < VisionConstants.GOAL_ANG_EPS_RAD;
-    return posDone && angDone;
+    return followCmd == null || followCmd.isFinished();
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    if (followCmd != null) followCmd.end(interrupted);
+    drivetrain.stop();
   }
 }

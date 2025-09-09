@@ -78,7 +78,7 @@ public class RobotContainer {
     private final ClimbSubsystem climb = new ClimbSubsystem();
     private final IntakeSubsystem intake = new IntakeSubsystem();
     private final VisionSubsystem vision = new VisionSubsystem();
-    private final AimAtTagCommand aimAtTag = new AimAtTagCommand(drivetrain, vision);
+    private final AimAtTagCommand aimAtTag = new AimAtTagCommand();
 
     private final Trigger auxY = m_auxController.y();
     private final Trigger auxA = m_auxController.a();
@@ -517,11 +517,7 @@ public class RobotContainer {
         //Trigger visionHasGoal = new Trigger(() -> vision.getBestRobotToGoal().isPresent()).debounce(0.10);
         //driveLeftBumper.and(visionHasGoal).whileTrue(aimAtTag);
         //no checks
-        driveLeftBumper.whileTrue(
-                aimAtTag
-                .beforeStarting(() -> System.out.println("[Vision] AimAtTag START"))
-                .finallyDo(() -> System.out.println("[Vision] AimAtTag END"))
-        );
+        driveLeftBumper.onTrue(aimAtTag);
         
 
 

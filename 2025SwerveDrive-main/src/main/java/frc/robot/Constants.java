@@ -106,6 +106,8 @@ public final class Constants {
     public static final int kArmCurrentLimit = 60;
   }
 
+
+
   public static class ElevatorConstants {
     public static final CANBus kElevatorCANbus = new CANBus("rio");
 
@@ -271,7 +273,55 @@ public final class Constants {
 
   }
 
-  public final class VisionConstants {
+  public static class GroundIntakeConstants {
+    /*
+    public static final CANBus kArmCANbus = new CANBus("rio");
+
+    public static final int kArmMotorID = 30;
+
+    public static final double TOLERANCE = 0.01;
+
+    public static final double ArmGearRatio = 52.09722 / 1;
+
+    public static final Distance ArmLength = Inches.of(16.1); 
+
+    public static final Angle ARM_BASE_ANGLE_VERTICAL       = Degrees.of(0);
+
+    public static final Angle CORAL_STATION_ANGLE_VERTICAL  = Degrees.of(-44);
+    public static final Angle STAGE_1_ANGLE_VERTICAL        = Degrees.of(28); 
+    public static final Angle STAGE_2_ANGLE_VERTICAL        = Degrees.of(26);
+    public static final Angle STAGE_3_ANGLE_VERTICAL        = Degrees.of(-220);
+    public static final Angle STAGE_4_ANGLE_VERTICAL        = Degrees.of(-227);
+
+    //public static final Angle SAD_CORAL_STATION_ANGLE_VERTICAL  = Degrees.of(CORAL_STATION_ANGLE_VERTICAL.in(Degrees) * -1);
+    public static final Angle SAD_CORAL_STATION_ANGLE_VERTICAL  = Degrees.of(CORAL_STATION_ANGLE_VERTICAL.in(Degrees) * -1);
+    public static final Angle SAD_STAGE_1_ANGLE_VERTICAL        = Degrees.of(STAGE_1_ANGLE_VERTICAL.in(Degrees) * -1); 
+    public static final Angle SAD_STAGE_2_ANGLE_VERTICAL        = Degrees.of(STAGE_2_ANGLE_VERTICAL.in(Degrees) * -1);
+    public static final Angle SAD_STAGE_3_ANGLE_VERTICAL        = Degrees.of(STAGE_3_ANGLE_VERTICAL.in(Degrees) * -1);
+    public static final Angle SAD_STAGE_4_ANGLE_VERTICAL        = Degrees.of(STAGE_4_ANGLE_VERTICAL.in(Degrees) * -1);
+
+    //random stuff
+    public static final double test = 0.0;
+    public static final double kArmP = 0.04;
+    public static final double kArmI = 0.003;
+    public static final double kArmD = 0.001;
+
+    public static final double kMaxAngle = 225;
+    public static final double kMinAngle = -225;
+
+
+
+    // public static final double kArmS = 0.25;
+    // public static final double kArmV = 6.47;
+    // public static final double kArmA = 0.01; //r^s^2
+    // public static final double kArmG = 0.11; //r^s
+
+    public static final double kArmMinOutput = -1;
+    public static final double kArmMaxOutput = 1;
+    public static final int kArmCurrentLimit = 60;
+     */
+  }
+  public static class VisionConstants {
     // photon vision camera namez
     public static final String RIGHT_CAM_NAME = "right";
     public static final String LEFT_CAM_NAME  = "left";
