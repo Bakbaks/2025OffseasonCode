@@ -504,13 +504,9 @@ public class RobotContainer {
         
 
         driveLeftTrigger.onTrue(new InstantCommand(() -> {
-                new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.ELEVATOR_BASE_DELTA)
-                        .alongWith(Commands.print("Elevator Source, Height: " + Constants.ElevatorConstants.ELEVATOR_BASE_DELTA.in(Units.Meters))).schedule();
-                
                 new SwingGroundIntakeCommand(groundIntake, Constants.GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))
                                 .alongWith(Commands.print("GroundIntake, Angles: " + Constants.GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))).schedule();
                         groundIntake.setState(2);
-                
         }));
         // //driver scoring, only control the
         driveRightTrigger.onTrue(new RunCommand(() ->{ //only scoring
