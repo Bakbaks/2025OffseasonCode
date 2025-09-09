@@ -121,7 +121,7 @@ public class GroundIntakeSubsystem extends SubsystemBase {
         return m_SwingKraken.getPosition().getValueAsDouble();
     }
 
-    public void stop_Intake() {
+    public void stopIntake() {
         m_IntakeKraken.set(0);
     }
 
