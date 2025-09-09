@@ -44,16 +44,16 @@ public class GroundIntakeSubsystem extends SubsystemBase {
         slot1Configs.kP = GroundIntakeConstants.kGroundP; // A position error of 2.5 rotations results in 12 V output
         slot1Configs.kI = GroundIntakeConstants.kGroundI; // no output for integrated error
         slot1Configs.kD = GroundIntakeConstants.kGroundD; // A velocity error of 1 rps results in 0.1 V output
-        m_SwingKraken.getConfigurator().apply(slot1Configs);
+        m_SwingKraken.getConfigurator().apply(slot0Configs);
 
         // current limit
         var currentLimitConfigs = new CurrentLimitsConfigs();
-        currentLimitConfigs.StatorCurrentLimit = GroundIntakeConstants.kGroundIntakeSwingCurrentLimit;
+        currentLimitConfigs.StatorCurrentLimit = GroundIntakeConstants.kIntakeCurrentLimit;
         currentLimitConfigs.StatorCurrentLimitEnable = true;
         m_SwingKraken.getConfigurator().apply(currentLimitConfigs);
 
         var currentLimitConfigs2 = new CurrentLimitsConfigs();
-        currentLimitConfigs2.StatorCurrentLimit = GroundIntakeConstants.kGroundIntakeCurrentLimit;
+        currentLimitConfigs2.StatorCurrentLimit = 40;
         currentLimitConfigs2.StatorCurrentLimitEnable = true;
         m_IntakeKraken.getConfigurator().apply(currentLimitConfigs2);
 
@@ -84,14 +84,14 @@ public class GroundIntakeSubsystem extends SubsystemBase {
         Swingsetpoint = Math.min(Rotations, GroundIntakeConstants.kMaxAngle);
 
 
-        if(Swingsetpoint !=  Rotations){
+        if(setpoint !=  Rotations){
             System.out.println("Warning: Requested Ground Intake angle is out of bounds. Setting to " + setpoint + " rotations");
         }
 
 
         System.out.println("Setting elevator position to final " + Rotations + " rotations");
 
-        m_SwingKraken.setControl(m_SwingpidPosition.withPosition(Swingsetpoint));
+        m_SwingKraken.setControl(m_SwingpidPosition.withPosition(setpoint));
 
     }
 
