@@ -106,7 +106,43 @@ public final class Constants {
     public static final int kArmCurrentLimit = 60;
   }
 
+  public static class GroundIntakeConstants {
+    
+    public static final CANBus kGroundIntakeCANbus = new CANBus("rio");
 
+    public static final int kGroundIntakeID = 51;
+    public static final int kGroundSwingID = 50;
+    public static final int kIntakeCurrentLimit = 70;
+
+    public static final double GroundIntakeGearRatio = 52.09722 / 1; // need to set
+
+
+    public static final Angle GroundIntake_FEED_ANGLE_VERTICAL = Degrees.of(0);
+    public static final Angle GroundIntake_LOWERED_ANGLE_VERTICAL = Degrees.of(100);
+
+    public static final double kGroundP = 0.04;
+    public static final double kGroundI = 0.003;
+    public static final double kGroundD = 0.001;
+
+    public static final double kMaxAngle = 100;
+    public static final double kMinAngle = 0;
+
+    /*
+    
+    
+
+
+
+    // public static final double kArmS = 0.25;
+    // public static final double kArmV = 6.47;
+    // public static final double kArmA = 0.01; //r^s^2
+    // public static final double kArmG = 0.11; //r^s
+
+    public static final double kArmMinOutput = -1;
+    public static final double kArmMaxOutput = 1;
+    
+     */
+  }
 
   public static class ElevatorConstants {
     public static final CANBus kElevatorCANbus = new CANBus("rio");
@@ -134,7 +170,7 @@ public final class Constants {
 
     //public static final double TOLERANCE = 1; // 1 rotation from motor, 2.51cm// determine if need to delete
 
-    public static final Distance kMinHeight = Inches.of(0); // Lowest safe position
+    public static final Distance kMinHeight = Inches.of(4); // Lowest safe position   was 0
     public static final Distance kMaxHeight = Inches.of(27); // Highest safe position
 
     public static final double kManualSpeedMultiplier = 1000; // Adjust for fine control
@@ -152,7 +188,7 @@ public final class Constants {
     //public static final double METERS_PER_ROTATION = PULLEY_CIRCUMFERENCE / GEAR_RATIO;
 
     // Elevator stages raw data (wrong right now i think)
-    public static final Distance Elevator_HEIGHT_NOUGHT = Inches.of(40.433); // ok  37.433 + 3
+    public static final Distance Elevator_HEIGHT_NOUGHT = Inches.of(37.433); // ok
     public static final Distance STAGE_1_HEIGHT         = Meters.of(0.46); // 46cm
     public static final Distance STAGE_2_HEIGHT         = Meters.of(0.81); // 81cm
     public static final Distance STAGE_3_HEIGHT         = Meters.of(1.21); // 121cm
@@ -273,54 +309,7 @@ public final class Constants {
 
   }
 
-  public static class GroundIntakeConstants {
-    /*
-    public static final CANBus kArmCANbus = new CANBus("rio");
-
-    public static final int kArmMotorID = 30;
-
-    public static final double TOLERANCE = 0.01;
-
-    public static final double ArmGearRatio = 52.09722 / 1;
-
-    public static final Distance ArmLength = Inches.of(16.1); 
-
-    public static final Angle ARM_BASE_ANGLE_VERTICAL       = Degrees.of(0);
-
-    public static final Angle CORAL_STATION_ANGLE_VERTICAL  = Degrees.of(-44);
-    public static final Angle STAGE_1_ANGLE_VERTICAL        = Degrees.of(28); 
-    public static final Angle STAGE_2_ANGLE_VERTICAL        = Degrees.of(26);
-    public static final Angle STAGE_3_ANGLE_VERTICAL        = Degrees.of(-220);
-    public static final Angle STAGE_4_ANGLE_VERTICAL        = Degrees.of(-227);
-
-    //public static final Angle SAD_CORAL_STATION_ANGLE_VERTICAL  = Degrees.of(CORAL_STATION_ANGLE_VERTICAL.in(Degrees) * -1);
-    public static final Angle SAD_CORAL_STATION_ANGLE_VERTICAL  = Degrees.of(CORAL_STATION_ANGLE_VERTICAL.in(Degrees) * -1);
-    public static final Angle SAD_STAGE_1_ANGLE_VERTICAL        = Degrees.of(STAGE_1_ANGLE_VERTICAL.in(Degrees) * -1); 
-    public static final Angle SAD_STAGE_2_ANGLE_VERTICAL        = Degrees.of(STAGE_2_ANGLE_VERTICAL.in(Degrees) * -1);
-    public static final Angle SAD_STAGE_3_ANGLE_VERTICAL        = Degrees.of(STAGE_3_ANGLE_VERTICAL.in(Degrees) * -1);
-    public static final Angle SAD_STAGE_4_ANGLE_VERTICAL        = Degrees.of(STAGE_4_ANGLE_VERTICAL.in(Degrees) * -1);
-
-    //random stuff
-    public static final double test = 0.0;
-    public static final double kArmP = 0.04;
-    public static final double kArmI = 0.003;
-    public static final double kArmD = 0.001;
-
-    public static final double kMaxAngle = 225;
-    public static final double kMinAngle = -225;
-
-
-
-    // public static final double kArmS = 0.25;
-    // public static final double kArmV = 6.47;
-    // public static final double kArmA = 0.01; //r^s^2
-    // public static final double kArmG = 0.11; //r^s
-
-    public static final double kArmMinOutput = -1;
-    public static final double kArmMaxOutput = 1;
-    public static final int kArmCurrentLimit = 60;
-     */
-  }
+  
   public static class VisionConstants {
     // photon vision camera namez
     public static final String RIGHT_CAM_NAME = "right";

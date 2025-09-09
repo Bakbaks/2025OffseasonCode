@@ -64,7 +64,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
     
 
-     public void setArmAngle(double targetAngle) {
+    public void setArmAngle(double targetAngle) {
 
         double Rotations = (targetAngle/360) * ArmConstant.ArmGearRatio;
 

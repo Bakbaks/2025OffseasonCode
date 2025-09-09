@@ -33,10 +33,10 @@ public class AimAtTagCommand extends Command {
 
   
   public AimAtTagCommand(
-      CommandSwerveDrivetrain drivetrain,
-      VisionSubsystem vision,
-      PathConstraints limits,
-      double minPlanDistanceM) {
+    CommandSwerveDrivetrain drivetrain,
+    VisionSubsystem vision,
+    PathConstraints limits,
+    double minPlanDistanceM) {
     this.drivetrain = drivetrain;
     this.vision = vision;
     this.limits = limits;

@@ -12,6 +12,8 @@ import frc.robot.commands.ElevatorCommand.youPary;
 import frc.robot.commands.IntakeCommand.IntakeWithDetectionCommand;
 import frc.robot.commands.IntakeCommand.IntakeHoldPositionCommand;
 import frc.robot.commands.AimAtTagCommand;
+import frc.robot.commands.SwingGroundIntakeCommand;
+import frc.robot.commands.SpinGroundIntakeCommand;
 
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmState;
@@ -21,6 +23,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem.CommandSwerveDrivetrain;
 import frc.robot.subsystems.SwerveSubsystem.TunerConstants;
 import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.GroundIntakeSubsystem;
 
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -50,6 +53,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.PathConstraints;
 
 public class RobotContainer {
     // swerve drive stuff
@@ -78,7 +82,16 @@ public class RobotContainer {
     private final ClimbSubsystem climb = new ClimbSubsystem();
     private final IntakeSubsystem intake = new IntakeSubsystem();
     private final VisionSubsystem vision = new VisionSubsystem();
-    private final AimAtTagCommand aimAtTag = new AimAtTagCommand();
+    private final GroundIntakeSubsystem groundIntake = new GroundIntakeSubsystem();
+
+    PathConstraints lims = new PathConstraints(
+    3.0,                     // max m/s
+    3.0,                     // max m/s^2
+    Math.toRadians(540.0),   // max rad/s
+    Math.toRadians(720.0)    // max rad/s^2
+    );
+    
+    private final AimAtTagCommand aimAtTag = new AimAtTagCommand(drivetrain, vision, lims, 0.1);
 
     private final Trigger auxY = m_auxController.y();
     private final Trigger auxA = m_auxController.a();
@@ -444,6 +457,7 @@ public class RobotContainer {
 
         //aux control the intake from the source
         //this is for getting the game pieces from the source
+        /*
         driveLeftTrigger.onTrue(new RunCommand(() ->{//source intake
 
 
@@ -485,8 +499,19 @@ public class RobotContainer {
         .onFalse(new RunCommand(() -> {
                 intake.stop();
         }, intake));
+        */
 
+        
 
+        driveLeftTrigger.onTrue(new InstantCommand(() -> {
+                new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.ELEVATOR_SOURCE_DELTA)
+                        .alongWith(Commands.print("Elevator Source, Height: " + Constants.ElevatorConstants.ELEVATOR_SOURCE_DELTA.in(Units.Meters))).schedule();
+                
+                new SwingGroundIntakeCommand(groundIntake, Constants.GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))
+                                .alongWith(Commands.print("GroundIntake, Angles: " + Constants.GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))).schedule();
+                        groundIntake.setState(2);
+                
+        }));
         // //driver scoring, only control the
         driveRightTrigger.onTrue(new RunCommand(() ->{ //only scoring
                 if(arm.getState() == 1 ||
