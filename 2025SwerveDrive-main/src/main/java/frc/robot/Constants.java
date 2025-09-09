@@ -112,9 +112,10 @@ public final class Constants {
 
     public static final int kGroundIntakeID = 51;
     public static final int kGroundSwingID = 50;
-    public static final int kIntakeCurrentLimit = 70;
+    public static final int kGroundIntakeSwingCurrentLimit = 70;
+    public static final int kGroundIntakeCurrentLimit = 40;
 
-    public static final double GroundIntakeGearRatio = 52.09722 / 1; // need to set
+    public static final double GroundIntakeGearRatio = 40.90909090909090909090909090909090901 / 1; // need to set
 
 
     public static final Angle GroundIntake_FEED_ANGLE_VERTICAL = Degrees.of(0);
@@ -170,7 +171,7 @@ public final class Constants {
 
     //public static final double TOLERANCE = 1; // 1 rotation from motor, 2.51cm// determine if need to delete
 
-    public static final Distance kMinHeight = Inches.of(4); // Lowest safe position   was 0
+    public static final Distance kMinHeight = Inches.of(0); // Lowest safe position
     public static final Distance kMaxHeight = Inches.of(27); // Highest safe position
 
     public static final double kManualSpeedMultiplier = 1000; // Adjust for fine control
@@ -197,7 +198,7 @@ public final class Constants {
 
     //Elevator stages effective data
     public static final Distance ELEVATOR_SOURCE_DELTA = Inches.of(14);//check
-    public static final Distance ELEVATOR_BASE_DELTA = Inches.of(0);
+    public static final Distance ELEVATOR_BASE_DELTA = Inches.of(8);
     public static final Distance STAGE_1_HEIGHT_DELTA  = Inches.of(0); 
     public static final Distance STAGE_2_HEIGHT_DELTA  = Inches.of(10); 
     public static final Distance STAGE_3_HEIGHT_DELTA  = Inches.of(0);

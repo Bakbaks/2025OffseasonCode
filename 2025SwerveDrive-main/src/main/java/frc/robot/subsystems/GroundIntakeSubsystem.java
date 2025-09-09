@@ -44,16 +44,16 @@ public class GroundIntakeSubsystem extends SubsystemBase {
         slot1Configs.kP = GroundIntakeConstants.kGroundP; // A position error of 2.5 rotations results in 12 V output
         slot1Configs.kI = GroundIntakeConstants.kGroundI; // no output for integrated error
         slot1Configs.kD = GroundIntakeConstants.kGroundD; // A velocity error of 1 rps results in 0.1 V output
-        m_SwingKraken.getConfigurator().apply(slot0Configs);
+        m_SwingKraken.getConfigurator().apply(slot1Configs);
 
         // current limit
         var currentLimitConfigs = new CurrentLimitsConfigs();
-        currentLimitConfigs.StatorCurrentLimit = GroundIntakeConstants.kIntakeCurrentLimit;
+        currentLimitConfigs.StatorCurrentLimit = GroundIntakeConstants.kGroundIntakeSwingCurrentLimit;
         currentLimitConfigs.StatorCurrentLimitEnable = true;
         m_SwingKraken.getConfigurator().apply(currentLimitConfigs);
 
         var currentLimitConfigs2 = new CurrentLimitsConfigs();
-        currentLimitConfigs2.StatorCurrentLimit = 40;
+        currentLimitConfigs2.StatorCurrentLimit = GroundIntakeConstants.kGroundIntakeCurrentLimit;
         currentLimitConfigs2.StatorCurrentLimitEnable = true;
         m_IntakeKraken.getConfigurator().apply(currentLimitConfigs2);
 
