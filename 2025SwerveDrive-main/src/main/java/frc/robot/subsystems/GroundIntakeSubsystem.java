@@ -82,14 +82,14 @@ public class GroundIntakeSubsystem extends SubsystemBase {
         double Rotations = (targetAngle/360) * GroundIntakeConstants.GroundIntakeGearRatio;
 
         Swingsetpoint = Math.min(Rotations, GroundIntakeConstants.kMaxAngle);
-
+        Swingsetpoint = Math.max(Rotations, GroundIntakeConstants.kMinAngle);
 
         if(Swingsetpoint !=  Rotations){
             System.out.println("Warning: Requested Ground Intake angle is out of bounds. Setting to " + setpoint + " rotations");
         }
 
 
-        System.out.println("Setting elevator position to final " + Rotations + " rotations");
+        System.out.println("Setting ground intake pos to final " + Rotations + " rotations");
 
         m_SwingKraken.setControl(m_SwingpidPosition.withPosition(Swingsetpoint));
 
