@@ -14,5 +14,7 @@ import com.ctre.phoenix6.configs.CANrangeConfiguration;
 import com.ctre.phoenix6.hardware.CANrange;
 
 public class GroundIntakeSubsystem {
-
+    private TalonFX m_IntakeKraken;
+    private CANrange CANrangeELeft;
+    private CANrange CANrangeERight;
 }
