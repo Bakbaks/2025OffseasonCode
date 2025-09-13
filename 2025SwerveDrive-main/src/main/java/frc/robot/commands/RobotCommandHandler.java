@@ -23,7 +23,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import static edu.wpi.first.units.Units.*;
 
 
-public class UpperRobotCommand extends Command{
+public class RobotCommandHandler extends Command{
 
     private final int state;
     private Distance targetPosition = null;
@@ -35,11 +35,11 @@ public class UpperRobotCommand extends Command{
     private final GroundIntakeSubsystem groundIntake = new GroundIntakeSubsystem();
 
 
-    public UpperRobotCommand(int state){
+    public RobotCommandHandler(int state){
         this.state = state;
     }
 
-    public UpperRobotCommand(int state, Distance targetPosition, Angle angle){
+    public RobotCommandHandler(int state, Distance targetPosition, Angle angle){
         this.state = state;
         this.targetPosition = targetPosition;
         this.angle = angle;
