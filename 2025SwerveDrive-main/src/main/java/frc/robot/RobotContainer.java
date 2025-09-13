@@ -2,6 +2,7 @@ package frc.robot;
 
 import frc.robot.Constants.ArmConstant;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.GroundIntakeConstants;
 import frc.robot.commands.ArmCommand.ArmSetPositionCommand;
 import frc.robot.commands.ArmCommand.youParyArm;
 import frc.robot.commands.AutoCommands.ElevatorAutonComomands;
@@ -503,15 +504,30 @@ public class RobotContainer {
         
 
         driveLeftTrigger.onTrue(new InstantCommand(() -> {
-                new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA)
-                        .alongWith(Commands.print("Elevator Source, Height: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Units.Meters))).schedule();
+                new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA);
+                        //.alongWith(Commands.print("Elevator Source, Height: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Units.Meters))).schedule();
                 
-                new SwingGroundIntakeCommand(groundIntake, Constants.GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))
-                                .alongWith(Commands.print("GroundIntake, Angles: " + Constants.GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))).schedule();
+                new SwingGroundIntakeCommand(groundIntake, GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))
+                                .alongWith(Commands.print("SWINGGROUNDINTAKE: " + GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))).schedule();
                         groundIntake.setState(2);
                 
         }));
+        driveLeftBumper.onTrue(new InstantCommand(() -> {
+                new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA);
+                        //.alongWith(Commands.print("Elevator Source, Height: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Units.Meters))).schedule();
+                
+                new SwingGroundIntakeCommand(groundIntake, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
+                                .alongWith(Commands.print("SWINGGROUNDINTAKE: " + GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))).schedule();
+                        groundIntake.setState(1);
+        }));
         // //driver scoring, only control the
+        driveRightTrigger.onTrue(new RunCommand(() -> {
+                intake.feedEast();
+        }, intake))
+        .onFalse(new RunCommand(() -> {
+                intake.stop();
+        }));
+        /*
         driveRightTrigger.onTrue(new RunCommand(() ->{ //only scoring
                 if(arm.getState() == 1 ||
                    arm.getState() == 2 ||
@@ -533,7 +549,7 @@ public class RobotContainer {
         }, intake))
         .onFalse(new RunCommand(() ->{
                 intake.stop();
-        }, intake));
+        }, intake)); */
 
 
 
@@ -541,7 +557,7 @@ public class RobotContainer {
         //Trigger visionHasGoal = new Trigger(() -> vision.getBestRobotToGoal().isPresent()).debounce(0.10);
         //driveLeftBumper.and(visionHasGoal).whileTrue(aimAtTag);
         //no checks
-        driveLeftBumper.onTrue(aimAtTag);
+        driveRightBumper.onTrue(aimAtTag);
         
 
 

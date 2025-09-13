@@ -33,6 +33,7 @@ public class GroundIntakeSubsystem extends SubsystemBase {
         m_SwingKraken = new TalonFX(GroundIntakeConstants.kGroundSwingID, GroundIntakeConstants.kGroundIntakeCANbus);
 
         var talonFXConfigs = new TalonFXConfiguration();
+        var talonFXConfigs2 = new TalonFXConfiguration();
         // set slot 0 gains
         var slot0Configs = talonFXConfigs.Slot0;
         slot0Configs.kP = 0.5;
@@ -40,7 +41,7 @@ public class GroundIntakeSubsystem extends SubsystemBase {
         slot0Configs.kD = 0; // A velocity error of 1 rps results in 0.1 V output
         m_IntakeKraken.getConfigurator().apply(slot0Configs);
 
-        var slot1Configs = talonFXConfigs.Slot1;
+        var slot1Configs = talonFXConfigs2.Slot0;
         slot1Configs.kP = GroundIntakeConstants.kGroundP; // A position error of 2.5 rotations results in 12 V output
         slot1Configs.kI = GroundIntakeConstants.kGroundI; // no output for integrated error
         slot1Configs.kD = GroundIntakeConstants.kGroundD; // A velocity error of 1 rps results in 0.1 V output
@@ -81,15 +82,16 @@ public class GroundIntakeSubsystem extends SubsystemBase {
 
         double Rotations = (targetAngle/360) * GroundIntakeConstants.GroundIntakeGearRatio;
 
-        Swingsetpoint = Math.min(Rotations, GroundIntakeConstants.kMaxAngle);
-        Swingsetpoint = Math.max(Rotations, GroundIntakeConstants.kMinAngle);
+        Swingsetpoint = Rotations;
+        //Swingsetpoint = Math.min(Rotations, GroundIntakeConstants.kMaxAngle);
+        //Swingsetpoint = Math.max(Rotations, GroundIntakeConstants.kMinAngle);
 
         if(Swingsetpoint !=  Rotations){
             System.out.println("Warning: Requested Ground Intake angle is out of bounds. Setting to " + setpoint + " rotations");
         }
 
 
-        System.out.println("Setting ground intake pos to final " + Rotations + " rotations");
+        System.out.println("GROUND INTAKE TO " + Swingsetpoint + " ROTATIONS");
 
         m_SwingKraken.setControl(m_SwingpidPosition.withPosition(Swingsetpoint));
 
