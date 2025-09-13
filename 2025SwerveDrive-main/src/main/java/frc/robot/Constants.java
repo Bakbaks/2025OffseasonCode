@@ -190,6 +190,7 @@ public final class Constants {
 
     // Elevator stages raw data (wrong right now i think)
     public static final Distance Elevator_HEIGHT_NOUGHT = Inches.of(37.433); // ok
+    public static final Distance STATE_0_HEIGHT         = Meters.of(0.46);
     public static final Distance STAGE_1_HEIGHT         = Meters.of(0.46); // 46cm
     public static final Distance STAGE_2_HEIGHT         = Meters.of(0.81); // 81cm
     public static final Distance STAGE_3_HEIGHT         = Meters.of(1.21); // 121cm
@@ -198,10 +199,11 @@ public final class Constants {
 
     //Elevator stages effective data
     public static final Distance ELEVATOR_SOURCE_DELTA = Inches.of(14);//check
-    public static final Distance ELEVATOR_BASE_DELTA = Inches.of(8);
-    public static final Distance STAGE_1_HEIGHT_DELTA  = Inches.of(0); 
+    public static final Distance ELEVATOR_BASE_DELTA = Inches.of(0);
+    public static final Distance STAGE_0_HEIGHT_DELTA = Inches.of(8);
+    public static final Distance STAGE_1_HEIGHT_DELTA  = Inches.of(0); //needs changing
     public static final Distance STAGE_2_HEIGHT_DELTA  = Inches.of(10); 
-    public static final Distance STAGE_3_HEIGHT_DELTA  = Inches.of(0);
+    public static final Distance STAGE_3_HEIGHT_DELTA  = Inches.of(0); // needs changing
     public static final Distance STAGE_4_HEIGHT_DELTA  = Inches.of(27);
 
   }

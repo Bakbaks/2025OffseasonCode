@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.GroundIntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
@@ -22,7 +22,7 @@ public class SpinGroundIntakeCommand extends Command{
     @Override
     public void execute(){
         System.out.println("HOLDING HOLDING WOWW");
-       intake.holdPositionWrite(intake.READPositionPoint());
+        intake.holdPositionWrite(intake.READPositionPoint());
     }
 
     @Override

@@ -97,6 +97,7 @@ public class GroundIntakeSubsystem extends SubsystemBase {
 
     public void setState(int newState){
         state = newState;
+        
     }
 
     public int getState(){
