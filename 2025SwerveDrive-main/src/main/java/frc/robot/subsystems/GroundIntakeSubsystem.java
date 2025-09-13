@@ -86,7 +86,7 @@ public class GroundIntakeSubsystem extends SubsystemBase {
         //Swingsetpoint = Math.min(Rotations, GroundIntakeConstants.kMaxAngle);
         //Swingsetpoint = Math.max(Rotations, GroundIntakeConstants.kMinAngle);
 
-        if(Swingsetpoint !=  Rotations){
+        if(Swingsetpoint !=  Rotations){ 
             System.out.println("Warning: Requested Ground Intake angle is out of bounds. Setting to " + setpoint + " rotations");
         }
 

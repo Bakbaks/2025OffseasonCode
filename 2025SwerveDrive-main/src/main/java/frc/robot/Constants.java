@@ -119,11 +119,12 @@ public final class Constants {
 
 
     public static final Angle GroundIntake_FEED_ANGLE_VERTICAL = Degrees.of(0);
-    public static final Angle GroundIntake_LOWERED_ANGLE_VERTICAL = Degrees.of(0);
+    public static final Angle GroundIntake_LOWERED_ANGLE_VERTICAL = Degrees.of(-140);
+    public static final Angle GroundIntake_LEVEL1_ANGLE_VERTICAL = Degrees.of(-50);
 
-    public static final double kGroundP = 0.005;
-    public static final double kGroundI = 0.003;
-    public static final double kGroundD = 0.001;
+    public static final double kGroundP = 0.05;
+    public static final double kGroundI = 0; //0.003;
+    public static final double kGroundD = 0; //0.001;
 
     //public static final double kMaxAngle = 100;
     //public static final double kMinAngle = 0;

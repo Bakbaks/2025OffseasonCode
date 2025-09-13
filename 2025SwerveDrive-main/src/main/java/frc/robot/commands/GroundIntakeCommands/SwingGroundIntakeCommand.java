@@ -16,7 +16,7 @@ public class SwingGroundIntakeCommand extends Command{
 
     @Override
     public void initialize() {
-        System.out.println("Intake initialized");        
+        //System.out.println("Intake initialized");        
         Intake.setGroundIntakeAngle(targetPositionRotations);
 
     }
