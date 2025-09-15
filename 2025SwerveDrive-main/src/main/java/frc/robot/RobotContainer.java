@@ -15,9 +15,11 @@ import frc.robot.commands.GroundIntakeCommands.SwingGroundIntakeCommand;
 import frc.robot.commands.IntakeCommand.IntakeWithDetectionCommand;
 import frc.robot.commands.IntakeCommand.IntakeHoldPositionCommand;
 import frc.robot.commands.AimAtTagCommand;
+import frc.robot.commands.RobotCommandHandler;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmState;
 import frc.robot.subsystems.GroundIntakeSubsystem.SwingGroundIntakeSubsystem;
+import frc.robot.subsystems.GroundIntakeSubsystem.SpinGroundIntakeSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -81,8 +83,8 @@ public class RobotContainer {
     private final ClimbSubsystem climb = new ClimbSubsystem();
     private final IntakeSubsystem intake = new IntakeSubsystem();
     private final VisionSubsystem vision = new VisionSubsystem();
-    private final SwingGroundIntakeSubsystem groundIntake = new SwingGroundIntakeSubsystem();
-
+    private final SwingGroundIntakeSubsystem SwingGroundIntake = new SwingGroundIntakeSubsystem();
+    private final SpinGroundIntakeSubsystem spinGroundIntake = new SpinGroundIntakeSubsystem();
     PathConstraints lims = new PathConstraints(
     3.0,                     // max m/s
     3.0,                     // max m/s^2
@@ -293,6 +295,7 @@ public class RobotContainer {
         ///////////////////////////////////////GIFTS AND TRINKETS (NON DRIVE BINDS)
 
         // Elevator and Arm bindings, move to zero position
+        /*
         auxRightTrigger.onTrue(
                 new ParallelCommandGroup(
                 new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA)
@@ -300,7 +303,8 @@ public class RobotContainer {
                 
                 new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
                 .alongWith(Commands.print("Arm Base/zero Position, Angles: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))))
-        );
+        ); */
+
         // auxRightTrigger.onTrue(new InstantCommand(() -> {
         //         new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
         //         .alongWith(Commands.print("Arm Base, Angles: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))).schedule();
@@ -308,6 +312,8 @@ public class RobotContainer {
                 
         // auxRightTrigger.onTrue(new RunCommand(() -> {arm.setState(0);}, arm));
         
+
+        /*
         //SADMODE TRIGGER
         auxLeftBumper.onTrue(new InstantCommand(() -> {
                 sadMode = true;
@@ -393,7 +399,7 @@ public class RobotContainer {
 
                 }
         }));
-
+        */
         //SADNESS aura
         /*auxLeftBumper.onTrue(new RunCommand(() -> { //sad commands
 
@@ -424,7 +430,14 @@ public class RobotContainer {
                 
         }, elevatorSubsystem));*/
         
+        auxRightTrigger.whileTrue(new RobotCommandHandler(
+        1, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake
+        ));
 
+        // Release = state 2
+        auxRightTrigger.onFalse(new RobotCommandHandler(
+        2, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake
+        ));
 
         //default elevator and arm manual control
         m_auxController.start().whileTrue(new youPary(elevatorSubsystem));
@@ -506,7 +519,7 @@ public class RobotContainer {
                 new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA);
                         //.alongWith(Commands.print("Elevator Source, Height: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Units.Meters))).schedule();
                 
-                new SwingGroundIntakeCommand(groundIntake, GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))
+                new SwingGroundIntakeCommand(SwingGroundIntake, GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))
                                 .alongWith(Commands.print("SWINGGROUNDINTAKE: " + GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))).schedule();
                 
         }));
@@ -514,7 +527,7 @@ public class RobotContainer {
                 new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA);
                         //.alongWith(Commands.print("Elevator Source, Height: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Units.Meters))).schedule();
                 
-                new SwingGroundIntakeCommand(groundIntake, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
+                new SwingGroundIntakeCommand(SwingGroundIntake, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
                                 .alongWith(Commands.print("SWINGGROUNDINTAKE: " + GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))).schedule();
         }));
         // //driver scoring, only control the
@@ -597,6 +610,11 @@ public class RobotContainer {
 
 
     }
+
+    public Command buildState0() {
+        return new RobotCommandHandler(
+            0, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake);
+      }
 
     private void handleIntakeByArmState(ArmState state, double speed) {
     switch (state) {
