@@ -4,9 +4,9 @@ import frc.robot.commands.GroundIntakeCommands.*;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.GroundIntakeSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.GroundIntakeSubsystem.*;
 import frc.robot.commands.ElevatorCommand.*;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstant;
@@ -28,19 +28,41 @@ public class RobotCommandHandler extends Command{
     private final int state;
     private Distance targetPosition = null;
     private Angle angle = null;
-    private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
-    private final ArmSubsystem arm = new ArmSubsystem();
-    private final ClimbSubsystem climb = new ClimbSubsystem();
-    private final IntakeSubsystem intake = new IntakeSubsystem();
-    private final GroundIntakeSubsystem groundIntake = new GroundIntakeSubsystem();
+    private final ElevatorSubsystem elevatorSubsystem;
+    private final ArmSubsystem arm;
+    private final ClimbSubsystem climb;
+    private final IntakeSubsystem intake;
+    private final SwingGroundIntakeSubsystem SwinggroundIntake;
+    private final SpinGroundIntakeSubsystem SpingroundIntake;
 
+    public RobotCommandHandler(int state, ElevatorSubsystem elevatorSubsystem, 
+    ArmSubsystem arm, ClimbSubsystem climb, 
+    IntakeSubsystem intake, 
+    SwingGroundIntakeSubsystem SwinggroundIntake, SpinGroundIntakeSubsystem SpingroundIntake){
 
-    public RobotCommandHandler(int state){
         this.state = state;
+        this.elevatorSubsystem = elevatorSubsystem;
+        this.arm = arm;
+        this.climb = climb;
+        this.intake = intake;
+        this.SwinggroundIntake = SwinggroundIntake;
+        this.SpingroundIntake = SpingroundIntake;
+
     }
 
-    public RobotCommandHandler(int state, Distance targetPosition, Angle angle){
+    public RobotCommandHandler(int state, ElevatorSubsystem elevatorSubsystem, 
+    ArmSubsystem arm, ClimbSubsystem climb, 
+    IntakeSubsystem intake, 
+    SwingGroundIntakeSubsystem SwinggroundIntake, SpinGroundIntakeSubsystem SpingroundIntake, 
+    Distance targetPosition, Angle angle){
+
         this.state = state;
+        this.elevatorSubsystem = elevatorSubsystem;
+        this.arm = arm;
+        this.climb = climb;
+        this.intake = intake;
+        this.SwinggroundIntake = SwinggroundIntake;
+        this.SpingroundIntake = SpingroundIntake;
         this.targetPosition = targetPosition;
         this.angle = angle;
     }
@@ -48,67 +70,111 @@ public class RobotCommandHandler extends Command{
 
     @Override
     public void initialize(){
-    }
-
-    @Override
-    public void execute(){
+        // using magic ints are not that good but it is what it is for now
         if(state == 0){ // planning on just robot starting position
+            
             // set elevator to default position
             new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA)
                         .alongWith(Commands.print("Elevator default, Height: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Units.Meters))).schedule();
-            // move ground intake to max up position
-            new SwingGroundIntakeCommand(groundIntake, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
-                                .alongWith(Commands.print("GroundIntake, Angles: " + Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))).schedule();
-                        groundIntake.setState(1);
+
+                
+            Commands.sequence(
+                Commands.waitSeconds(0.50),
+                Commands.parallel(
+                    // move ground intake to max up position
+            new SwingGroundIntakeCommand(SwinggroundIntake, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
+            .alongWith(Commands.print("GroundIntake, Angles: " + Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),
             // move arm to default position
 
             new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
-                .alongWith(Commands.print("Arm Base/zero Position, Angles: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees)));
+                        .alongWith(Commands.print("Arm Base/zero Position, Angles: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees)))
+                            )
+            
+            ).schedule();
+            
         }else if(state == 1){ // robot ground intake down
-            // set elevator to absolute lowest postion(gotta change old elevator logic then. and new enum state)
-            new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.ELEVATOR_BASE_DELTA)
-                        .alongWith(Commands.print("Elevator lowest, Height: " + Constants.ElevatorConstants.ELEVATOR_BASE_DELTA.in(Units.Meters))).schedule();
             // move ground intake down to lowest position
-            new SwingGroundIntakeCommand(groundIntake, Constants.GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))
-                                .alongWith(Commands.print("GroundIntake, Angles: " + Constants.GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))).schedule();
-                        groundIntake.setState(2);
-            // move arm to default position
-            new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
-                .alongWith(Commands.print("Arm Base/zero Position, Angles: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees)));
+            new SwingGroundIntakeCommand(SwinggroundIntake, Constants.GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))
+            .alongWith(Commands.print("GroundIntake, Angles: " + Constants.GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))).schedule();
+            Commands.sequence(
+            
+                Commands.waitSeconds(0.50),
+
+                Commands.parallel(
+                // set elevator to absolute lowest postion(gotta change old elevator logic then. and new enum state)
+                new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.ELEVATOR_BASE_DELTA)
+                .alongWith(Commands.print("Elevator lowest, Height: " + Constants.ElevatorConstants.ELEVATOR_BASE_DELTA.in(Units.Meters))),
+                // move arm to default position
+
+                // move arm to default position
+                new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
+                .alongWith(Commands.print("Arm Base/zero Position, Angles: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
+
+                new SpinGroundIntakeCommand(SpingroundIntake, 0.3)
+                )
+            ).schedule();
+            
         }else if(state == 2){ // robot ground intake feed to arm on elevator. final state ground intake up and elevator down
-            // set elevator to second lowest position
+             // set elevator to default position
             new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA)
                         .alongWith(Commands.print("Elevator default, Height: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Units.Meters))).schedule();
-    
-            //set ground intake to max up position
-            new SwingGroundIntakeCommand(groundIntake, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
-                                .alongWith(Commands.print("GroundIntake, Angles: " + Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))).schedule();
-                        groundIntake.setState(1);
+
+                
+            Commands.sequence(
+                Commands.waitSeconds(0.5),
+                Commands.parallel(
+                    // move ground intake to max up position
+            new SwingGroundIntakeCommand(SwinggroundIntake, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
+            .alongWith(Commands.print("GroundIntake, Angles: " + Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),
             // move arm to default position
+
             new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
-                .alongWith(Commands.print("Arm Base/zero Position, Angles: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees)));
-            // spin ground intake
-            Command spin1 = new SpinGroundIntakeCommand(groundIntake); // somehow make it spin for 1 second
-            //spin arm motors
+                        .alongWith(Commands.print("Arm Base/zero Position, Angles: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees)))
+                            )
+            ).schedule();
 
-            Command spin2 = new IntakeHoldPositionCommand(intake);
 
-            // Run the two spin commands and the wait command in parallel.
-            // The race group will end as soon as the waitCommand finishes,
-            // interrupting the spin commands.
-            Command waitCommand = new WaitCommand(1);
-            new ParallelRaceGroup(spin1, spin2, waitCommand);
+            Commands.sequence(
+                Commands.waitSeconds(1.50),
+                Commands.parallel(
+                    new SpinGroundIntakeCommand(SpingroundIntake, 0.3).withTimeout(0.5),
+                    new IntakeSpinCommand(intake,0.3).withTimeout(0.5)
+                )
+            ).schedule();
+
+            
+            
         }else if(state == 3){ // robot ground intake up. elevator up and arm ready to score
+            
+             // move ground intake to max up position
+            new SwingGroundIntakeCommand(SwinggroundIntake, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
+                .alongWith(Commands.print("GroundIntake, Angles: " + Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))).schedule();
             // set elevator to whatever level aux sets it.
             new ElevatorSetPositionCommand(elevatorSubsystem, targetPosition)
                         .alongWith(Commands.print("Elevator scoring, Height: " + targetPosition.in(Units.Meters))).schedule();
-            // set arm ready to score, 5 degrees off from actual angle
+            // set arm ready to score
             new ArmSetPositionCommand(arm, angle.in(Degrees))
                         .alongWith(Commands.print("Arm Level, Angles: " + angle.in(Degrees))).schedule();
                         //arm.setState(4); // therer are alot of state changing. gonna have to organize this. prob gonna just do in container instead
 
         }else if(state == 4){ // robot scoring. robot moves arm and spits out the coral at the same time.
-            // arm moves through path. intake spins at the same time.
+            
+                        // set elevator to whatever level aux sets it.
+            new ElevatorSetPositionCommand(elevatorSubsystem, targetPosition)
+            .alongWith(Commands.print("Elevator scoring, Height: " + targetPosition.in(Units.Meters))).schedule();
+            
+            new SwingGroundIntakeCommand(SwinggroundIntake, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
+                .alongWith(Commands.print("GroundIntake, Angles: " + Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))).schedule();
+
+                // arm moves through path. intake spins at the same time.
+            new ArmSetPositionCommand(arm, angle.in(Degrees))
+            .alongWith(Commands.print("Arm Level, Angles: " + angle.in(Degrees))).schedule();
+
+
+            new IntakeSpinCommand(intake, 0.1)
+                .withTimeout(1.0)
+                .schedule();
+            
         }else if(state == 5){ // robot now moves the arm and elevator to pick up the algae
             //elevator moves to second lowest position
 

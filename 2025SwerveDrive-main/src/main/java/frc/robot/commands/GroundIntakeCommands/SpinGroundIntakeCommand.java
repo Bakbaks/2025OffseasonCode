@@ -2,27 +2,31 @@ package frc.robot.commands.GroundIntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.GroundIntakeSubsystem;
+import frc.robot.subsystems.GroundIntakeSubsystem.SpinGroundIntakeSubsystem;
 
 
 public class SpinGroundIntakeCommand extends Command{
-    private final GroundIntakeSubsystem intake;
+    private final SpinGroundIntakeSubsystem intake;
+    private final double speed;
 
-    public SpinGroundIntakeCommand(GroundIntakeSubsystem intake){
+    public SpinGroundIntakeCommand(SpinGroundIntakeSubsystem intake){
+        this(intake, 0.30);
+    }
+
+    public SpinGroundIntakeCommand(SpinGroundIntakeSubsystem intake, double speed) {
         this.intake = intake;
+        this.speed = speed;
         addRequirements(intake);
-        System.out.println("Ground intake HOLD initialized");
     }
 
     @Override
     public void initialize(){
-
+        intake.setIntake(speed);
     }
 
     @Override
-    public void execute(){
-        System.out.println("HOLDING HOLDING WOWW");
-        intake.holdPositionWrite(intake.READPositionPoint());
+    public void end(boolean interrupted){
+        intake.stop();
     }
 
     @Override

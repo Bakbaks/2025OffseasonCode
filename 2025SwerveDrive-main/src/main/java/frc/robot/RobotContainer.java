@@ -17,14 +17,13 @@ import frc.robot.commands.IntakeCommand.IntakeHoldPositionCommand;
 import frc.robot.commands.AimAtTagCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmState;
+import frc.robot.subsystems.GroundIntakeSubsystem.SwingGroundIntakeSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem.CommandSwerveDrivetrain;
 import frc.robot.subsystems.SwerveSubsystem.TunerConstants;
 import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.subsystems.GroundIntakeSubsystem;
-
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -82,7 +81,7 @@ public class RobotContainer {
     private final ClimbSubsystem climb = new ClimbSubsystem();
     private final IntakeSubsystem intake = new IntakeSubsystem();
     private final VisionSubsystem vision = new VisionSubsystem();
-    private final GroundIntakeSubsystem groundIntake = new GroundIntakeSubsystem();
+    private final SwingGroundIntakeSubsystem groundIntake = new SwingGroundIntakeSubsystem();
 
     PathConstraints lims = new PathConstraints(
     3.0,                     // max m/s
@@ -509,7 +508,6 @@ public class RobotContainer {
                 
                 new SwingGroundIntakeCommand(groundIntake, GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))
                                 .alongWith(Commands.print("SWINGGROUNDINTAKE: " + GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))).schedule();
-                        groundIntake.setState(2);
                 
         }));
         driveLeftBumper.onTrue(new InstantCommand(() -> {
@@ -518,7 +516,6 @@ public class RobotContainer {
                 
                 new SwingGroundIntakeCommand(groundIntake, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
                                 .alongWith(Commands.print("SWINGGROUNDINTAKE: " + GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))).schedule();
-                        groundIntake.setState(1);
         }));
         // //driver scoring, only control the
         driveRightTrigger.onTrue(new RunCommand(() -> {

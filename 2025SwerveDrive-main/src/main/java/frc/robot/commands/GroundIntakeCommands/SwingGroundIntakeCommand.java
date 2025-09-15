@@ -2,13 +2,13 @@ package frc.robot.commands.GroundIntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.GroundIntakeSubsystem;
+import frc.robot.subsystems.GroundIntakeSubsystem.SwingGroundIntakeSubsystem;
 
 public class SwingGroundIntakeCommand extends Command{
-    private final GroundIntakeSubsystem Intake;
+    private final SwingGroundIntakeSubsystem Intake;
     private final double targetPositionRotations;
 
-    public SwingGroundIntakeCommand(GroundIntakeSubsystem Intake, double targetPosition) {
+    public SwingGroundIntakeCommand(SwingGroundIntakeSubsystem Intake, double targetPosition) {
         this.Intake = Intake;
         this.targetPositionRotations = targetPosition;
         addRequirements(Intake);
