@@ -301,6 +301,12 @@ public class RobotContainer {
                 0, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake
         ));
 
+        auxLeftTrigger.onTrue(new RobotCommandHandler(
+                5, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake
+        ));
+
+
+
 
         /*
         auxRightTrigger.onTrue(
@@ -438,14 +444,16 @@ public class RobotContainer {
                 
         }, elevatorSubsystem));*/
         
-        driveRightTrigger.whileTrue(new RobotCommandHandler(
+        driveRightTrigger.onTrue(new RobotCommandHandler(
         1, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake
         ));
 
         // Release = state 2
-        driveRightTrigger.onFalse(new RobotCommandHandler(
+        driveLeftTrigger.onTrue(new RobotCommandHandler(
         2, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake
         ));
+
+
 
 
         //default elevator and arm manual control
@@ -523,7 +531,7 @@ public class RobotContainer {
         */
 
         
-
+        /* 
         driveLeftTrigger.onTrue(new InstantCommand(() -> {
                 new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA);
                         //.alongWith(Commands.print("Elevator Source, Height: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Units.Meters))).schedule();
@@ -539,6 +547,9 @@ public class RobotContainer {
                 new SwingGroundIntakeCommand(SwingGroundIntake, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
                                 .alongWith(Commands.print("SWINGGROUNDINTAKE: " + GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))).schedule();
         }));
+        */
+
+
         // //driver scoring, only control the
         /* 
         driveRightTrigger.onTrue(new RunCommand(() -> {

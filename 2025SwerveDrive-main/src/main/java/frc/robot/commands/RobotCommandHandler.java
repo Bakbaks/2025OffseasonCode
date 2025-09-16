@@ -119,9 +119,10 @@ public class RobotCommandHandler extends Command{
             new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA)
                         .alongWith(Commands.print("Elevator default, Height: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Units.Meters))).schedule();
 
-                
+            new SpinGroundIntakeCommand(SpingroundIntake, 0.3).schedule();
+
             Commands.sequence(
-                Commands.waitSeconds(0.5),
+                Commands.waitSeconds(0.25),
                 Commands.parallel(
                     // move ground intake to max up position
             new SwingGroundIntakeCommand(SwinggroundIntake, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
@@ -137,7 +138,7 @@ public class RobotCommandHandler extends Command{
             Commands.sequence(
                 Commands.waitSeconds(1.50),
                 Commands.parallel(
-                    new SpinGroundIntakeCommand(SpingroundIntake, 0.3).withTimeout(0.5),
+                    //new SpinGroundIntakeCommand(SpingroundIntake, -0.3).withTimeout(0.5),
                     new IntakeSpinCommand(intake,0.3).withTimeout(0.5)
                 )
             ).schedule();
@@ -175,11 +176,40 @@ public class RobotCommandHandler extends Command{
                 .withTimeout(1.0)
                 .schedule();
             
-        }else if(state == 5){ // robot now moves the arm and elevator to pick up the algae
+        }else if(state == 5){
+            // set elevator to default position
+            new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.STAGE_1_HEIGHT_DELTA)
+                        .alongWith(Commands.print("Elevator default, Height: " + Constants.ElevatorConstants.STAGE_1_HEIGHT_DELTA.in(Units.Meters))).schedule();
+
+            //new SpinGroundIntakeCommand(SpingroundIntake, 0.3).schedule();
+
+            Commands.sequence(
+                Commands.waitSeconds(0.25),
+                Commands.parallel(
+                    // move ground intake to max up position
+            new SwingGroundIntakeCommand(SwinggroundIntake, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
+            .alongWith(Commands.print("GroundIntake, Angles: " + Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),
+            // move arm to default position
+
+            new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
+                        .alongWith(Commands.print("Arm Base/zero Position, Angles: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees)))
+                            )
+            ).schedule();
+
+
+            Commands.sequence(
+                Commands.waitSeconds(1.50),
+                Commands.parallel(
+                    new SpinGroundIntakeCommand(SpingroundIntake, -0.4).withTimeout(0.5),
+                    new IntakeSpinCommand(intake,-0.4).withTimeout(0.5)
+                )
+            ).schedule();
+        }
+        else if(state == 6){ // robot now moves the arm and elevator to pick up the algae
             //elevator moves to second lowest position
 
             // arm rotates to a certain angle
-        }else if(state == 6){ // robot is scoring algae
+        }else if(state == 7){ // robot is scoring algae
             //elevator moves to highest position
 
             //arm rotates to 180 deg
@@ -189,7 +219,7 @@ public class RobotCommandHandler extends Command{
 
     @Override
     public boolean isFinished(){
-        return false;
+        return true;
     }
 
     
