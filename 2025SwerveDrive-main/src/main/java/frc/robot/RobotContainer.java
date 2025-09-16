@@ -295,6 +295,13 @@ public class RobotContainer {
         ///////////////////////////////////////GIFTS AND TRINKETS (NON DRIVE BINDS)
 
         // Elevator and Arm bindings, move to zero position
+        //default position only after scoring actions
+
+        auxRightTrigger.onTrue(new RobotCommandHandler(
+                0, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake
+        ));
+
+
         /*
         auxRightTrigger.onTrue(
                 new ParallelCommandGroup(
@@ -339,20 +346,21 @@ public class RobotContainer {
                 }
         }));
         //L1
-        auxA.onTrue(new InstantCommand(() -> {
-                new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.STAGE_1_HEIGHT_DELTA)
-                        .alongWith(Commands.print("Elevator Level 1, Height: " + Constants.ElevatorConstants.STAGE_1_HEIGHT.in(Units.Meters))).schedule();
-                if(sadMode){
-                        new ArmSetPositionCommand(arm, ArmConstant.SAD_STAGE_1_ANGLE_VERTICAL.in(Degrees))
-                                .alongWith(Commands.print("Arm Sad Level 1, Angles: " + ArmConstant.SAD_STAGE_1_ANGLE_VERTICAL.in(Degrees))).schedule();
-                        arm.setState(-1);
-                }
-                else{
-                        new ArmSetPositionCommand(arm, ArmConstant.STAGE_1_ANGLE_VERTICAL.in(Degrees))
-                                .alongWith(Commands.print("Arm Level 1, Angles: " + ArmConstant.STAGE_1_ANGLE_VERTICAL.in(Degrees))).schedule();
-                        arm.setState(1);
-                }
-        }));
+        */
+        auxA.onTrue(new RobotCommandHandler(
+                3, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake, Constants.ElevatorConstants.STAGE_1_HEIGHT_DELTA, Constants.ArmConstant.STAGE_1_ANGLE_VERTICAL
+        ));
+
+        auxB.onTrue(new RobotCommandHandler(
+                3, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake, Constants.ElevatorConstants.STAGE_2_HEIGHT_DELTA, Constants.ArmConstant.STAGE_2_ANGLE_VERTICAL
+        ));
+        auxX.onTrue(new RobotCommandHandler(
+                3, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake, Constants.ElevatorConstants.STAGE_3_HEIGHT_DELTA, Constants.ArmConstant.STAGE_3_ANGLE_VERTICAL
+        ));
+        auxY.onTrue(new RobotCommandHandler(
+                3, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake, Constants.ElevatorConstants.STAGE_4_HEIGHT_DELTA, Constants.ArmConstant.STAGE_4_ANGLE_VERTICAL
+        ));
+        /* 
         //L2
         auxB.onTrue(new InstantCommand(() -> {
                 new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.STAGE_2_HEIGHT_DELTA)
@@ -430,14 +438,15 @@ public class RobotContainer {
                 
         }, elevatorSubsystem));*/
         
-        auxRightTrigger.whileTrue(new RobotCommandHandler(
+        driveRightTrigger.whileTrue(new RobotCommandHandler(
         1, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake
         ));
 
         // Release = state 2
-        auxRightTrigger.onFalse(new RobotCommandHandler(
+        driveRightTrigger.onFalse(new RobotCommandHandler(
         2, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake
         ));
+
 
         //default elevator and arm manual control
         m_auxController.start().whileTrue(new youPary(elevatorSubsystem));
@@ -531,12 +540,14 @@ public class RobotContainer {
                                 .alongWith(Commands.print("SWINGGROUNDINTAKE: " + GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))).schedule();
         }));
         // //driver scoring, only control the
+        /* 
         driveRightTrigger.onTrue(new RunCommand(() -> {
                 intake.feedEast();
         }, intake))
         .onFalse(new RunCommand(() -> {
                 intake.stop();
         }));
+        */
         /*
         driveRightTrigger.onTrue(new RunCommand(() ->{ //only scoring
                 if(arm.getState() == 1 ||
