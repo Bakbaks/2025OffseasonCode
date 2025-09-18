@@ -4,6 +4,10 @@ public enum RobotState {
     START_CONFIG,
     INTAKE_DOWN,
     HANDOFF,
-    READY_TO_SCORE,
-    SCORE
+    L1,
+    L2,
+    L3,
+    L4,
+    SCORE,
+    SCOREL1
 }

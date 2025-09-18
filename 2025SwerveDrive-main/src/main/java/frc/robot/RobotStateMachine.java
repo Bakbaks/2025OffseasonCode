@@ -41,51 +41,149 @@ public class RobotStateMachine {
                 new SequentialCommandGroup(
                     new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA)
                         .alongWith(Commands.print("Elevator default: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Meters))),
-                    Commands.waitSeconds(0.50),
+                    Commands.waitSeconds(0.3),
                     new ParallelCommandGroup(
                         new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
                             .alongWith(Commands.print("Swing FEED: " + Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),
                         new ArmSetPositionCommand(arm, Constants.ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
-                            .alongWith(Commands.print("Arm BASE: " + Constants.ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees)))
+                            .alongWith(Commands.print("Arm BASE: " + Constants.ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
+                        new SpinGroundIntakeCommand(spin, 0),
+                        new IntakeSpinCommand(intake, 0)
                     )
                 ).withName("START_CONFIG"),
 
                 RobotState.INTAKE_DOWN,
                 new SequentialCommandGroup(
-                    new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))
-                        .alongWith(Commands.print("Swing LOWERED: " + Constants.GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))),
-                    Commands.waitSeconds(0.50),
                     new ParallelCommandGroup(
+                        new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))
+                        .alongWith(Commands.print("Swing LOWERED: " + Constants.GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))),
+                        new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA)
+                            .alongWith(Commands.print("Elevator BASE: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Meters))),
+                        new ArmSetPositionCommand(arm, Constants.ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
+                            .alongWith(Commands.print("Arm BASE: " + Constants.ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
+                        new SpinGroundIntakeCommand(spin, 0),
+                        new IntakeSpinCommand(intake, 0)
+                    ),
+                    
+                    Commands.waitSeconds(0.3),
+
+                    new ParallelCommandGroup(
+                        new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))
+                        .alongWith(Commands.print("Swing LOWERED: " + Constants.GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))),
                         new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.ELEVATOR_BASE_DELTA)
                             .alongWith(Commands.print("Elevator BASE: " + Constants.ElevatorConstants.ELEVATOR_BASE_DELTA.in(Meters))),
                         new ArmSetPositionCommand(arm, Constants.ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
                             .alongWith(Commands.print("Arm BASE: " + Constants.ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
+                        new IntakeSpinCommand(intake, 0),
                         new SpinGroundIntakeCommand(spin, 0.3)
                     )
                 ).withName("INTAKE_DOWN"),
 
                 RobotState.HANDOFF, // your state 2
                 new SequentialCommandGroup(
-                    new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA)
+                    new ParallelCommandGroup(
+                        new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))
+                        .alongWith(Commands.print("Swing LOWERED: " + Constants.GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))),
+                        new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA)
                         .alongWith(Commands.print("Elevator default: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Meters))),
-                    new SpinGroundIntakeCommand(spin, 0.3), // start spin
-                    Commands.waitSeconds(0.25),
+                        new ArmSetPositionCommand(arm, Constants.ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
+                        .alongWith(Commands.print("Arm BASE: " + Constants.ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
+                        new IntakeSpinCommand(intake, 0),
+                        new SpinGroundIntakeCommand(spin, 0.3) // start spin
+                    ),
+                    
+                    Commands.waitSeconds(0.3),
+
                     new ParallelCommandGroup(
                         new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees)),
-                        new ArmSetPositionCommand(arm, Constants.ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
+                        new ArmSetPositionCommand(arm, Constants.ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees)),
+                        new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA)
+                            .alongWith(Commands.print("Elevator BASE: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Meters))),
+                        new SpinGroundIntakeCommand(spin, 0.3),
+                        new IntakeSpinCommand(intake, 0)
                     ),
-                    // same-command-twice with different timing: keep your timing
-                    Commands.waitSeconds(1.50),
+                    Commands.waitSeconds(0.3),
+
                     new ParallelCommandGroup(
-                        // previously: SpinGroundIntake -0.3 optional
+                        new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees)),
+                        new ArmSetPositionCommand(arm, Constants.ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees)),
+                        new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA)
+                            .alongWith(Commands.print("Elevator BASE: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Meters))),
+                        new SpinGroundIntakeCommand(spin, -0.3).withTimeout(0.5),
                         new IntakeSpinCommand(intake, 0.3).withTimeout(0.5)
                     )
                 ).withName("HANDOFF"),
+                
+                RobotState.L1,
+                new SequentialCommandGroup(
+                    new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA)
+                        .alongWith(Commands.print("Elevator default: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Meters))),
+                    Commands.waitSeconds(0.3),
+                    new ParallelCommandGroup(
+                        new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_LEVEL1_ANGLE_VERTICAL.in(Degrees))
+                            .alongWith(Commands.print("Swing FEED: " + Constants.GroundIntakeConstants.GroundIntake_LEVEL1_ANGLE_VERTICAL.in(Degrees))),
+                        new ArmSetPositionCommand(arm, Constants.ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
+                            .alongWith(Commands.print("Arm BASE: " + Constants.ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
+                        new SpinGroundIntakeCommand(spin, 0),
+                        new IntakeSpinCommand(intake, 0)
+                    )
+                ).withName("L1"),
+                
+                RobotState.L2,
+                new SequentialCommandGroup(
+                    new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_2_HEIGHT_DELTA)
+                        .alongWith(Commands.print("Elevator default: " + Constants.ElevatorConstants.STAGE_2_HEIGHT_DELTA.in(Meters))),
+                    Commands.waitSeconds(0.1),
+                    new ParallelCommandGroup(
+                        new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
+                            .alongWith(Commands.print("Swing FEED: " + Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),
+                        new ArmSetPositionCommand(arm, Constants.ArmConstant.STAGE_2_ANGLE_VERTICAL.in(Degrees))
+                            .alongWith(Commands.print("Arm BASE: " + Constants.ArmConstant.STAGE_2_ANGLE_VERTICAL.in(Degrees))),
+                        new SpinGroundIntakeCommand(spin, 0),
+                        new IntakeSpinCommand(intake, 0)
+                    )
+                ).withName("L2"),
+
+                RobotState.L3,
+                new SequentialCommandGroup(
+                    new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_3_HEIGHT_DELTA)
+                        .alongWith(Commands.print("Elevator default: " + Constants.ElevatorConstants.STAGE_3_HEIGHT_DELTA.in(Meters))),
+                    Commands.waitSeconds(0.1),
+                    new ParallelCommandGroup(
+                        new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
+                            .alongWith(Commands.print("Swing FEED: " + Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),
+                        new ArmSetPositionCommand(arm, Constants.ArmConstant.STAGE_3_ANGLE_VERTICAL.in(Degrees))
+                            .alongWith(Commands.print("Arm BASE: " + Constants.ArmConstant.STAGE_3_ANGLE_VERTICAL.in(Degrees))),
+                        new SpinGroundIntakeCommand(spin, 0),
+                        new IntakeSpinCommand(intake, 0)
+                    )
+                ).withName("L3"),
+
+                RobotState.L4,
+                new SequentialCommandGroup(
+                    new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_4_HEIGHT_DELTA)
+                        .alongWith(Commands.print("Elevator default: " + Constants.ElevatorConstants.STAGE_4_HEIGHT_DELTA.in(Meters))),
+                    Commands.waitSeconds(0.1),
+                    new ParallelCommandGroup(
+                        new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
+                            .alongWith(Commands.print("Swing FEED: " + Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),
+                        new ArmSetPositionCommand(arm, Constants.ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))
+                            .alongWith(Commands.print("Arm BASE: " + Constants.ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))),
+                        new SpinGroundIntakeCommand(spin, 0),
+                        new IntakeSpinCommand(intake, 0)
+                    )
+                ).withName("L4"),
 
                 RobotState.SCORE, // a simple canned score if you want a non-parameterized version
                 new SequentialCommandGroup(
                     new IntakeSpinCommand(intake, 0.1).withTimeout(1.0)
-                ).withName("SCORE")
+                ).withName("SCORE"),
+
+                RobotState.SCOREL1,
+                new SequentialCommandGroup(
+                    new SpinGroundIntakeCommand(spin, -0.3).withTimeout(1.0)
+                ).withName("SCOREL1")
+                
             );
 
             return new SelectCommand<RobotState>(states, ()->current);
