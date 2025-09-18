@@ -24,7 +24,7 @@ public class SwingGroundIntakeCommand extends Command{
     @Override
     public void execute(){
     //        System.out.println("--------------------------Target"+targetPositionRotations);
-        System.out.println("current pos "+Intake.getGroundIntakeAngle_Rotation()+" my ideal postition: "+targetPositionRotations);
+        //System.out.println("current pos "+Intake.getGroundIntakeAngle_Rotation()+" my ideal postition: "+targetPositionRotations);
     }
 
     @Override

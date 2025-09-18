@@ -47,7 +47,7 @@ public class AimAtTagCommand extends Command {
   @Override
   public void initialize() {
     followCmd = null;
-
+    System.out.println("FJKLSDFDLJKFSDJLKDFSLJKFDSLJKFDS");
     
     VisionSubsystem.PathPlan plan = vision.getPlan();
     if (plan == null) {
@@ -57,10 +57,11 @@ public class AimAtTagCommand extends Command {
       System.out.println("yes vision plan");
     }
 
-    /* 
+    System.out.println("--------------------" + plan + "----------------------");
     
     Pose2d start = drivetrain.getPose();
     Transform2d robotToGoal = plan.robotToGoal;
+    System.out.println("---------------------------------GOALLLLL" + robotToGoal);
     Pose2d end = start.transformBy(robotToGoal);
 
     Rotation2d finalHeading = end.getRotation();
@@ -91,7 +92,7 @@ public class AimAtTagCommand extends Command {
     System.out.println("Following path to tag " + plan.tagId + " via " + plan.cameraName);
     followCmd.initialize();
 
-    */
+  
   }
 
   @Override

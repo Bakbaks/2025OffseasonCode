@@ -115,6 +115,7 @@ public class VisionSubsystem extends SubsystemBase {
       // use photon vision 3d pose only if available
       Transform3d camToTag3d = t.getBestCameraToTarget();
       if (camToTag3d != null) {
+        System.out.println("----------------" + camToTag3d + "----------____________");
         obs.camToTag2d = project3d2d(camToTag3d);
       } else {
         double camHeight = robotToCam.getTranslation().getZ();
