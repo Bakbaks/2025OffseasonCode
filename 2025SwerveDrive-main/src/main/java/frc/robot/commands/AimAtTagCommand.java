@@ -53,8 +53,11 @@ public class AimAtTagCommand extends Command {
     if (plan == null) {
       System.out.println("No vision plan");
       return;
+    }else{
+      System.out.println("yes vision plan");
     }
 
+    /* 
     
     Pose2d start = drivetrain.getPose();
     Transform2d robotToGoal = plan.robotToGoal;
@@ -71,6 +74,7 @@ public class AimAtTagCommand extends Command {
       return;
     }
 
+    
     //path planner magic with waypoints
     Rotation2d travelDir = new Rotation2d(dx, dy);
     Pose2d startForPath = new Pose2d(start.getTranslation(), travelDir);
@@ -86,6 +90,8 @@ public class AimAtTagCommand extends Command {
     followCmd = AutoBuilder.followPath(path);
     System.out.println("Following path to tag " + plan.tagId + " via " + plan.cameraName);
     followCmd.initialize();
+
+    */
   }
 
   @Override

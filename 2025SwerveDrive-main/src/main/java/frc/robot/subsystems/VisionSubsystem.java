@@ -98,7 +98,7 @@ public class VisionSubsystem extends SubsystemBase {
     Snapshot snap = new Snapshot();
     snap.timestampMs = System.currentTimeMillis();
 
-    PhotonPipelineResult result = cam.getLatestResult();
+    PhotonPipelineResult result = cam.getLatestResult();// change to undeprecated method
     if (result == null || !result.hasTargets()) {
       return snap;
     }

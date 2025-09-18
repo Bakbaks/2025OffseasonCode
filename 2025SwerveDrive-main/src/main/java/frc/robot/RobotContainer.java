@@ -1,5 +1,7 @@
 package frc.robot;
 
+import frc.robot.RobotStateMachine;
+import frc.robot.RobotState;
 import frc.robot.Constants.ArmConstant;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.GroundIntakeConstants;
@@ -57,6 +59,9 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathConstraints;
 
 public class RobotContainer {
+
+    private final RobotStateMachine sm = new RobotStateMachine();
+
     // swerve drive stuff
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
@@ -444,6 +449,12 @@ public class RobotContainer {
                 
         }, elevatorSubsystem));*/
         
+        /*
+        driveRightTrigger.onTrue(
+        Commands.runOnce(() -> sm.setState(RobotState.START_CONFIG))
+                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        ); */
+
         driveRightTrigger.onTrue(new RobotCommandHandler(
         1, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake
         ));
