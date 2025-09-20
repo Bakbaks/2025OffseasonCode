@@ -148,8 +148,8 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Arm Position Rotation", getArmAngle_Rotation());
         SmartDashboard.putNumber("Arm Position Degree", getArmAngle_Rotation());
         SmartDashboard.putNumber("Arm PID Position(Rotation)", m_pidPosition.getPositionMeasure().in(Degree)); 
-        System.out.println("Current position; " + m_armCANCoder.toString());       
-        System.out.println("Current position2:  " + m_armCANCoder.getAbsolutePosition());
+        //System.out.println("Current position; " + m_armCANCoder.toString());       
+        //System.out.println("Current position2:  " + m_armCANCoder.getAbsolutePosition());
     }
 
 }
