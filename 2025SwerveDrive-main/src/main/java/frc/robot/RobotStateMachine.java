@@ -45,7 +45,7 @@ public class RobotStateMachine {
                 RobotState.START_CONFIG,
                 new SequentialCommandGroup(
                     Commands.deadline(
-                        Commands.waitSeconds(0.3),
+                        Commands.waitSeconds(0.1),
                         new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA)
                         .alongWith(Commands.print("Elevator default: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Meters)))
                     ),
@@ -221,7 +221,13 @@ public class RobotStateMachine {
                     Commands.deadline(
                         Commands.waitSeconds(0.5),
                         new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_4_HEIGHT_DELTA)
-                        .alongWith(Commands.print("Elevator default: " + Constants.ElevatorConstants.STAGE_4_HEIGHT_DELTA.in(Meters)))
+                        .alongWith(Commands.print("Elevator default: " + Constants.ElevatorConstants.STAGE_4_HEIGHT_DELTA.in(Meters))),
+                        new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
+                            .alongWith(Commands.print("Swing FEED: " + Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),
+                        new ArmSetPositionCommand(arm, Constants.ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
+                            .alongWith(Commands.print("Arm BASE: " + Constants.ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
+                        new SpinGroundIntakeCommand(spin, 0),
+                        new IntakeSpinCommand(intake, -0.3)
                     ),
                     new ParallelCommandGroup(
                         new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_4_HEIGHT_DELTA)
@@ -231,7 +237,7 @@ public class RobotStateMachine {
                         new ArmSetPositionCommand(arm, Constants.ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))
                             .alongWith(Commands.print("Arm BASE: " + Constants.ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))),
                         new SpinGroundIntakeCommand(spin, 0),
-                        new IntakeSpinCommand(intake, 0)
+                        new IntakeSpinCommand(intake, -0.3)
                     )
                 ).withName("L4"),
 
@@ -246,7 +252,7 @@ public class RobotStateMachine {
                         new ArmSetPositionCommand(arm, Constants.ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))
                             .alongWith(Commands.print("Arm BASE: " + Constants.ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))),
                         new SpinGroundIntakeCommand(spin, 0),
-                        new IntakeSpinCommand(intake, 0)
+                        new IntakeSpinCommand(intake, -0.3)
                     ),
                     Commands.deadline(
                         Commands.waitSeconds(0.3),
@@ -257,7 +263,7 @@ public class RobotStateMachine {
                         new ArmSetPositionCommand(arm, Constants.ArmConstant.SCORE_STAGE_4_ANGLE_VERTICAL.in(Degrees))
                             .alongWith(Commands.print("Arm BASE: " + Constants.ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))),
                         new SpinGroundIntakeCommand(spin, 0),
-                        new IntakeSpinCommand(intake, 0)
+                        new IntakeSpinCommand(intake, -0.3)
                     ),
 
                     new ParallelCommandGroup(
@@ -268,11 +274,12 @@ public class RobotStateMachine {
                         new ArmSetPositionCommand(arm, Constants.ArmConstant.SCORE_STAGE_4_ANGLE_VERTICAL.in(Degrees))
                         .alongWith(Commands.print("Arm BASE: " + Constants.ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))),
                         new SpinGroundIntakeCommand(spin, 0),
-                        new IntakeSpinCommand(intake, 0.1).withTimeout(1.0)
+                        //new IntakeSpinCommand(intake, 0.1).withTimeout(1.0)
+                        new IntakeSpinCommand(intake, -0.3).withTimeout(1.0)
                     )
                     
 
-                ).withName("SCORE"),
+                ).withName("SCOREL4"),
 
                 RobotState.SCOREL1,
                 new SequentialCommandGroup(

@@ -87,8 +87,8 @@ public final class Constants {
 
     public static final Angle SCORE_STAGE_1_ANGLE_VERTICAL        = Degrees.of(15); 
     public static final Angle SCORE_STAGE_2_ANGLE_VERTICAL        = Degrees.of(60);
-    public static final Angle SCORE_STAGE_3_ANGLE_VERTICAL        = Degrees.of(100);
-    public static final Angle SCORE_STAGE_4_ANGLE_VERTICAL        = Degrees.of(80);
+    public static final Angle SCORE_STAGE_3_ANGLE_VERTICAL        = Degrees.of(60);
+    public static final Angle SCORE_STAGE_4_ANGLE_VERTICAL        = Degrees.of(60);
 
 
     //public static final Angle SAD_CORAL_STATION_ANGLE_VERTICAL  = Degrees.of(CORAL_STATION_ANGLE_VERTICAL.in(Degrees) * -1);
@@ -100,7 +100,7 @@ public final class Constants {
 
     //random stuff
     public static final double test = 0.0;
-    public static final double kArmP = 2;
+    public static final double kArmP = 2.5;
     public static final double kArmI = 0; // 0.003;
     public static final double kArmD = 0; // 0.001;
 
@@ -221,7 +221,9 @@ public final class Constants {
     public static final Distance STAGE_3_HEIGHT_DELTA  = Inches.of(0); // needs changing
     public static final Distance STAGE_4_HEIGHT_DELTA  = Inches.of(27);
 
-    public static final Distance SCORE_STAGE_4_HEIGHT_DELTA  = Inches.of(25);
+    public static final Distance SCORE_STAGE_2_HEIGHT_DELTA  = Inches.of(STAGE_2_HEIGHT_DELTA.in(Inches) - 2);
+    public static final Distance SCORE_STAGE_3_HEIGHT_DELTA  = Inches.of(STAGE_3_HEIGHT_DELTA.in(Inches) - 2);
+    public static final Distance SCORE_STAGE_4_HEIGHT_DELTA  = Inches.of(23);
   }
   //ignore check tuner constants
 

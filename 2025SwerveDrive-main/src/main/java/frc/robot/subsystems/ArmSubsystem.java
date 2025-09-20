@@ -31,7 +31,7 @@ public class ArmSubsystem extends SubsystemBase {
         m_armCANCoder = new CANcoder(ArmConstant.kArmCANCoderID, ArmConstant.kArmCANbus);
 
         var CANCoderConfig = new CANcoderConfiguration();
-        CANCoderConfig.MagnetSensor.MagnetOffset = -0.14404256875;
+        CANCoderConfig.MagnetSensor.MagnetOffset = -0.142333984375;
         m_armCANCoder.getConfigurator().apply(CANCoderConfig);
         var talonFXConfigs = new TalonFXConfiguration();
 
@@ -102,7 +102,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 
         System.out.println("Setting ARMM position to final " + Rotations + " rotations");
-        System.out.println("Current position; " + m_armCANCoder.toString());
+        //System.out.println("Current position; " + m_armCANCoder.toString());
         
         m_armKraken.setControl(m_pidPosition.withPosition(setpoint));
 
