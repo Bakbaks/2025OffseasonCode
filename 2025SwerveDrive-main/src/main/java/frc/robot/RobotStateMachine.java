@@ -119,7 +119,7 @@ public class RobotStateMachine {
                         new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.ELEVATOR_HANDOFF_DELTA)
                             .alongWith(Commands.print("Elevator BASE: " + Constants.ElevatorConstants.ELEVATOR_HANDOFF_DELTA.in(Meters))),
                         new SpinGroundIntakeCommand(spin, 0.3),
-                        new IntakeSpinCommand(intake, 0.3)
+                        new IntakeSpinCommand(intake, -0.3)
                     ),
 
                     new ParallelCommandGroup(
@@ -128,7 +128,7 @@ public class RobotStateMachine {
                         new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.ELEVATOR_HANDOFF_DELTA)
                             .alongWith(Commands.print("Elevator BASE: " + Constants.ElevatorConstants.ELEVATOR_HANDOFF_DELTA.in(Meters))),
                         new SpinGroundIntakeCommand(spin, -0.5).withTimeout(1),
-                        new IntakeSpinCommand(intake, 0.5).withTimeout(1)
+                        new IntakeSpinCommand(intake, -0.5).withTimeout(1)
                     )
                 ).withName("HANDOFF"),
                 
