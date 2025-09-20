@@ -336,7 +336,7 @@ public final class Constants {
     public static final double R_YAW   = Math.toRadians(-35.0); 
   
     // Left camera
-    public static final double L_X = 0.2601976;
+    public static final double L_X = -0.2601976; // negative makes the robot end up further from the wall
     public static final double L_Y = 0.085725;    // left is positive Y
     public static final double L_Z = 0.2067306;
     public static final double L_ROLL  = 0.0;

@@ -61,7 +61,8 @@ public class RobotStateMachine {
                             .alongWith(Commands.print("Elevator BASE: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Meters))),
                         new ArmSetPositionCommand(arm, Constants.ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
                             .alongWith(Commands.print("Arm BASE: " + Constants.ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
-                        new SpinGroundIntakeCommand(spin, 0),
+                        new SpinGroundIntakeCommand(spin, 0)
+                            .alongWith(Commands.print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARGH")),
                         new IntakeSpinCommand(intake, 0)
                     ),
                     
@@ -76,6 +77,7 @@ public class RobotStateMachine {
                             .alongWith(Commands.print("Arm BASE: " + Constants.ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
                         new IntakeSpinCommand(intake, 0),
                         new SpinGroundIntakeCommand(spin, 0.3)
+                            .alongWith(Commands.print("GRAHRHRHHGHHGHGHGHGHGGHGHGHGHGH"))
                     )
                 ).withName("INTAKE_DOWN"),
 

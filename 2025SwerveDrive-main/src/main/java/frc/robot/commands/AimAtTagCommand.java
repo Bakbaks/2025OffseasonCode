@@ -47,7 +47,7 @@ public class AimAtTagCommand extends Command {
   @Override
   public void initialize() {
     followCmd = null;
-    System.out.println("FJKLSDFDLJKFSDJLKDFSLJKFDSLJKFDS");
+    
     
     VisionSubsystem.PathPlan plan = vision.getPlan();
     if (plan == null) {
