@@ -208,7 +208,7 @@ public final class Constants {
     //Elevator stages effective data
     public static final Distance ELEVATOR_SOURCE_DELTA = Inches.of(14);//check
     public static final Distance ELEVATOR_BASE_DELTA = Inches.of(0);
-    public static final Distance ELEVATOR_HANDOFF_DELTA = Inches.of(5); //needs changing
+    public static final Distance ELEVATOR_HANDOFF_DELTA = Inches.of(1); //needs changing
     public static final Distance STAGE_0_HEIGHT_DELTA = Inches.of(8);
     public static final Distance STAGE_1_HEIGHT_DELTA  = Inches.of(8); //needs changing
     public static final Distance STAGE_2_HEIGHT_DELTA  = Inches.of(10); 
