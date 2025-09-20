@@ -87,7 +87,8 @@ public class RobotStateMachine {
 
                 RobotState.HANDOFF, // your state 2
                 new SequentialCommandGroup(
-                    new ParallelCommandGroup(
+                    Commands.deadline(
+                        Commands.waitSeconds(0.3),
                         new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))
                         .alongWith(Commands.print("Swing LOWERED: " + Constants.GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))),
                         new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA)
@@ -98,9 +99,10 @@ public class RobotStateMachine {
                         new SpinGroundIntakeCommand(spin, 0.3) // start spin
                     ),
                     
-                    Commands.waitSeconds(0.3),
+                    
 
-                    new ParallelCommandGroup(
+                    Commands.deadline(
+                        Commands.waitSeconds(0.3),
                         new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees)),
                         new ArmSetPositionCommand(arm, Constants.ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees)),
                         new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA)
@@ -108,7 +110,7 @@ public class RobotStateMachine {
                         new SpinGroundIntakeCommand(spin, 0.3),
                         new IntakeSpinCommand(intake, 0)
                     ),
-                    Commands.waitSeconds(0.3),
+                    
 
                     new ParallelCommandGroup(
                         new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees)),
