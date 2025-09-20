@@ -154,6 +154,12 @@ public class VisionSubsystem extends SubsystemBase {
   private static Transform2d project3d2d(Transform3d t3) {
     Translation3d tr = t3.getTranslation();
     Rotation3d r3 = t3.getRotation();
+    if(r3.getAngle() > 90){
+      r3 = new Rotation3d(0,0, -(r3.getAngle()-90));
+    }else if(-(r3.getAngle()) > 90){
+      r3 = new Rotation3d(0,0, -(r3.getAngle() + 90));
+    }
+
     return new Transform2d(new Translation2d(tr.getX(), tr.getY()), r3.toRotation2d());
   }
 }
