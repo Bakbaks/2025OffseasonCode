@@ -39,9 +39,12 @@ public class RobotStateMachine {
             Map<RobotState, Command> states = Map.of(
                 RobotState.START_CONFIG,
                 new SequentialCommandGroup(
-                    new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA)
-                        .alongWith(Commands.print("Elevator default: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Meters))),
-                    Commands.waitSeconds(0.3),
+                    Commands.deadline(
+                        Commands.waitSeconds(0.3),
+                        new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA)
+                        .alongWith(Commands.print("Elevator default: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Meters)))
+                    ),
+                    
                     new ParallelCommandGroup(
                         new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
                             .alongWith(Commands.print("Swing FEED: " + Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),
@@ -54,7 +57,8 @@ public class RobotStateMachine {
 
                 RobotState.INTAKE_DOWN,
                 new SequentialCommandGroup(
-                    new ParallelCommandGroup(
+                    Commands.deadline(
+                        Commands.waitSeconds(0.3),
                         new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))
                         .alongWith(Commands.print("Swing LOWERED: " + Constants.GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))),
                         new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA)
@@ -66,7 +70,7 @@ public class RobotStateMachine {
                         new IntakeSpinCommand(intake, 0)
                     ),
                     
-                    Commands.waitSeconds(0.3),
+                    
 
                     new ParallelCommandGroup(
                         new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))
