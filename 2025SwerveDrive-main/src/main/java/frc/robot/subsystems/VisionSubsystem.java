@@ -154,12 +154,21 @@ public class VisionSubsystem extends SubsystemBase {
   private static Transform2d project3d2d(Transform3d t3) {
     Translation3d tr = t3.getTranslation();
     Rotation3d r3 = t3.getRotation();
-    if(r3.getAngle() > 90){
-      r3 = new Rotation3d(0,0, -(r3.getAngle()-90));
-    }else if(-(r3.getAngle()) > 90){
-      r3 = new Rotation3d(0,0, -(r3.getAngle() + 90));
+
+    Rotation2d yaw2d = t3.getRotation().toRotation2d();
+    
+    double deg = yaw2d.getDegrees();
+
+    deg = Math.IEEEremainder(deg, 360.0);
+    
+    if (deg > 90.0) {
+      deg = -(180.0 - deg);
+    } else if (deg < -90.0) {
+      deg = 180.0 + deg;  
     }
 
-    return new Transform2d(new Translation2d(tr.getX(), tr.getY()), r3.toRotation2d());
+    Rotation2d folded = Rotation2d.fromDegrees(deg);
+
+    return new Transform2d(new Translation2d(tr.getX(), tr.getY()), folded);
   }
 }
