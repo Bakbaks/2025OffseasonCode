@@ -105,7 +105,17 @@ public class VisionSubsystem extends SubsystemBase {
 
     for (PhotonTrackedTarget t : result.getTargets()) {
       if (t == null) continue;
-      if (t.getFiducialId() <= 0) continue; // photon vision function that checks if the april tag is legit
+      if (t.getFiducialId() <= 0 
+      || t.getFiducialId() == 13
+      || t.getFiducialId() == 12
+      || t.getFiducialId() == 16
+      || t.getFiducialId() == 14
+      || t.getFiducialId() == 15
+      || t.getFiducialId() == 4
+      || t.getFiducialId() == 5
+      || t.getFiducialId() == 3
+      || t.getFiducialId() == 2
+      || t.getFiducialId() == 1) continue; // photon vision function that checks if the april tag is legit
 
       Tag obs = new Tag();
       obs.tagId = t.getFiducialId();
