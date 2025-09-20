@@ -102,7 +102,7 @@ public class RobotStateMachine {
                     
 
                     Commands.deadline(
-                        Commands.waitSeconds(0.3),
+                        Commands.waitSeconds(0.5),
                         new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees)),
                         new ArmSetPositionCommand(arm, Constants.ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees)),
                         new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA)
@@ -115,8 +115,8 @@ public class RobotStateMachine {
                     new ParallelCommandGroup(
                         new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees)),
                         new ArmSetPositionCommand(arm, Constants.ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees)),
-                        new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA)
-                            .alongWith(Commands.print("Elevator BASE: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Meters))),
+                        new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.ELEVATOR_HANDOFF_DELTA)
+                            .alongWith(Commands.print("Elevator BASE: " + Constants.ElevatorConstants.ELEVATOR_HANDOFF_DELTA.in(Meters))),
                         new SpinGroundIntakeCommand(spin, -0.3).withTimeout(0.5),
                         new IntakeSpinCommand(intake, 0.3).withTimeout(0.5)
                     )
