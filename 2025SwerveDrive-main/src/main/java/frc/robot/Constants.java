@@ -83,7 +83,7 @@ public final class Constants {
     public static final Angle STAGE_1_ANGLE_VERTICAL        = Degrees.of(15); 
     public static final Angle STAGE_2_ANGLE_VERTICAL        = Degrees.of(15);
     public static final Angle STAGE_3_ANGLE_VERTICAL        = Degrees.of(15);
-    public static final Angle STAGE_4_ANGLE_VERTICAL        = Degrees.of(5);
+    public static final Angle STAGE_4_ANGLE_VERTICAL        = Degrees.of(15);
 
     //public static final Angle SAD_CORAL_STATION_ANGLE_VERTICAL  = Degrees.of(CORAL_STATION_ANGLE_VERTICAL.in(Degrees) * -1);
     //public static final Angle SAD_CORAL_STATION_ANGLE_VERTICAL  = Degrees.of(CORAL_STATION_ANGLE_VERTICAL.in(Degrees) * -1);
@@ -94,7 +94,7 @@ public final class Constants {
 
     //random stuff
     public static final double test = 0.0;
-    public static final double kArmP = 0.04;
+    public static final double kArmP = 0.1;
     public static final double kArmI = 0.003;
     public static final double kArmD = 0.001;
 
