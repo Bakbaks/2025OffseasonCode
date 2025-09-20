@@ -102,7 +102,8 @@ public class ArmSubsystem extends SubsystemBase {
 
 
         System.out.println("Setting ARMM position to final " + Rotations + " rotations");
-
+        System.out.println("Current position; " + m_armCANCoder.toString());
+        
         m_armKraken.setControl(m_pidPosition.withPosition(setpoint));
 
     }
@@ -146,7 +147,9 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Arm Motor Voltage", m_armKraken.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Arm Position Rotation", getArmAngle_Rotation());
         SmartDashboard.putNumber("Arm Position Degree", getArmAngle_Rotation());
-        SmartDashboard.putNumber("Arm PID Position(Rotation)", m_pidPosition.getPositionMeasure().in(Degree));        
+        SmartDashboard.putNumber("Arm PID Position(Rotation)", m_pidPosition.getPositionMeasure().in(Degree)); 
+        System.out.println("Current position; " + m_armCANCoder.toString());       
+        System.out.println("Current position2:  " + m_armCANCoder.getAbsolutePosition());
     }
 
 }
