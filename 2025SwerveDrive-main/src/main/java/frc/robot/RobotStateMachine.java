@@ -190,8 +190,8 @@ public class RobotStateMachine {
                     new ParallelCommandGroup(
                         new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
                             .alongWith(Commands.print("Swing FEED: " + Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),
-                        new ArmSetPositionCommand(arm, Constants.ArmConstant.SAD_STAGE_2_ANGLE_VERTICAL.in(Degrees))
-                            .alongWith(Commands.print("Arm BASE: " + Constants.ArmConstant.SAD_STAGE_2_ANGLE_VERTICAL.in(Degrees))),
+                        new ArmSetPositionCommand(arm, Constants.ArmConstant.STAGE_2_ANGLE_VERTICAL.in(Degrees))
+                            .alongWith(Commands.print("Arm BASE: " + Constants.ArmConstant.STAGE_2_ANGLE_VERTICAL.in(Degrees))),
                         new SpinGroundIntakeCommand(spin, 0),
                         new IntakeSpinCommand(intake, 0)
                     )
@@ -208,8 +208,8 @@ public class RobotStateMachine {
                     new ParallelCommandGroup(
                         new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
                             .alongWith(Commands.print("Swing FEED: " + Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),
-                        new ArmSetPositionCommand(arm, Constants.ArmConstant.SAD_STAGE_3_ANGLE_VERTICAL.in(Degrees))
-                            .alongWith(Commands.print("Arm BASE: " + Constants.ArmConstant.SAD_STAGE_3_ANGLE_VERTICAL.in(Degrees))),
+                        new ArmSetPositionCommand(arm, Constants.ArmConstant.STAGE_3_ANGLE_VERTICAL.in(Degrees))
+                            .alongWith(Commands.print("Arm BASE: " + Constants.ArmConstant.STAGE_3_ANGLE_VERTICAL.in(Degrees))),
                         new SpinGroundIntakeCommand(spin, 0),
                         new IntakeSpinCommand(intake, 0)
                     )
@@ -225,8 +225,8 @@ public class RobotStateMachine {
                     new ParallelCommandGroup(
                         new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
                             .alongWith(Commands.print("Swing FEED: " + Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),
-                        new ArmSetPositionCommand(arm, Constants.ArmConstant.SAD_STAGE_4_ANGLE_VERTICAL.in(Degrees))
-                            .alongWith(Commands.print("Arm BASE: " + Constants.ArmConstant.SAD_STAGE_4_ANGLE_VERTICAL.in(Degrees))),
+                        new ArmSetPositionCommand(arm, Constants.ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))
+                            .alongWith(Commands.print("Arm BASE: " + Constants.ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))),
                         new SpinGroundIntakeCommand(spin, 0),
                         new IntakeSpinCommand(intake, 0)
                     )
