@@ -458,10 +458,16 @@ public class RobotContainer {
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         );
 
-        driveRightTrigger.onTrue(
-        Commands.runOnce(() -> sm.setState(RobotState.INTAKE_DOWN))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        );
+        
+
+        driveRightTrigger.onTrue(new InstantCommand(() -> {
+                if(sm.getState() == RobotState.HANDOFF){
+                        return;
+                }else{
+                        Commands.runOnce(() -> sm.setState(RobotState.INTAKE_DOWN))
+                        .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake));
+                }
+        }));
 
         auxRightTrigger.onTrue(
         Commands.runOnce(() -> sm.setState(RobotState.START_CONFIG))

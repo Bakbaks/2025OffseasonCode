@@ -28,6 +28,10 @@ public class RobotStateMachine {
         current = newState;
     }
 
+    public RobotState getState(){
+        return current;
+    }
+
     public Command build(ElevatorSubsystem elevator,
                          ArmSubsystem arm,
                          SwingGroundIntakeSubsystem swing,
