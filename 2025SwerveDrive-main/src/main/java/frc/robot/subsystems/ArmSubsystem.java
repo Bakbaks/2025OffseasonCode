@@ -21,6 +21,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     public ArmSubsystem() {
         m_armKraken = new TalonFX(ArmConstant.kArmMotorID, ArmConstant.kArmCANbus);
+        
 
         var talonFXConfigs = new TalonFXConfiguration();
 

@@ -302,6 +302,7 @@ public class RobotContainer {
         // Elevator and Arm bindings, move to zero position
         //default position only after scoring actions
 
+        /*
         auxRightTrigger.onTrue(new RobotCommandHandler(
                 0, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake
         ));
@@ -309,7 +310,7 @@ public class RobotContainer {
         auxLeftTrigger.onTrue(new RobotCommandHandler(
                 5, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake
         ));
-
+         */
 
 
 
@@ -358,6 +359,7 @@ public class RobotContainer {
         }));
         //L1
         */
+        /* 
         auxA.onTrue(new RobotCommandHandler(
                 3, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake, Constants.ElevatorConstants.STAGE_1_HEIGHT_DELTA, Constants.ArmConstant.STAGE_1_ANGLE_VERTICAL
         ));
@@ -371,6 +373,7 @@ public class RobotContainer {
         auxY.onTrue(new RobotCommandHandler(
                 3, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake, Constants.ElevatorConstants.STAGE_4_HEIGHT_DELTA, Constants.ArmConstant.STAGE_4_ANGLE_VERTICAL
         ));
+        */
         /* 
         //L2
         auxB.onTrue(new InstantCommand(() -> {
@@ -449,20 +452,28 @@ public class RobotContainer {
                 
         }, elevatorSubsystem));*/
         
-        /*
-        driveRightTrigger.onTrue(
+        
+        driveLeftTrigger.onTrue(
         Commands.runOnce(() -> sm.setState(RobotState.START_CONFIG))
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        ); */
+        );
 
+        driveRightTrigger.onTrue(
+        Commands.runOnce(() -> sm.setState(RobotState.INTAKE_DOWN))
+                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        );
+        /* 
         driveRightTrigger.onTrue(new RobotCommandHandler(
         1, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake
         ));
-
+        */
         // Release = state 2
+        /*
         driveLeftTrigger.onTrue(new RobotCommandHandler(
         2, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake
         ));
+
+         */
 
 
 
