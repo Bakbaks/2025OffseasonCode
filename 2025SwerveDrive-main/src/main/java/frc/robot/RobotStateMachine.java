@@ -134,9 +134,12 @@ public class RobotStateMachine {
                 
                 RobotState.L1,
                 new SequentialCommandGroup(
-                    new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA)
-                        .alongWith(Commands.print("Elevator default: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Meters))),
-                    Commands.waitSeconds(0.3),
+                    Commands.deadline(
+                        Commands.waitSeconds(0.5),
+                        new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA)
+                        .alongWith(Commands.print("Elevator default: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Meters)))
+                    
+                    ),
                     new ParallelCommandGroup(
                         new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_LEVEL1_ANGLE_VERTICAL.in(Degrees))
                             .alongWith(Commands.print("Swing FEED: " + Constants.GroundIntakeConstants.GroundIntake_LEVEL1_ANGLE_VERTICAL.in(Degrees))),
@@ -149,9 +152,11 @@ public class RobotStateMachine {
                 
                 RobotState.L2,
                 new SequentialCommandGroup(
-                    new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_2_HEIGHT_DELTA)
-                        .alongWith(Commands.print("Elevator default: " + Constants.ElevatorConstants.STAGE_2_HEIGHT_DELTA.in(Meters))),
-                    Commands.waitSeconds(0.1),
+                    Commands.deadline(
+                        Commands.waitSeconds(0.5),
+                        new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_2_HEIGHT_DELTA)
+                        .alongWith(Commands.print("Elevator default: " + Constants.ElevatorConstants.STAGE_2_HEIGHT_DELTA.in(Meters)))
+                    ),
                     new ParallelCommandGroup(
                         new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
                             .alongWith(Commands.print("Swing FEED: " + Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),
@@ -164,9 +169,12 @@ public class RobotStateMachine {
 
                 RobotState.L3,
                 new SequentialCommandGroup(
-                    new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_3_HEIGHT_DELTA)
-                        .alongWith(Commands.print("Elevator default: " + Constants.ElevatorConstants.STAGE_3_HEIGHT_DELTA.in(Meters))),
-                    Commands.waitSeconds(0.1),
+                    Commands.deadline(
+                        Commands.waitSeconds(0.5),
+                        new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_3_HEIGHT_DELTA)
+                        .alongWith(Commands.print("Elevator default: " + Constants.ElevatorConstants.STAGE_3_HEIGHT_DELTA.in(Meters)))
+                    
+                    ),
                     new ParallelCommandGroup(
                         new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
                             .alongWith(Commands.print("Swing FEED: " + Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),
@@ -179,9 +187,11 @@ public class RobotStateMachine {
 
                 RobotState.L4,
                 new SequentialCommandGroup(
-                    new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_4_HEIGHT_DELTA)
-                        .alongWith(Commands.print("Elevator default: " + Constants.ElevatorConstants.STAGE_4_HEIGHT_DELTA.in(Meters))),
-                    Commands.waitSeconds(0.1),
+                    Commands.deadline(
+                        Commands.waitSeconds(0.5),
+                        new ElevatorSetPositionCommand(elevator, Constants.ElevatorConstants.STAGE_4_HEIGHT_DELTA)
+                        .alongWith(Commands.print("Elevator default: " + Constants.ElevatorConstants.STAGE_4_HEIGHT_DELTA.in(Meters)))
+                    ),
                     new ParallelCommandGroup(
                         new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
                             .alongWith(Commands.print("Swing FEED: " + Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),

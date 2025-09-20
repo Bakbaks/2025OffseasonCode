@@ -467,6 +467,11 @@ public class RobotContainer {
         Commands.runOnce(() -> sm.setState(RobotState.START_CONFIG))
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         );
+
+        auxY.onTrue(
+        Commands.runOnce(() -> sm.setState(RobotState.L4))
+                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        );
         /* 
         driveRightTrigger.onTrue(new RobotCommandHandler(
         1, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake
