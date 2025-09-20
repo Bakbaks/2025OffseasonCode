@@ -463,6 +463,11 @@ public class RobotContainer {
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         );
 
+        driveA.onTrue(
+        Commands.runOnce(() -> sm.setState(RobotState.SCORE4))
+                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        );
+
         
 
         auxRightTrigger.onTrue(

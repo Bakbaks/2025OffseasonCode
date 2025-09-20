@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.commands.ArmCommand.ArmSetPositionCommand;
 import frc.robot.commands.ElevatorCommand.ElevatorSetPositionCommand;
 import frc.robot.commands.GroundIntakeCommands.SpinGroundIntakeCommand;
@@ -232,9 +233,32 @@ public class RobotStateMachine {
                     )
                 ).withName("L4"),
 
-                RobotState.SCORE, // a simple canned score if you want a non-parameterized version
+                RobotState.SCORE4, // a simple canned score if you want a non-parameterized version
                 new SequentialCommandGroup(
-                    new IntakeSpinCommand(intake, 0.1).withTimeout(1.0)
+                    Commands.deadline(
+                        Commands.waitSeconds(0.1),
+                        new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
+                            .alongWith(Commands.print("Swing FEED: " + Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),
+                        new ArmSetPositionCommand(arm, Constants.ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))
+                            .alongWith(Commands.print("Arm BASE: " + Constants.ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))),
+                        new SpinGroundIntakeCommand(spin, 0),
+                        new IntakeSpinCommand(intake, 0)
+                    ),
+                    Commands.deadline(
+                        Commands.waitSeconds(0.3),
+                        new SwingGroundIntakeCommand(swing, Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
+                            .alongWith(Commands.print("Swing FEED: " + Constants.GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),
+                        new ArmSetPositionCommand(arm, Constants.ArmConstant.SCORE_STAGE_4_ANGLE_VERTICAL.in(Degrees))
+                            .alongWith(Commands.print("Arm BASE: " + Constants.ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))),
+                        new SpinGroundIntakeCommand(spin, 0),
+                        new IntakeSpinCommand(intake, 0)
+                    ),
+
+                    new ParallelCommandGroup(
+                        new IntakeSpinCommand(intake, -0.1).withTimeout(1.0)
+                    )
+                    
+
                 ).withName("SCORE"),
 
                 RobotState.SCOREL1,

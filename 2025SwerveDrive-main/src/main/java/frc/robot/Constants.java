@@ -83,7 +83,13 @@ public final class Constants {
     public static final Angle STAGE_1_ANGLE_VERTICAL        = Degrees.of(15); 
     public static final Angle STAGE_2_ANGLE_VERTICAL        = Degrees.of(15);
     public static final Angle STAGE_3_ANGLE_VERTICAL        = Degrees.of(15);
-    public static final Angle STAGE_4_ANGLE_VERTICAL        = Degrees.of(160);
+    public static final Angle STAGE_4_ANGLE_VERTICAL        = Degrees.of(140);
+
+    public static final Angle SCORE_STAGE_1_ANGLE_VERTICAL        = Degrees.of(15); 
+    public static final Angle SCORE_STAGE_2_ANGLE_VERTICAL        = Degrees.of(15);
+    public static final Angle SCORE_STAGE_3_ANGLE_VERTICAL        = Degrees.of(15);
+    public static final Angle SCORE_STAGE_4_ANGLE_VERTICAL        = Degrees.of(100);
+
 
     //public static final Angle SAD_CORAL_STATION_ANGLE_VERTICAL  = Degrees.of(CORAL_STATION_ANGLE_VERTICAL.in(Degrees) * -1);
     //public static final Angle SAD_CORAL_STATION_ANGLE_VERTICAL  = Degrees.of(CORAL_STATION_ANGLE_VERTICAL.in(Degrees) * -1);

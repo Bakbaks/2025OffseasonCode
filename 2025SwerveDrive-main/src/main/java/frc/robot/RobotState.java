@@ -8,6 +8,8 @@ public enum RobotState {
     L2,
     L3,
     L4,
-    SCORE,
+    SCORE2,
+    SCORE3,
+    SCORE4,
     SCOREL1
 }
