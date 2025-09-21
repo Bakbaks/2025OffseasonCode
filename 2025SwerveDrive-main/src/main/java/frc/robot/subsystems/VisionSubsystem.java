@@ -53,7 +53,7 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   
-  public PathPlan getPlan() {
+  public PathPlan getPlan(Transform2d robot2goal) {
     Snapshot rightSnap = takeSnapshot(rightCamera, robotToRight);
     Snapshot leftSnap  = takeSnapshot(leftCamera,  robotToLeft);
 
@@ -81,12 +81,12 @@ public class VisionSubsystem extends SubsystemBase {
       plan.cameraName = "right";
       plan.tagId = rightFirst.tagId;
       Transform2d robotToCam2d = project3d2d(robotToRight);
-      plan.robotToGoal = robotToCam2d.plus(rightFirst.camToTag2d).plus(VisionConstants.TAG_TO_GOAL);
+      plan.robotToGoal = robotToCam2d.plus(rightFirst.camToTag2d).plus(robot2goal);
     } else {
       plan.cameraName = "left";
       plan.tagId = leftFirst.tagId;
       Transform2d robotToCam2d = project3d2d(robotToLeft);
-      plan.robotToGoal = robotToCam2d.plus(leftFirst.camToTag2d).plus(VisionConstants.TAG_TO_GOAL);
+      plan.robotToGoal = robotToCam2d.plus(leftFirst.camToTag2d).plus(robot2goal);
     }
 
     System.out.println("[Vision] " + plan);

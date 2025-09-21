@@ -30,13 +30,16 @@ public class AimAtTagCommand extends Command {
 
   private Command followCmd;
   private Pose2d targetPose;
+  private Transform2d robot2goal;
 
   
   public AimAtTagCommand(
+    Transform2d robot2goal,
     CommandSwerveDrivetrain drivetrain,
     VisionSubsystem vision,
     PathConstraints limits,
     double minPlanDistanceM) {
+    this.robot2goal = robot2goal;
     this.drivetrain = drivetrain;
     this.vision = vision;
     this.limits = limits;
@@ -49,7 +52,7 @@ public class AimAtTagCommand extends Command {
     followCmd = null;
     
     
-    VisionSubsystem.PathPlan plan = vision.getPlan();
+    VisionSubsystem.PathPlan plan = vision.getPlan(robot2goal);
     if (plan == null) {
       System.out.println("No vision plan");
       return;

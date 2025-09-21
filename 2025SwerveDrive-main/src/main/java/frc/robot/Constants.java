@@ -80,12 +80,12 @@ public final class Constants {
  */
 
     public static final Angle CORAL_STATION_ANGLE_VERTICAL  = Degrees.of(-15);
-    public static final Angle STAGE_1_ANGLE_VERTICAL        = Degrees.of(15); 
-    public static final Angle STAGE_2_ANGLE_VERTICAL        = Degrees.of(100);
-    public static final Angle STAGE_3_ANGLE_VERTICAL        = Degrees.of(140);
+    public static final Angle STAGE_1_ANGLE_VERTICAL        = Degrees.of(0); 
+    public static final Angle STAGE_2_ANGLE_VERTICAL        = Degrees.of(110);
+    public static final Angle STAGE_3_ANGLE_VERTICAL        = Degrees.of(130);
     public static final Angle STAGE_4_ANGLE_VERTICAL        = Degrees.of(140);
 
-    public static final Angle SCORE_STAGE_1_ANGLE_VERTICAL        = Degrees.of(15); 
+    public static final Angle SCORE_STAGE_1_ANGLE_VERTICAL        = Degrees.of(0); 
     public static final Angle SCORE_STAGE_2_ANGLE_VERTICAL        = Degrees.of(60);
     public static final Angle SCORE_STAGE_3_ANGLE_VERTICAL        = Degrees.of(40);
     public static final Angle SCORE_STAGE_4_ANGLE_VERTICAL        = Degrees.of(40);
@@ -133,7 +133,7 @@ public final class Constants {
 
     public static final Angle GroundIntake_FEED_ANGLE_VERTICAL = Degrees.of(0);
     public static final Angle GroundIntake_LOWERED_ANGLE_VERTICAL = Degrees.of(-145);
-    public static final Angle GroundIntake_LEVEL1_ANGLE_VERTICAL = Degrees.of(-50);
+    public static final Angle GroundIntake_LEVEL1_ANGLE_VERTICAL = Degrees.of(-70);
 
     public static final double kGroundP = 0.05;
     public static final double kGroundI = 0; //0.003;
@@ -217,12 +217,12 @@ public final class Constants {
     public static final Distance ELEVATOR_HANDOFF_DELTA = Inches.of(1); //needs changing
     public static final Distance STAGE_0_HEIGHT_DELTA = Inches.of(8);
     public static final Distance STAGE_1_HEIGHT_DELTA  = Inches.of(8); //needs changing
-    public static final Distance STAGE_2_HEIGHT_DELTA  = Inches.of(10); 
-    public static final Distance STAGE_3_HEIGHT_DELTA  = Inches.of(0); // needs changing
+    public static final Distance STAGE_2_HEIGHT_DELTA  = Inches.of(0); 
+    public static final Distance STAGE_3_HEIGHT_DELTA  = Inches.of(7); // needs changing
     public static final Distance STAGE_4_HEIGHT_DELTA  = Inches.of(27);
 
     public static final Distance SCORE_STAGE_2_HEIGHT_DELTA  = Inches.of(STAGE_2_HEIGHT_DELTA.in(Inches) - 2);
-    public static final Distance SCORE_STAGE_3_HEIGHT_DELTA  = Inches.of(STAGE_3_HEIGHT_DELTA.in(Inches) - 2);
+    public static final Distance SCORE_STAGE_3_HEIGHT_DELTA  = Inches.of(6);
     public static final Distance SCORE_STAGE_4_HEIGHT_DELTA  = Inches.of(23);
   }
   //ignore check tuner constants
@@ -358,7 +358,8 @@ public final class Constants {
     
 
     //point to go to relative to the tag
-    public static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(0, -.4), new Rotation2d());//meters
+    public static final Transform2d TAG_TO_GOAL_RIGHT = new Transform2d(new Translation2d(0, -.4), new Rotation2d());//meters
+    public static final Transform2d TAG_TO_GOAL_LEFT = new Transform2d(new Translation2d(0, 0.1), new Rotation2d());//meters
   
 
 

@@ -97,7 +97,9 @@ public class RobotContainer {
     Math.toRadians(720.0)    // max rad/s^2
     );
     
-    private final AimAtTagCommand aimAtTag = new AimAtTagCommand(drivetrain, vision, lims, 0.1);
+    private final AimAtTagCommand aimAtTagL = new AimAtTagCommand(Constants.VisionConstants.TAG_TO_GOAL_LEFT, drivetrain, vision, lims, 0.1);
+    private final AimAtTagCommand aimAtTagR = new AimAtTagCommand(Constants.VisionConstants.TAG_TO_GOAL_RIGHT, drivetrain, vision, lims, 0.1);
+        
 
     private final Trigger auxY = m_auxController.y();
     private final Trigger auxA = m_auxController.a();
@@ -451,35 +453,8 @@ public class RobotContainer {
                         .alongWith(Commands.print("Arm Level 4, Angles: " + ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))));
                 
         }, elevatorSubsystem));*/
-        
-        
-        driveLeftTrigger.onTrue(
-        Commands.runOnce(() -> sm.setState(RobotState.HANDOFF))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        );
 
-        driveRightTrigger.onTrue(
-        Commands.runOnce(() -> sm.setState(RobotState.INTAKE_DOWN))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        );
-
-        driveA.onTrue(
-        Commands.runOnce(() -> sm.setState(RobotState.SCORE4))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        );
-
-        
-
-        auxRightTrigger.onTrue(
-        Commands.runOnce(() -> sm.setState(RobotState.START_CONFIG))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        );
-
-        auxY.onTrue(
-        Commands.runOnce(() -> sm.setState(RobotState.L4))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        );
-        /* 
+                /* 
         driveRightTrigger.onTrue(new RobotCommandHandler(
         1, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake
         ));
@@ -492,38 +467,12 @@ public class RobotContainer {
 
          */
 
-
-
-
-        //default elevator and arm manual control
-        m_auxController.start().whileTrue(new youPary(elevatorSubsystem));
-        elevatorSubsystem.setDefaultCommand(new RunCommand(() -> {
-            double rightXAxis = m_auxController.getRightY();
-            elevatorSubsystem.manualControl(-rightXAxis*0.25+0.035);
-        }, elevatorSubsystem)
-        .alongWith(Commands.print("Elevator Manual Controlling: " + m_auxController.getRightX())));
-
-        m_auxController.back().whileTrue(new youParyArm(arm));
-        arm.setDefaultCommand(new RunCommand(() -> {
-            double leftYAxis = m_auxController.getLeftX();
-            arm.manualControl(-leftYAxis*0.2);
-        }, arm)
-        .alongWith(Commands.print("Arm Manual Controlling: "+m_auxController.getLeftY())));
-
-        //Climber Bindings
-        auxPovUP.onTrue(new RunCommand(() -> {climb.expand();}, climb)).onFalse(new RunCommand(() -> {climb.stop();}, climb));
-        auxPovDOWN.onTrue(new RunCommand(() -> {climb.retract();}, climb)).onFalse(new RunCommand(() -> {climb.stop();}, climb));
-
+         
         // auxPovUP.onTrue(new RunCommand(() -> {climb.expand();}, climb));
         // System.out.println("climb" );
         // auxPovDOWN.onTrue(new RunCommand(() -> {climb.retract();}, climb));
 
-
-        auxPovLEFT.onTrue(new RunCommand(() -> {intake.feedEast(0.1);}, intake)).onFalse(new RunCommand(() -> {intake.stop();}, intake));
-        auxPovRIGHT.onTrue(new RunCommand(() -> {intake.feedWest(0.1);}, intake)).onFalse(new RunCommand(() -> {intake.stop();}, intake));
-
-
-        //aux control the intake from the source
+ //aux control the intake from the source
         //this is for getting the game pieces from the source
         /*
         driveLeftTrigger.onTrue(new RunCommand(() ->{//source intake
@@ -628,24 +577,127 @@ public class RobotContainer {
         //Trigger visionHasGoal = new Trigger(() -> vision.getBestRobotToGoal().isPresent()).debounce(0.10);
         //driveLeftBumper.and(visionHasGoal).whileTrue(aimAtTag);
         //no checks
-        driveRightBumper.onTrue(aimAtTag);
         
 
+        //OFF SEAS
+        
+        /*
+        driveLeftTrigger.onTrue(new RunCommand(() -> {
+                if(sm.getState() == RobotState.START_CONFIG){
+                        System.out.println("LEFT TRIGGER");
+                        sm.setState(RobotState.HANDOFF);
+                        sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake);
+                }
+                else if(sm.getState() == RobotState.HANDOFF){
+                        sm.setState(RobotState.INTAKE_DOWN);
+                        sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake);
+                }
+                else{}
+        })); 
+
+        driveRightTrigger.onTrue(new RunCommand(() -> {
+                if(sm.getState() == RobotState.L1){
+                        sm.setState(RobotState.SCOREL1);
+                }
+                else if(sm.getState() == RobotState.L2){
+                        sm.setState(RobotState.SCORE2);
+                }
+                else if(sm.getState() == RobotState.L3){
+                        sm.setState(RobotState.SCORE3);
+                }
+                else if(sm.getState() == RobotState.L4){
+                        sm.setState(RobotState.SCORE4);
+                }
+                else{}
+        }));
+        */
+        
+        
+        driveLeftTrigger.onTrue(
+        Commands.runOnce(() -> sm.setState(RobotState.HANDOFF))
+                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        );
+
+        driveRightTrigger.onTrue(
+        Commands.runOnce(() -> sm.setState(RobotState.INTAKE_DOWN))
+                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        ); 
+        
+        driveA.onTrue(
+        Commands.runOnce(() -> sm.setState(RobotState.SCOREL1))
+                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        );
+        driveB.onTrue(
+        Commands.runOnce(() -> sm.setState(RobotState.SCORE2))
+                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        );
+        driveX.onTrue(
+        Commands.runOnce(() -> sm.setState(RobotState.SCORE3))
+                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        );
+        driveY.onTrue(
+        Commands.runOnce(() -> sm.setState(RobotState.SCORE4))
+                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        );
+        
+        
+
+        driveRightBumper.onTrue(aimAtTagR);
+        driveLeftBumper.onTrue(aimAtTagL);
+
 
         
 
-            //delete if enum works
-        
-        //Intake Bindings
-        //driver scoring, only control the intake and out take spinning
-        // driveRightTrigger.onTrue(new RunCommand(() -> {
-        //         // Use the helper method
-        //         handleIntakeByArmState(arm.getStateE(), 0.6);
-        //     }, intake))
-        //     .onFalse(new RunCommand(() -> {
-        //         intake.stop();
-        //     }, intake));
+        //AUX COMMANDS
 
+        auxRightTrigger.onTrue(
+        Commands.runOnce(() -> sm.setState(RobotState.START_CONFIG))
+                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        );
+
+        auxA.onTrue(
+                Commands.runOnce(() -> sm.setState(RobotState.L1))
+                        .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        );
+        auxB.onTrue(
+                Commands.runOnce(() -> sm.setState(RobotState.L2))
+                        .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        );
+        auxX.onTrue(
+                Commands.runOnce(() -> sm.setState(RobotState.L3))
+                        .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        );
+        auxY.onTrue(
+        Commands.runOnce(() -> sm.setState(RobotState.L4))
+                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        );
+
+
+        //default elevator and arm manual control
+        m_auxController.start().whileTrue(new youPary(elevatorSubsystem));
+        elevatorSubsystem.setDefaultCommand(new RunCommand(() -> {
+            double rightXAxis = m_auxController.getRightY();
+            elevatorSubsystem.manualControl(-rightXAxis*0.25+0.035);
+        }, elevatorSubsystem)
+        .alongWith(Commands.print("Elevator Manual Controlling: " + m_auxController.getRightX())));
+
+        m_auxController.back().whileTrue(new youParyArm(arm));
+        arm.setDefaultCommand(new RunCommand(() -> {
+            double leftYAxis = m_auxController.getLeftX();
+            arm.manualControl(-leftYAxis*0.2);
+        }, arm)
+        .alongWith(Commands.print("Arm Manual Controlling: "+m_auxController.getLeftY())));
+
+        //Climber Bindings
+        auxPovUP.onTrue(new RunCommand(() -> {climb.expand();}, climb)).onFalse(new RunCommand(() -> {climb.stop();}, climb));
+        auxPovDOWN.onTrue(new RunCommand(() -> {climb.retract();}, climb)).onFalse(new RunCommand(() -> {climb.stop();}, climb));
+
+        //auxPovLEFT.onTrue(new RunCommand(() -> {intake.feedEast(0.1);}, intake)).onFalse(new RunCommand(() -> {intake.stop();}, intake));
+        //auxPovRIGHT.onTrue(new RunCommand(() -> {intake.feedWest(0.1);}, intake)).onFalse(new RunCommand(() -> {intake.stop();}, intake));
+
+
+       
+        
 
 
 
