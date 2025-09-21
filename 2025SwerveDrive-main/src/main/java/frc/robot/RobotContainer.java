@@ -91,8 +91,8 @@ public class RobotContainer {
     private final SwingGroundIntakeSubsystem SwingGroundIntake = new SwingGroundIntakeSubsystem();
     private final SpinGroundIntakeSubsystem spinGroundIntake = new SpinGroundIntakeSubsystem();
     PathConstraints lims = new PathConstraints(
-    2.0,                     // max m/s
-    0.5,                     // max m/s^2
+    5.0,                     // max m/s
+    3,                     // max m/s^2
     Math.toRadians(540.0),   // max rad/s
     Math.toRadians(720.0)    // max rad/s^2
     );

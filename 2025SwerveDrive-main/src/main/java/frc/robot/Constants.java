@@ -87,8 +87,8 @@ public final class Constants {
 
     public static final Angle SCORE_STAGE_1_ANGLE_VERTICAL        = Degrees.of(15); 
     public static final Angle SCORE_STAGE_2_ANGLE_VERTICAL        = Degrees.of(60);
-    public static final Angle SCORE_STAGE_3_ANGLE_VERTICAL        = Degrees.of(60);
-    public static final Angle SCORE_STAGE_4_ANGLE_VERTICAL        = Degrees.of(60);
+    public static final Angle SCORE_STAGE_3_ANGLE_VERTICAL        = Degrees.of(40);
+    public static final Angle SCORE_STAGE_4_ANGLE_VERTICAL        = Degrees.of(40);
 
 
     //public static final Angle SAD_CORAL_STATION_ANGLE_VERTICAL  = Degrees.of(CORAL_STATION_ANGLE_VERTICAL.in(Degrees) * -1);
@@ -346,7 +346,7 @@ public final class Constants {
     public static final double R_YAW   = Math.toRadians(-35.0); 
   
     // Left camera
-    public static final double L_X = -0.2601976; // negative makes the robot end up further from the wall
+    public static final double L_X = 0.2601976; // negative makes the robot end up further from the wall
     public static final double L_Y = 0.085725;    // left is positive Y
     public static final double L_Z = 0.2067306;
     public static final double L_ROLL  = 0.0;
@@ -358,7 +358,7 @@ public final class Constants {
     
 
     //point to go to relative to the tag
-    public static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(0, -0.2), new Rotation2d());//meters
+    public static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(0, -.4), new Rotation2d());//meters
   
 
 
