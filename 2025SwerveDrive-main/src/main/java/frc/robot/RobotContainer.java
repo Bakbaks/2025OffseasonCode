@@ -618,6 +618,8 @@ public class RobotContainer {
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         );
 
+        //make this toggle later
+        
         driveRightTrigger.onTrue(
         Commands.runOnce(() -> sm.setState(RobotState.INTAKE_DOWN))
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))

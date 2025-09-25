@@ -154,10 +154,25 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   private Tag getTag(Snapshot snap) {
-    if (snap == null) return null;
-    if (snap.observed == null || snap.observed.isEmpty()) return null;
-    // getting first tag
-    return snap.observed.get(0);
+    if (snap == null || snap.observed == null || snap.observed.isEmpty()) return null;
+  
+    Tag best = null;
+    double bestDist = Double.POSITIVE_INFINITY;
+  
+    for (Tag t : snap.observed) {
+      if (t.camToTag2d == null) continue;
+      double dx = t.camToTag2d.getX();
+      double dy = t.camToTag2d.getY();
+      double planar = Math.hypot(dx, dy);   // distance in the X–Y plane
+  
+      // prefer lower ambiguity when distances are ~equal
+      if (planar < bestDist - 1e-6 ||
+          (Math.abs(planar - bestDist) <= 1e-6 && best != null && t.ambiguity < best.ambiguity)) {
+        best = t;
+        bestDist = planar;
+      }
+    }
+    return best;
   }
 
   //x,y,yaw
