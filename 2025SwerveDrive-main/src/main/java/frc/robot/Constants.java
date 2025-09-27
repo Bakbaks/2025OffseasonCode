@@ -81,7 +81,7 @@ public final class Constants {
 
     public static final Angle CORAL_STATION_ANGLE_VERTICAL  = Degrees.of(-15);
     public static final Angle STAGE_1_ANGLE_VERTICAL        = Degrees.of(0); 
-    public static final Angle STAGE_2_ANGLE_VERTICAL        = Degrees.of(110);
+    public static final Angle STAGE_2_ANGLE_VERTICAL        = Degrees.of(90);
     public static final Angle STAGE_3_ANGLE_VERTICAL        = Degrees.of(130);
     public static final Angle STAGE_4_ANGLE_VERTICAL        = Degrees.of(140);
 
@@ -91,7 +91,7 @@ public final class Constants {
     public static final Angle SCORE_STAGE_4_ANGLE_VERTICAL        = Degrees.of(40);
 
     public static final Angle ARM_SUPERGRAB_ANGLE_VERTICAL        = Degrees.of(90);
-    public static final Angle ARM_SUPERSCORE_ANGLE_VERTICAL        = Degrees.of(140);
+    public static final Angle ARM_SUPERSCORE_ANGLE_VERTICAL        = Degrees.of(160);
 
 
     //public static final Angle SAD_CORAL_STATION_ANGLE_VERTICAL  = Degrees.of(CORAL_STATION_ANGLE_VERTICAL.in(Degrees) * -1);
@@ -224,7 +224,8 @@ public final class Constants {
     public static final Distance STAGE_2_HEIGHT_DELTA  = Inches.of(0); 
     public static final Distance STAGE_3_HEIGHT_DELTA  = Inches.of(7); // needs changing
     public static final Distance STAGE_4_HEIGHT_DELTA  = Inches.of(27);
-    public static final Distance STAGE_PINCH_HEIGHT_DELTA = Inches.of(14);
+    public static final Distance STAGE_PINCH_HIGH_HEIGHT_DELTA = Inches.of(17);
+    public static final Distance STAGE_PINCH_LOW_HEIGHT_DELTA = Inches.of(7);
 
     public static final Distance SCORE_STAGE_2_HEIGHT_DELTA  = Inches.of(STAGE_2_HEIGHT_DELTA.in(Inches) - 2);
     public static final Distance SCORE_STAGE_3_HEIGHT_DELTA  = Inches.of(6);

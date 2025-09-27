@@ -123,7 +123,7 @@ public class RobotContainer {
     private final Trigger driveLeftBumper = m_driverController.leftBumper();
     private final Trigger driveLeftTrigger = m_driverController.leftTrigger();
     private final Trigger drivePovDOWN = m_driverController.povDown();
-
+    private final Trigger drivePovUP = m_driverController.povUp();
     private boolean sadMode = false;
     private final SendableChooser<Command> autoChooser;
 
@@ -644,6 +644,8 @@ public class RobotContainer {
         )
         );
         */
+
+
         driveLeftTrigger.onTrue(
         Commands.runOnce(() -> sm.setState(RobotState.HANDOFF))
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
@@ -653,7 +655,28 @@ public class RobotContainer {
         Commands.runOnce(() -> sm.setState(RobotState.INTAKE_DOWN))
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         ); 
+        
         /* 
+        driveRightTrigger.onTrue(
+        Commands.defer(
+                () -> {
+                final RobotState current = sm.getState();
+                final RobotState next = (current == RobotState.INTAKE_DOWN)
+                        ? RobotState.HANDOFF : RobotState.INTAKE_DOWN;
+                sm.setState(next);
+
+                return sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake)
+                        .withName("SM:" + next)
+                        .withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf);
+                },
+                java.util.Set.of(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake)
+        )
+        .withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf)
+        );*/
+
+
+
+        /*
         driveA.onTrue(
         Commands.runOnce(() -> sm.setState(RobotState.SCOREL1))
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
@@ -670,7 +693,7 @@ public class RobotContainer {
         Commands.runOnce(() -> sm.setState(RobotState.SCORE4))
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         );
-        */
+         */
         /* */
         /* driveY.onTrue(
         Commands.runOnce(() -> {
@@ -722,6 +745,12 @@ public class RobotContainer {
         Commands.runOnce(() -> sm.setState(RobotState.SCORE4))
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         ); 
+
+        drivePovUP.onTrue(
+                Commands.runOnce(() -> sm.setState(RobotState.SupaPinchScore))
+                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        ); 
+        
         
 
         driveRightBumper.onTrue(aimAtTagR);
@@ -771,15 +800,15 @@ public class RobotContainer {
         }, arm)
         .alongWith(Commands.print("Arm Manual Controlling: "+m_auxController.getLeftY())));
 
-        auxLeftTrigger.onTrue(
+        auxLeftBumper.onTrue(
         Commands.defer(
                 () -> {
                 RobotState cur = sm.getState();
                 RobotState target;
-                if (cur == RobotState.SupaPinchGrab) {
-                        target = RobotState.SupaPinchScore;
+                if (cur == RobotState.SupaPinchHIGHGrab) {
+                        target = RobotState.SupaPinchBarge;
                 } else {
-                        target = RobotState.SupaPinchGrab;
+                        target = RobotState.SupaPinchHIGHGrab;
                 }
                 sm.setState(target);
                 return sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake);
@@ -787,6 +816,31 @@ public class RobotContainer {
                 java.util.Set.of(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake)
         )
         );
+
+        auxRightBumper.onTrue(
+                Commands.runOnce(() -> sm.setState(RobotState.SupaPinchBarge))
+                        .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        );
+
+        auxLeftTrigger.onTrue(
+        Commands.defer(
+                () -> {
+                RobotState cur = sm.getState();
+                RobotState target;
+                if (cur == RobotState.SupaPinchLOWGrab) {
+                        target = RobotState.SupaPinchBarge;
+                } else {
+                        target = RobotState.SupaPinchLOWGrab;
+                }
+                sm.setState(target);
+                return sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake);
+                },
+                java.util.Set.of(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake)
+        )
+        );
+
+
+        
         //Climber Bindings
         //auxPovUP.onTrue(new RunCommand(() -> {climb.expand();}, climb)).onFalse(new RunCommand(() -> {climb.stop();}, climb));
         //auxPovDOWN.onTrue(new RunCommand(() -> {climb.retract();}, climb)).onFalse(new RunCommand(() -> {climb.stop();}, climb));
