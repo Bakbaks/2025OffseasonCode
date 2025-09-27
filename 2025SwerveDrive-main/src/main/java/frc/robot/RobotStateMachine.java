@@ -60,6 +60,8 @@ public class RobotStateMachine {
                     ),
                    
                     new ParallelCommandGroup(
+                        new ElevatorSetPositionCommand(elevator, ElevatorConstants.STAGE_0_HEIGHT_DELTA)
+                        .alongWith(Commands.print("Elevator default: " + ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Meters))),
                         new SwingGroundIntakeCommand(swing, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
                             .alongWith(Commands.print("Swing FEED: " + GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),
                         new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
@@ -420,7 +422,62 @@ public class RobotStateMachine {
                             new SpinGroundIntakeCommand(spin, -0.3).withTimeout(1.0),
                         new IntakeSpinCommand(intake, -0.3)
                     )
-                ).withName("SCOREL1"))
+                ).withName("SCOREL1")),
+
+                entry(RobotState.SupaPinchGrab,
+                new SequentialCommandGroup(
+                    Commands.deadline(
+                        Commands.waitSeconds(0.1),
+                        new ElevatorSetPositionCommand(elevator, ElevatorConstants.STAGE_PINCH_HEIGHT_DELTA)
+                        .alongWith(Commands.print("Elevator default: " + ElevatorConstants.STAGE_PINCH_HEIGHT_DELTA.in(Meters)))
+                    ),
+                   
+                    new ParallelCommandGroup(
+                        new ElevatorSetPositionCommand(elevator, ElevatorConstants.STAGE_PINCH_HEIGHT_DELTA)
+                        .alongWith(Commands.print("Elevator default: " + ElevatorConstants.STAGE_PINCH_HEIGHT_DELTA.in(Meters))),
+                        new SwingGroundIntakeCommand(swing, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
+                            .alongWith(Commands.print("Swing FEED: " + GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),
+                        new ArmSetPositionCommand(arm, ArmConstant.ARM_SUPERGRAB_ANGLE_VERTICAL.in(Degrees))
+                            .alongWith(Commands.print("Arm BASE: " + ArmConstant.ARM_SUPERGRAB_ANGLE_VERTICAL.in(Degrees))),
+                        new SpinGroundIntakeCommand(spin, 0),
+                        new IntakeSpinCommand(intake, 0)
+                    )
+                ).withName("SupaPinchGrab")),
+
+                entry(RobotState.SupaPinchScore,
+                new SequentialCommandGroup(
+                    Commands.deadline(
+                        Commands.waitSeconds(0.1),
+                        new ElevatorSetPositionCommand(elevator, ElevatorConstants.SCORE_STAGE_4_HEIGHT_DELTA)
+                        .alongWith(Commands.print("Elevator default: " + ElevatorConstants.SCORE_STAGE_4_HEIGHT_DELTA.in(Meters)))
+                    ),
+                   
+                    new ParallelCommandGroup(
+                        new ElevatorSetPositionCommand(elevator, ElevatorConstants.SCORE_STAGE_4_HEIGHT_DELTA)
+                        .alongWith(Commands.print("Elevator default: " + ElevatorConstants.SCORE_STAGE_4_HEIGHT_DELTA.in(Meters))),
+                        new SwingGroundIntakeCommand(swing, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
+                            .alongWith(Commands.print("Swing FEED: " + GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),
+                        new ArmSetPositionCommand(arm, ArmConstant.ARM_SUPERSCORE_ANGLE_VERTICAL.in(Degrees))
+                            .alongWith(Commands.print("Arm BASE: " + ArmConstant.ARM_SUPERSCORE_ANGLE_VERTICAL.in(Degrees))),
+                        new SpinGroundIntakeCommand(spin, 0),
+                        new IntakeSpinCommand(intake, 0)
+                    )
+                ).withName("SupaPinchScore")),
+
+                entry(RobotState.SupaPinchScoreRelease,
+                new SequentialCommandGroup(
+
+                    new ParallelCommandGroup(
+                        new ElevatorSetPositionCommand(elevator, ElevatorConstants.SCORE_STAGE_4_HEIGHT_DELTA)
+                        .alongWith(Commands.print("Elevator default: " + ElevatorConstants.SCORE_STAGE_4_HEIGHT_DELTA.in(Meters))),
+                        new SwingGroundIntakeCommand(swing, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
+                            .alongWith(Commands.print("Swing FEED: " + GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),
+                        new ArmSetPositionCommand(arm, ArmConstant.ARM_SUPERSCORE_ANGLE_VERTICAL.in(Degrees))
+                            .alongWith(Commands.print("Arm BASE: " + ArmConstant.ARM_SUPERSCORE_ANGLE_VERTICAL.in(Degrees))),
+                        new SpinGroundIntakeCommand(spin, 0),
+                        new IntakeSpinCommand(intake, -0.3)
+                    )
+                ).withName("SupaPinchScoreRelease"))
                
             );
 

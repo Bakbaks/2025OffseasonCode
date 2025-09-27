@@ -675,10 +675,14 @@ public class RobotContainer {
                 target = RobotState.SCORE3;
                 } else if (cur == RobotState.L4) {
                 target = RobotState.SCORE4;
-                } else if (cur == RobotState.SCOREL1 || 
+                } else if (cur == RobotState.SupaPinchScore){
+                target = RobotState.SupaPinchScoreRelease;
+                }
+                else if (cur == RobotState.SCOREL1 || 
                         cur == RobotState.SCORE2  || 
                         cur == RobotState.SCORE3  || 
-                        cur == RobotState.SCORE4) {
+                        cur == RobotState.SCORE4 ||
+                        cur == RobotState.SupaPinchScoreRelease) {
                 
                 target = cur;
                 } else {
@@ -739,9 +743,25 @@ public class RobotContainer {
         }, arm)
         .alongWith(Commands.print("Arm Manual Controlling: "+m_auxController.getLeftY())));
 
+        auxLeftTrigger.onTrue(
+        Commands.defer(
+                () -> {
+                RobotState cur = sm.getState();
+                RobotState target;
+                if (cur == RobotState.SupaPinchGrab) {
+                        target = RobotState.SupaPinchScore;
+                } else {
+                        target = RobotState.SupaPinchGrab;
+                }
+                sm.setState(target);
+                return sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake);
+                },
+                java.util.Set.of(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake)
+        )
+        );
         //Climber Bindings
-        auxPovUP.onTrue(new RunCommand(() -> {climb.expand();}, climb)).onFalse(new RunCommand(() -> {climb.stop();}, climb));
-        auxPovDOWN.onTrue(new RunCommand(() -> {climb.retract();}, climb)).onFalse(new RunCommand(() -> {climb.stop();}, climb));
+        //auxPovUP.onTrue(new RunCommand(() -> {climb.expand();}, climb)).onFalse(new RunCommand(() -> {climb.stop();}, climb));
+        //auxPovDOWN.onTrue(new RunCommand(() -> {climb.retract();}, climb)).onFalse(new RunCommand(() -> {climb.stop();}, climb));
 
         //auxPovLEFT.onTrue(new RunCommand(() -> {intake.feedEast(0.1);}, intake)).onFalse(new RunCommand(() -> {intake.stop();}, intake));
         //auxPovRIGHT.onTrue(new RunCommand(() -> {intake.feedWest(0.1);}, intake)).onFalse(new RunCommand(() -> {intake.stop();}, intake));
