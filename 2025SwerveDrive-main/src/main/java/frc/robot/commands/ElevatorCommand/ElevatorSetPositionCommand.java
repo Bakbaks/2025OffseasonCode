@@ -21,7 +21,7 @@ public class ElevatorSetPositionCommand extends Command {
 
     @Override
     public void initialize() {
-        System.out.println("Elevator Target Position: "  + targetPosition);
+        //System.out.println("Elevator Target Position: "  + targetPosition);
     }
 
     @Override

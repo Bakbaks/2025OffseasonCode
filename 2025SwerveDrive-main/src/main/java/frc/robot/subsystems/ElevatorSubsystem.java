@@ -75,7 +75,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         setpoint = Math.max(kElevatorMinRotation, Math.min(Rotations, kElevatorMaxRotation));
         if(setpoint !=  Rotations){
-            System.out.println("Warning: Requested elevator position is out of bounds. Setting to " + setpoint + " rotations");
+            //System.out.println("Warning: Requested elevator position is out of bounds. Setting to " + setpoint + " rotations");
             DriverStation.reportWarning("Requested elevator position is out of bounds. Setting to " + setpoint + " rotations", true);
         }
 

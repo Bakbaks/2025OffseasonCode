@@ -61,7 +61,7 @@ public class SwingGroundIntakeSubsystem extends SubsystemBase {
         }
 
 
-        System.out.println("GROUND INTAKE TO " + Swingsetpoint + " ROTATIONS");
+        //System.out.println("GROUND INTAKE TO " + Swingsetpoint + " ROTATIONS");
 
         m_SwingKraken.setControl(m_SwingpidPosition.withPosition(Swingsetpoint));
 

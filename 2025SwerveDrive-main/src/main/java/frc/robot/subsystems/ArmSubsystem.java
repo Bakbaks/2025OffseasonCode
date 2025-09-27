@@ -89,7 +89,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void setArmAngle(double targetAngle) {
         // m_armCANCoder.getPosition().refresh();
         // m_armKraken.getPosition().refresh();
-        System.out.println("you are in set arm angle");
+        //System.out.println("you are in set arm angle");
 
         double Rotations = (targetAngle/360);
 
@@ -101,7 +101,7 @@ public class ArmSubsystem extends SubsystemBase {
         }
 
 
-        System.out.println("Setting ARMM position to final " + Rotations + " rotations");
+        //System.out.println("Setting ARMM position to final " + Rotations + " rotations");
         //System.out.println("Current position; " + m_armCANCoder.toString());
         
         m_armKraken.setControl(m_pidPosition.withPosition(setpoint));
