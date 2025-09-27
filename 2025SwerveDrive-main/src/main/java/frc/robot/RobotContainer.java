@@ -612,19 +612,38 @@ public class RobotContainer {
         }));
         */
         
-        
+        /* 
         driveLeftTrigger.onTrue(
         Commands.runOnce(() -> sm.setState(RobotState.HANDOFF))
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         );
+        */
 
         //make this toggle later
-        
+        /* 
         driveRightTrigger.onTrue(
         Commands.runOnce(() -> sm.setState(RobotState.INTAKE_DOWN))
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         ); 
+        */
+        driveRightTrigger.onTrue(
+        Commands.defer(
+                () -> {
+                RobotState cur = sm.getState();
+                RobotState target;
+                if (cur == RobotState.INTAKE_DOWN) {
+                        target = RobotState.HANDOFF;
+                } else {
+                        target = RobotState.INTAKE_DOWN;
+                }
+                sm.setState(target);
+                return sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake);
+                },
+                java.util.Set.of(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake)
+        )
+        );
         
+        /* 
         driveA.onTrue(
         Commands.runOnce(() -> sm.setState(RobotState.SCOREL1))
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
@@ -641,7 +660,37 @@ public class RobotContainer {
         Commands.runOnce(() -> sm.setState(RobotState.SCORE4))
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         );
-        
+        */
+
+        driveLeftTrigger.onTrue(
+        Commands.runOnce(() -> {
+                RobotState cur = sm.getState();
+                RobotState target;
+
+                if (cur == RobotState.L1) {
+                target = RobotState.SCOREL1;
+                } else if (cur == RobotState.L2) {
+                target = RobotState.SCORE2;
+                } else if (cur == RobotState.L3) {
+                target = RobotState.SCORE3;
+                } else if (cur == RobotState.L4) {
+                target = RobotState.SCORE4;
+                } else if (cur == RobotState.SCOREL1 || 
+                        cur == RobotState.SCORE2  || 
+                        cur == RobotState.SCORE3  || 
+                        cur == RobotState.SCORE4) {
+                
+                target = cur;
+                } else {
+                
+                target = RobotState.SCOREL1;
+                }
+
+                sm.setState(target);
+        }).andThen(() ->
+                sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake)
+        )
+        );
         
 
         driveRightBumper.onTrue(aimAtTagR);
