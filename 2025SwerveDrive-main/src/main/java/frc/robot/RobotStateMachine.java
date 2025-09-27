@@ -107,8 +107,8 @@ public class RobotStateMachine {
                     new ParallelCommandGroup(
                         new SwingGroundIntakeCommand(swing, GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))
                         .alongWith(Commands.print("Swing LOWERED: " + GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))),
-                        new ElevatorSetPositionCommand(elevator, ElevatorConstants.ELEVATOR_BASE_DELTA)
-                            .alongWith(Commands.print("Elevator BASE: " + ElevatorConstants.ELEVATOR_BASE_DELTA.in(Meters))),
+                        new ElevatorSetPositionCommand(elevator, ElevatorConstants.STAGE_0_HEIGHT_DELTA)
+                            .alongWith(Commands.print("Elevator BASE: " + ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Meters))),
                         new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
                             .alongWith(Commands.print("Arm BASE: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
                         new IntakeSpinCommand(intake, 0),
@@ -129,7 +129,7 @@ public class RobotStateMachine {
                         new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
                         .alongWith(Commands.print("Arm BASE: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
                         new IntakeSpinCommand(intake, 0),
-                        new SpinGroundIntakeCommand(spin, 0.3) // start spin
+                        new SpinGroundIntakeCommand(spin, 0.6) // start spin
                     ),
                    
                    
@@ -141,7 +141,7 @@ public class RobotStateMachine {
                         new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees)),
                         new ElevatorSetPositionCommand(elevator, ElevatorConstants.STAGE_0_HEIGHT_DELTA)
                             .alongWith(Commands.print("Elevator BASE: " + ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Meters))),
-                        new SpinGroundIntakeCommand(spin, 0.3),
+                        new SpinGroundIntakeCommand(spin, 0.6),
                         new IntakeSpinCommand(intake, 0)
                     ),
                    
@@ -153,7 +153,7 @@ public class RobotStateMachine {
                         new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees)),
                         new ElevatorSetPositionCommand(elevator, ElevatorConstants.ELEVATOR_HANDOFF_DELTA)
                             .alongWith(Commands.print("Elevator BASE: " + ElevatorConstants.ELEVATOR_HANDOFF_DELTA.in(Meters))),
-                        new SpinGroundIntakeCommand(spin, 0.3),
+                        new SpinGroundIntakeCommand(spin, 0.6),
                         new IntakeSpinCommand(intake, -0.3)
                     ),
 
