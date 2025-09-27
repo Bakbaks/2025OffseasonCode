@@ -440,7 +440,7 @@ public class RobotStateMachine {
                         new ArmSetPositionCommand(arm, ArmConstant.ARM_SUPERGRAB_ANGLE_VERTICAL.in(Degrees))
                             .alongWith(Commands.print("Arm BASE: " + ArmConstant.ARM_SUPERGRAB_ANGLE_VERTICAL.in(Degrees))),
                         new SpinGroundIntakeCommand(spin, 0),
-                        new IntakeSpinCommand(intake, 0)
+                        new IntakeSpinCommand(intake, -0.8)
                     )
                 ).withName("SupaPinchGrab")),
 
@@ -460,7 +460,7 @@ public class RobotStateMachine {
                         new ArmSetPositionCommand(arm, ArmConstant.ARM_SUPERSCORE_ANGLE_VERTICAL.in(Degrees))
                             .alongWith(Commands.print("Arm BASE: " + ArmConstant.ARM_SUPERSCORE_ANGLE_VERTICAL.in(Degrees))),
                         new SpinGroundIntakeCommand(spin, 0),
-                        new IntakeSpinCommand(intake, 0)
+                        new IntakeSpinCommand(intake, -0.8)
                     )
                 ).withName("SupaPinchScore")),
 
@@ -475,7 +475,7 @@ public class RobotStateMachine {
                         new ArmSetPositionCommand(arm, ArmConstant.ARM_SUPERSCORE_ANGLE_VERTICAL.in(Degrees))
                             .alongWith(Commands.print("Arm BASE: " + ArmConstant.ARM_SUPERSCORE_ANGLE_VERTICAL.in(Degrees))),
                         new SpinGroundIntakeCommand(spin, 0),
-                        new IntakeSpinCommand(intake, -0.3)
+                        new IntakeSpinCommand(intake, 0.3)
                     )
                 ).withName("SupaPinchScoreRelease"))
                

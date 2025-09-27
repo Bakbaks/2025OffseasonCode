@@ -51,7 +51,7 @@ public final class Constants {
   public static class IntakeConstant {
     public static final int kIntakeMotorID = 31;
     public static final CANBus kIntakeCANbus = new CANBus("rio");
-    public static final int kIntakeCurrentLimit = 40;
+    public static final int kIntakeCurrentLimit = 60;
 
     public static final int kCANrange1ID = 32;
     public static final int kCANrange2ID = 33;
@@ -119,7 +119,7 @@ public final class Constants {
 
     public static final double kArmMinOutput = -1;
     public static final double kArmMaxOutput = 1;
-    public static final int kArmCurrentLimit = 60;
+    public static final int kArmCurrentLimit = 70;
   }
 
   public static class GroundIntakeConstants {
@@ -223,7 +223,7 @@ public final class Constants {
     public static final Distance STAGE_2_HEIGHT_DELTA  = Inches.of(0); 
     public static final Distance STAGE_3_HEIGHT_DELTA  = Inches.of(7); // needs changing
     public static final Distance STAGE_4_HEIGHT_DELTA  = Inches.of(27);
-    public static final Distance STAGE_PINCH_HEIGHT_DELTA = Inches.of(15);
+    public static final Distance STAGE_PINCH_HEIGHT_DELTA = Inches.of(8);
 
     public static final Distance SCORE_STAGE_2_HEIGHT_DELTA  = Inches.of(STAGE_2_HEIGHT_DELTA.in(Inches) - 2);
     public static final Distance SCORE_STAGE_3_HEIGHT_DELTA  = Inches.of(6);
