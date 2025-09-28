@@ -51,7 +51,7 @@ public final class Constants {
   public static class IntakeConstant {
     public static final int kIntakeMotorID = 31;
     public static final CANBus kIntakeCANbus = new CANBus("rio");
-    public static final int kIntakeCurrentLimit = 60;
+    public static final int kIntakeCurrentLimit = 50;
 
     public static final int kCANrange1ID = 32;
     public static final int kCANrange2ID = 33;
@@ -90,8 +90,10 @@ public final class Constants {
     public static final Angle SCORE_STAGE_3_ANGLE_VERTICAL        = Degrees.of(40);
     public static final Angle SCORE_STAGE_4_ANGLE_VERTICAL        = Degrees.of(40);
 
-    public static final Angle ARM_SUPERGRAB_ANGLE_VERTICAL        = Degrees.of(90);
-    public static final Angle ARM_SUPERSCORE_ANGLE_VERTICAL        = Degrees.of(160);
+    public static final Angle ARM_PINCH_HIGH_ANGLE_VERTICAL        = Degrees.of(90);
+    public static final Angle ARM_PINCH_LOW_ANGLE_VERTICAL        = Degrees.of(70);
+    public static final Angle ARM_SUPERSCORE_ANGLE_VERTICAL        = Degrees.of(200);
+    public static final Angle ARM_SUPERSWING_ANGLE_VERTICAL        = Degrees.of(160);
 
 
     //public static final Angle SAD_CORAL_STATION_ANGLE_VERTICAL  = Degrees.of(CORAL_STATION_ANGLE_VERTICAL.in(Degrees) * -1);
@@ -136,7 +138,7 @@ public final class Constants {
 
     public static final Angle GroundIntake_FEED_ANGLE_VERTICAL = Degrees.of(0);
     //public static final Angle GroundIntake_LOWERED_ANGLE_VERTICAL = Degrees.of(-145);
-    public static final Angle GroundIntake_LOWERED_ANGLE_VERTICAL = Degrees.of(-139);
+    public static final Angle GroundIntake_LOWERED_ANGLE_VERTICAL = Degrees.of(-145);
     public static final Angle GroundIntake_LEVEL1_ANGLE_VERTICAL = Degrees.of(-70);
 
     public static final double kGroundP = 0.05;
@@ -224,8 +226,8 @@ public final class Constants {
     public static final Distance STAGE_2_HEIGHT_DELTA  = Inches.of(0); 
     public static final Distance STAGE_3_HEIGHT_DELTA  = Inches.of(7); // needs changing
     public static final Distance STAGE_4_HEIGHT_DELTA  = Inches.of(27);
-    public static final Distance STAGE_PINCH_HIGH_HEIGHT_DELTA = Inches.of(17);
-    public static final Distance STAGE_PINCH_LOW_HEIGHT_DELTA = Inches.of(7);
+    public static final Distance STAGE_PINCH_HIGH_HEIGHT_DELTA = Inches.of(16);
+    public static final Distance STAGE_PINCH_LOW_HEIGHT_DELTA = Inches.of(0);
 
     public static final Distance SCORE_STAGE_2_HEIGHT_DELTA  = Inches.of(STAGE_2_HEIGHT_DELTA.in(Inches) - 2);
     public static final Distance SCORE_STAGE_3_HEIGHT_DELTA  = Inches.of(6);
