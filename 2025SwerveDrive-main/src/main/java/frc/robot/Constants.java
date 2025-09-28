@@ -91,7 +91,7 @@ public final class Constants {
     public static final Angle SCORE_STAGE_4_ANGLE_VERTICAL        = Degrees.of(40);
 
     public static final Angle ARM_PINCH_HIGH_ANGLE_VERTICAL        = Degrees.of(90);
-    public static final Angle ARM_PINCH_LOW_ANGLE_VERTICAL        = Degrees.of(70);
+    public static final Angle ARM_PINCH_LOW_ANGLE_VERTICAL        = Degrees.of(90);
     public static final Angle ARM_SUPERSCORE_ANGLE_VERTICAL        = Degrees.of(200);
     public static final Angle ARM_SUPERSWING_ANGLE_VERTICAL        = Degrees.of(160);
 
