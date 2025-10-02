@@ -651,7 +651,7 @@ public class RobotContainer {
                         System.out.println("------------------------------ROBOT STATE : " + cur);
 
                         
-                })
+                }).andThen(pulseGate(rtGate))
         );
 
         /*
