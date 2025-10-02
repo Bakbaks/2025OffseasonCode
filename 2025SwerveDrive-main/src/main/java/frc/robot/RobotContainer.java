@@ -626,26 +626,29 @@ public class RobotContainer {
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         ); 
         */
-        /* 
+         
         driveRightTrigger.onTrue(
-        Commands.defer(
+        Commands.runOnce(
                 () -> {
-                RobotState cur = sm.getState();
+                /*RobotState cur = sm.getState();
                 RobotState target;
+                System.out.println("-------------------------------------------RobotState: " + cur);
                 if (cur == RobotState.INTAKE_DOWN) {
                         target = RobotState.HANDOFF;
+                        
                 } else {
                         target = RobotState.INTAKE_DOWN;
-                }
-                sm.setState(target);
-                return sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake);
-                },
-                java.util.Set.of(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake)
-        )
+                }*/
+                System.out.println("-------------------------------------------INTAKE_DOWN");
+                sm.setState(RobotState.INTAKE_DOWN);
+                })
+        .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         );
-        */
+                
+                //java.util.Set.of(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake)
+        
 
-
+        /* 
         driveLeftTrigger.onTrue(
         Commands.runOnce(() -> sm.setState(RobotState.HANDOFF))
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
@@ -655,7 +658,7 @@ public class RobotContainer {
         Commands.runOnce(() -> sm.setState(RobotState.INTAKE_DOWN))
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         ); 
-        
+        */
         /* 
         driveRightTrigger.onTrue(
         Commands.defer(
@@ -766,10 +769,24 @@ public class RobotContainer {
         Commands.runOnce(() -> sm.setState(RobotState.START_CONFIG))
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         );
-
+        
+        
         auxA.onTrue(
-                Commands.runOnce(() -> sm.setState(RobotState.L1))
+                Commands.runOnce(() -> {
+                        System.out.println("-------------------AUXA");
+                        sm.setState(RobotState.L1);
+
+                        
+                })
                         .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        );
+        auxA.onFalse(
+                Commands.runOnce(() -> {
+                        System.out.println("-------------------AUXA OFFF");
+                        
+
+                        
+                })
         );
         auxB.onTrue(
                 Commands.runOnce(() -> sm.setState(RobotState.L2))
