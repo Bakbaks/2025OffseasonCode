@@ -62,6 +62,8 @@ public class RobotContainer {
 
     private final RobotStateMachine sm = new RobotStateMachine();
 
+
+    
     // swerve drive stuff
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
@@ -127,6 +129,21 @@ public class RobotContainer {
     private boolean sadMode = false;
     private final SendableChooser<Command> autoChooser;
 
+
+    //Fake button shenanigans
+    // Software gate for right trigger
+    private final java.util.concurrent.atomic.AtomicBoolean rtGate = new java.util.concurrent.atomic.AtomicBoolean(true);
+
+    private final Trigger driveRightTriggerArmed = driveRightTrigger.and(new Trigger(rtGate::get));
+
+    
+    private static Command pulseGate(java.util.concurrent.atomic.AtomicBoolean gate){
+        return Commands.sequence(
+                Commands.runOnce(()-> gate.set(false)),
+                new edu.wpi.first.wpilibj2.command.WaitCommand(0.02),
+                Commands.runOnce(()-> gate.set(true))
+        );
+    }
     Command AEI_Scoring_L4 = new SequentialCommandGroup(
         new ParallelCommandGroup(
                 new ElevatorAutonComomands(elevatorSubsystem, Constants.ElevatorConstants.STAGE_4_HEIGHT_DELTA), 
@@ -626,11 +643,22 @@ public class RobotContainer {
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         ); 
         */
-         
+
+        driveRightTriggerArmed.onTrue(
+                Commands.runOnce(() -> {
+                        RobotState cur = sm.getState();
+                        RobotState target;
+                        System.out.println("------------------------------ROBOT STATE : " + cur);
+
+                        
+                })
+        );
+
+        /*
         driveRightTrigger.onTrue(
         Commands.runOnce(
                 () -> {
-                /*RobotState cur = sm.getState();
+                RobotState cur = sm.getState();
                 RobotState target;
                 System.out.println("-------------------------------------------RobotState: " + cur);
                 if (cur == RobotState.INTAKE_DOWN) {
@@ -638,12 +666,14 @@ public class RobotContainer {
                         
                 } else {
                         target = RobotState.INTAKE_DOWN;
-                }*/
+        
                 System.out.println("-------------------------------------------INTAKE_DOWN");
                 sm.setState(RobotState.INTAKE_DOWN);
                 })
         .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         );
+        
+        */
                 
                 //java.util.Set.of(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake)
         
