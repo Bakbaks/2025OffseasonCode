@@ -765,13 +765,13 @@ public class RobotContainer {
         //AUX COMMANDS
 
         
-        auxRightTrigger.onTrue(
+        auxA.onTrue(
         Commands.runOnce(() -> sm.setState(RobotState.START_CONFIG))
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         );
         
-        
-        auxA.onTrue(
+
+        auxRightBumper.onTrue(
                 Commands.runOnce(() -> {
                         System.out.println("-------------------AUXA");
                         sm.setState(RobotState.L1);
@@ -833,12 +833,12 @@ public class RobotContainer {
                 java.util.Set.of(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake)
         )
         );
-
+        /* 
         auxRightBumper.onTrue(
                 Commands.runOnce(() -> sm.setState(RobotState.SupaPinchBarge))
                         .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         );
-
+*/
         auxLeftTrigger.onTrue(
         Commands.defer(
                 () -> {
