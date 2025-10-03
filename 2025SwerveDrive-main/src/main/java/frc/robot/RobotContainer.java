@@ -136,7 +136,17 @@ public class RobotContainer {
 
     private final Trigger driveRightTriggerArmed = driveRightTrigger.and(new Trigger(rtGate::get));
 
+    private final java.util.concurrent.atomic.AtomicBoolean ltGate = new java.util.concurrent.atomic.AtomicBoolean(true);
+
+    private final Trigger driveLeftTriggerArmed = driveLeftTrigger.and(new Trigger(ltGate::get));
+
     
+    private final java.util.concurrent.atomic.AtomicBoolean auxLBGate = new java.util.concurrent.atomic.AtomicBoolean(true);
+    private final java.util.concurrent.atomic.AtomicBoolean auxLTGate = new java.util.concurrent.atomic.AtomicBoolean(true);
+
+    private final Trigger auxLeftBumperArmed = auxLeftBumper.and(new Trigger(auxLBGate::get));
+    private final Trigger auxLeftTriggerArmed = auxLeftTrigger.and(new Trigger(auxLTGate::get));
+
     private static Command pulseGate(java.util.concurrent.atomic.AtomicBoolean gate){
         return Commands.sequence(
                 Commands.runOnce(()-> gate.set(false)),
@@ -316,334 +326,7 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
         // end of swerve drive bindings
 
-        ///////////////////////////////////////GIFTS AND TRINKETS (NON DRIVE BINDS)
-
-        // Elevator and Arm bindings, move to zero position
-        //default position only after scoring actions
-
         /*
-        auxRightTrigger.onTrue(new RobotCommandHandler(
-                0, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake
-        ));
-
-        auxLeftTrigger.onTrue(new RobotCommandHandler(
-                5, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake
-        ));
-         */
-
-
-
-        /*
-        auxRightTrigger.onTrue(
-                new ParallelCommandGroup(
-                new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA)
-                .alongWith(Commands.print("Elevator Zero Position, Height: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Units.Meters))),
-                
-                new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
-                .alongWith(Commands.print("Arm Base/zero Position, Angles: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))))
-        ); */
-
-        // auxRightTrigger.onTrue(new InstantCommand(() -> {
-        //         new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
-        //         .alongWith(Commands.print("Arm Base, Angles: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))).schedule();
-        // }));
-                
-        // auxRightTrigger.onTrue(new RunCommand(() -> {arm.setState(0);}, arm));
-        
-
-        /*
-        //SADMODE TRIGGER
-        auxLeftBumper.onTrue(new InstantCommand(() -> {
-                sadMode = true;
-                System.out.println("sadMode: " + sadMode);
-        }))
-        .onFalse(new InstantCommand(() -> {
-                sadMode = false;
-                System.out.println("sadMode: " + sadMode);
-        }));
-        //SOURCE
-        auxRightBumper.onTrue(new InstantCommand(() -> {
-                new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.ELEVATOR_SOURCE_DELTA)
-                        .alongWith(Commands.print("Elevator Source, Height: " + Constants.ElevatorConstants.ELEVATOR_SOURCE_DELTA.in(Units.Meters))).schedule();
-                if(sadMode){
-                        new ArmSetPositionCommand(arm, ArmConstant.SAD_CORAL_STATION_ANGLE_VERTICAL.in(Degrees))
-                                .alongWith(Commands.print("Arm Sad Source, Angles: " + ArmConstant.SAD_CORAL_STATION_ANGLE_VERTICAL.in(Degrees))).schedule();
-                        arm.setState(5);
-                }
-                else{
-                        new ArmSetPositionCommand(arm, ArmConstant.CORAL_STATION_ANGLE_VERTICAL.in(Degrees))
-                                .alongWith(Commands.print("Arm Source, Angles: " + ArmConstant.CORAL_STATION_ANGLE_VERTICAL.in(Degrees))).schedule();
-                        arm.setState(-5);
-                }
-        }));
-        //L1
-        */
-        /* 
-        auxA.onTrue(new RobotCommandHandler(
-                3, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake, Constants.ElevatorConstants.STAGE_1_HEIGHT_DELTA, Constants.ArmConstant.STAGE_1_ANGLE_VERTICAL
-        ));
-
-        auxB.onTrue(new RobotCommandHandler(
-                3, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake, Constants.ElevatorConstants.STAGE_2_HEIGHT_DELTA, Constants.ArmConstant.STAGE_2_ANGLE_VERTICAL
-        ));
-        auxX.onTrue(new RobotCommandHandler(
-                3, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake, Constants.ElevatorConstants.STAGE_3_HEIGHT_DELTA, Constants.ArmConstant.STAGE_3_ANGLE_VERTICAL
-        ));
-        auxY.onTrue(new RobotCommandHandler(
-                3, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake, Constants.ElevatorConstants.STAGE_4_HEIGHT_DELTA, Constants.ArmConstant.STAGE_4_ANGLE_VERTICAL
-        ));
-        */
-        /* 
-        //L2
-        auxB.onTrue(new InstantCommand(() -> {
-                new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.STAGE_2_HEIGHT_DELTA)
-                        .alongWith(Commands.print("Elevator Level 2, Height: " + Constants.ElevatorConstants.STAGE_2_HEIGHT.in(Units.Meters))).schedule();
-                if(sadMode){
-                        new ArmSetPositionCommand(arm, ArmConstant.SAD_STAGE_2_ANGLE_VERTICAL.in(Degrees))
-                                .alongWith(Commands.print("Arm Sad Level 2, Angles: " + ArmConstant.SAD_STAGE_2_ANGLE_VERTICAL.in(Degrees))).schedule();
-                        arm.setState(-2);
-                }
-                else{
-                        new ArmSetPositionCommand(arm, ArmConstant.STAGE_2_ANGLE_VERTICAL.in(Degrees))
-                                .alongWith(Commands.print("Arm Level 2, Angles: " + ArmConstant.STAGE_2_ANGLE_VERTICAL.in(Degrees))).schedule();
-                        arm.setState(2);
-                }
-        }));
-        //L3
-        auxX.onTrue(new InstantCommand(() -> {
-                new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.STAGE_3_HEIGHT_DELTA)
-                        .alongWith(Commands.print("Elevator Level 3, Height: " + Constants.ElevatorConstants.STAGE_3_HEIGHT.in(Units.Meters))).schedule();
-                if(sadMode){
-                        new ArmSetPositionCommand(arm, ArmConstant.SAD_STAGE_3_ANGLE_VERTICAL.in(Degrees))
-                        .alongWith(Commands.print("Arm Sad Level 3, Angles: " + ArmConstant.SAD_STAGE_3_ANGLE_VERTICAL.in(Degrees))).schedule();
-                        arm.setState(-3);
-                }
-                else{
-                        new ArmSetPositionCommand(arm, ArmConstant.STAGE_3_ANGLE_VERTICAL.in(Degrees))
-                        .alongWith(Commands.print("Arm Level 3, Angles: " + ArmConstant.STAGE_3_ANGLE_VERTICAL.in(Degrees))).schedule();
-                        arm.setState(3);
-                }
-        }));
-        //L4
-        auxY.onTrue(new InstantCommand(() -> {
-                new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.STAGE_4_HEIGHT_DELTA)
-                        .alongWith(Commands.print("Elevator Level 4, Height: " + Constants.ElevatorConstants.STAGE_4_HEIGHT.in(Units.Meters))).schedule();
-                if(sadMode){
-                        new ArmSetPositionCommand(arm, ArmConstant.SAD_STAGE_4_ANGLE_VERTICAL.in(Degrees))
-                        .alongWith(Commands.print("Arm Sad Level 4, Angles: " + ArmConstant.SAD_STAGE_4_ANGLE_VERTICAL.in(Degrees))).schedule();
-                        arm.setState(-4);
-                }
-                else{
-                        new ArmSetPositionCommand(arm, ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))
-                        .alongWith(Commands.print("Arm Level 4, Angles: " + ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))).schedule();
-                        arm.setState(4);
-
-                }
-        }));
-        */
-        //SADNESS aura
-        /*auxLeftBumper.onTrue(new RunCommand(() -> { //sad commands
-
-                auxRightBumper.onTrue(new ArmSetPositionCommand(arm, ArmConstant.SAD_CORAL_STATION_ANGLE_VERTICAL.in(Degrees))           //SOURCE
-                        .alongWith(Commands.print("Arm Source, Angles: " + ArmConstant.SAD_CORAL_STATION_ANGLE_VERTICAL.in(Degrees))));
-                auxA.onTrue(new ArmSetPositionCommand(arm, ArmConstant.SAD_STAGE_1_ANGLE_VERTICAL.in(Degrees))                           //L1
-                        .alongWith(Commands.print("Arm Source, Angles: " + ArmConstant.SAD_STAGE_1_ANGLE_VERTICAL.in(Degrees))));
-                auxB.onTrue(new ArmSetPositionCommand(arm, ArmConstant.SAD_STAGE_2_ANGLE_VERTICAL.in(Degrees))                           //L2
-                        .alongWith(Commands.print("Arm Level 2, Angles: " + ArmConstant.SAD_STAGE_2_ANGLE_VERTICAL.in(Degrees))));
-                auxX.onTrue(new ArmSetPositionCommand(arm, ArmConstant.SAD_STAGE_3_ANGLE_VERTICAL.in(Degrees))                               //L3
-                        .alongWith(Commands.print("Arm Level 3, Angles: " + ArmConstant.SAD_STAGE_3_ANGLE_VERTICAL.in(Degrees))));
-                auxY.onTrue(new ArmSetPositionCommand(arm, ArmConstant.SAD_STAGE_4_ANGLE_VERTICAL.in(Degrees))                               //L4
-                        .alongWith(Commands.print("Arm Level 4, Angles: " + ArmConstant.SAD_STAGE_4_ANGLE_VERTICAL.in(Degrees))));
-
-        }, elevatorSubsystem))
-        .onFalse(new RunCommand(() -> { //normal commands
-
-                auxRightBumper.onTrue(new ArmSetPositionCommand(arm, ArmConstant.CORAL_STATION_ANGLE_VERTICAL.in(Degrees))               //SOURCE
-                        .alongWith(Commands.print("Arm Source, Angles: " + ArmConstant.CORAL_STATION_ANGLE_VERTICAL.in(Degrees))));
-                auxA.onTrue(new ArmSetPositionCommand(arm, ArmConstant.STAGE_1_ANGLE_VERTICAL.in(Degrees))                               //L1
-                        .alongWith(Commands.print("Arm Source, Angles: " + ArmConstant.STAGE_1_ANGLE_VERTICAL.in(Degrees))));
-                auxB.onTrue(new ArmSetPositionCommand(arm, ArmConstant.STAGE_2_ANGLE_VERTICAL.in(Degrees))                               //L2
-                        .alongWith(Commands.print("Arm Level 2, Angles: " + ArmConstant.STAGE_2_ANGLE_VERTICAL.in(Degrees))));
-                auxX.onTrue(new ArmSetPositionCommand(arm, ArmConstant.STAGE_3_ANGLE_VERTICAL.in(Degrees))                               //L3
-                        .alongWith(Commands.print("Arm Level 3, Angles: " + ArmConstant.STAGE_3_ANGLE_VERTICAL.in(Degrees))));
-                auxY.onTrue(new ArmSetPositionCommand(arm, ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))                               //L4
-                        .alongWith(Commands.print("Arm Level 4, Angles: " + ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))));
-                
-        }, elevatorSubsystem));*/
-
-                /* 
-        driveRightTrigger.onTrue(new RobotCommandHandler(
-        1, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake
-        ));
-        */
-        // Release = state 2
-        /*
-        driveLeftTrigger.onTrue(new RobotCommandHandler(
-        2, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake
-        ));
-
-         */
-
-         
-        // auxPovUP.onTrue(new RunCommand(() -> {climb.expand();}, climb));
-        // System.out.println("climb" );
-        // auxPovDOWN.onTrue(new RunCommand(() -> {climb.retract();}, climb));
-
- //aux control the intake from the source
-        //this is for getting the game pieces from the source
-        /*
-        driveLeftTrigger.onTrue(new RunCommand(() ->{//source intake
-
-
-                // switch (arm.getStateE()) {
-                //         case SOURCE:
-                //                 new SequentialCommandGroup(
-                //                         new IntakeWithDetectionCommand(intake, intake.getCANrangeE(), false),
-                //                         new IntakeHoldPositionCommand(intake, intake.getCurrentPosition_Rotations())).schedule();
-                //             break;
-                //         case SAD_SOURCE:
-                //             new IntakeWithDetectionCommand(intake, intake.getCANrangeE(), true).schedule();
-                //             new IntakeHoldPositionCommand(intake, intake.getCurrentPosition_Rotations()).schedule();
-                //             break;
-                //         default:
-                //             intake.stop();
-                //             break;
-                //     }
-                if(arm.getState() == 5){
-                        System.out.println("arm source state 5, sad is false");
-                        new SequentialCommandGroup(
-                        new IntakeWithDetectionCommand(intake, intake.getCANrangeLeft(),intake.getCANrangeRight(), true), //sad is false
-                        new IntakeHoldPositionCommand(intake)
-                        ).schedule();
-                }
-                else if(arm.getState() == -5){
-                        System.out.println("arm source state -5, sad is true");
-                        new SequentialCommandGroup(
-                        new IntakeWithDetectionCommand(intake, intake.getCANrangeLeft(),intake.getCANrangeRight(), false), //sad is true
-                        new IntakeHoldPositionCommand(intake)
-                        ).schedule();
-
-
-                }
-                else{
-                        System.out.println("nothing for now");
-                        intake.stop();
-                }
-        }, intake))
-        .onFalse(new RunCommand(() -> {
-                intake.stop();
-        }, intake));
-        */
-
-        
-        /* 
-        driveLeftTrigger.onTrue(new InstantCommand(() -> {
-                new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA);
-                        //.alongWith(Commands.print("Elevator Source, Height: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Units.Meters))).schedule();
-                
-                new SwingGroundIntakeCommand(SwingGroundIntake, GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))
-                                .alongWith(Commands.print("SWINGGROUNDINTAKE: " + GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))).schedule();
-                
-        }));
-        driveLeftBumper.onTrue(new InstantCommand(() -> {
-                new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA);
-                        //.alongWith(Commands.print("Elevator Source, Height: " + Constants.ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Units.Meters))).schedule();
-                
-                new SwingGroundIntakeCommand(SwingGroundIntake, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
-                                .alongWith(Commands.print("SWINGGROUNDINTAKE: " + GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))).schedule();
-        }));
-        */
-
-
-        // //driver scoring, only control the
-        /* 
-        driveRightTrigger.onTrue(new RunCommand(() -> {
-                intake.feedEast();
-        }, intake))
-        .onFalse(new RunCommand(() -> {
-                intake.stop();
-        }));
-        */
-        /*
-        driveRightTrigger.onTrue(new RunCommand(() ->{ //only scoring
-                if(arm.getState() == 1 ||
-                   arm.getState() == 2 ||
-                   arm.getState() == -3 ||
-                   arm.getState() == -4){
-                        intake.feedEast();
-                     
-                }
-                else if(arm.getState() == -1 ||
-                        arm.getState() == -2 ||
-                        arm.getState() == 3 ||
-                        arm.getState() == 4){
-
-                        intake.feedWest();
-                }
-                else{
-                        intake.stop();
-                }
-        }, intake))
-        .onFalse(new RunCommand(() ->{
-                intake.stop();
-        }, intake)); */
-
-
-
-        /*Vision Button*/
-        //Trigger visionHasGoal = new Trigger(() -> vision.getBestRobotToGoal().isPresent()).debounce(0.10);
-        //driveLeftBumper.and(visionHasGoal).whileTrue(aimAtTag);
-        //no checks
-        
-
-        //OFF SEAS
-        
-        /*
-        driveLeftTrigger.onTrue(new RunCommand(() -> {
-                if(sm.getState() == RobotState.START_CONFIG){
-                        System.out.println("LEFT TRIGGER");
-                        sm.setState(RobotState.HANDOFF);
-                        sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake);
-                }
-                else if(sm.getState() == RobotState.HANDOFF){
-                        sm.setState(RobotState.INTAKE_DOWN);
-                        sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake);
-                }
-                else{}
-        })); 
-
-        driveRightTrigger.onTrue(new RunCommand(() -> {
-                if(sm.getState() == RobotState.L1){
-                        sm.setState(RobotState.SCOREL1);
-                }
-                else if(sm.getState() == RobotState.L2){
-                        sm.setState(RobotState.SCORE2);
-                }
-                else if(sm.getState() == RobotState.L3){
-                        sm.setState(RobotState.SCORE3);
-                }
-                else if(sm.getState() == RobotState.L4){
-                        sm.setState(RobotState.SCORE4);
-                }
-                else{}
-        }));
-        */
-        
-        /* 
-        driveLeftTrigger.onTrue(
-        Commands.runOnce(() -> sm.setState(RobotState.HANDOFF))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        );
-        */
-
-        //make this toggle later
-        /* 
-        driveRightTrigger.onTrue(
-        Commands.runOnce(() -> sm.setState(RobotState.INTAKE_DOWN))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        ); 
-        */
-
         driveRightTriggerArmed.onTrue(
                 Commands.runOnce(() -> {
                         RobotState cur = sm.getState();
@@ -653,82 +336,28 @@ public class RobotContainer {
                         
                 }).andThen(pulseGate(rtGate))
         );
+        */
+        driveRightTriggerArmed.onTrue(
+                Commands.runOnce(() -> {
+                        RobotState cur = sm.getState();
+                        RobotState target;
 
-        /*
-        driveRightTrigger.onTrue(
-        Commands.runOnce(
-                () -> {
-                RobotState cur = sm.getState();
-                RobotState target;
-                System.out.println("-------------------------------------------RobotState: " + cur);
-                if (cur == RobotState.INTAKE_DOWN) {
+                        if (cur == RobotState.INTAKE_DOWN) {
                         target = RobotState.HANDOFF;
-                        
-                } else {
+                        } else {
                         target = RobotState.INTAKE_DOWN;
-        
-                System.out.println("-------------------------------------------INTAKE_DOWN");
-                sm.setState(RobotState.INTAKE_DOWN);
+                        }
+
+                        //System.out.println("------------------------------ ROBOT STATE : " + cur + " -> " + target);
+
+                        sm.setState(target);
                 })
-        .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+                .andThen(pulseGate(rtGate))
         );
+
         
-        */
-                
-                //java.util.Set.of(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake)
-        
-
-        /* 
-        driveLeftTrigger.onTrue(
-        Commands.runOnce(() -> sm.setState(RobotState.HANDOFF))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        );
-
-        driveRightTrigger.onTrue(
-        Commands.runOnce(() -> sm.setState(RobotState.INTAKE_DOWN))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        ); 
-        */
-        /* 
-        driveRightTrigger.onTrue(
-        Commands.defer(
-                () -> {
-                final RobotState current = sm.getState();
-                final RobotState next = (current == RobotState.INTAKE_DOWN)
-                        ? RobotState.HANDOFF : RobotState.INTAKE_DOWN;
-                sm.setState(next);
-
-                return sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake)
-                        .withName("SM:" + next)
-                        .withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf);
-                },
-                java.util.Set.of(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake)
-        )
-        .withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf)
-        );*/
-
-
-
-        /*
-        driveA.onTrue(
-        Commands.runOnce(() -> sm.setState(RobotState.SCOREL1))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        );
-        driveB.onTrue(
-        Commands.runOnce(() -> sm.setState(RobotState.SCORE2))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        );
-        driveX.onTrue(
-        Commands.runOnce(() -> sm.setState(RobotState.SCORE3))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        );
-        driveY.onTrue(
-        Commands.runOnce(() -> sm.setState(RobotState.SCORE4))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        );
-         */
-        /* */
-        /* driveY.onTrue(
+        driveLeftTriggerArmed.onTrue(
         Commands.runOnce(() -> {
                 RobotState cur = sm.getState();
                 RobotState target;
@@ -741,49 +370,23 @@ public class RobotContainer {
                 target = RobotState.SCORE3;
                 } else if (cur == RobotState.L4) {
                 target = RobotState.SCORE4;
-                } else if (cur == RobotState.SupaPinchScore){
-                target = RobotState.SupaPinchScoreRelease;
-                }
-                else if (cur == RobotState.SCOREL1 || 
-                        cur == RobotState.SCORE2  || 
-                        cur == RobotState.SCORE3  || 
-                        cur == RobotState.SCORE4 ||
-                        cur == RobotState.SupaPinchScoreRelease) {
-                
-                target = cur;
+                } else if (cur == RobotState.SupaPinchBarge) {
+                target = RobotState.SupaPinchScore;
+                } else if (cur == RobotState.SCOREL1
+                        || cur == RobotState.SCORE2
+                        || cur == RobotState.SCORE3
+                        || cur == RobotState.SCORE4
+                        || cur == RobotState.SupaPinchScore) {
+                target = cur; // already scoring or releasing; keep it
                 } else {
-                
-                target = RobotState.SCOREL1;
+                target = cur; // default
                 }
 
                 sm.setState(target);
-        }).andThen(() ->
-                sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake)
-        )
-        );*/
-        
-        driveA.onTrue(
-        Commands.runOnce(() -> sm.setState(RobotState.SCOREL1))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        })
+        .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        .andThen(pulseGate(ltGate))
         );
-        driveB.onTrue(
-        Commands.runOnce(() -> sm.setState(RobotState.SCORE2))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        );
-        driveX.onTrue(
-        Commands.runOnce(() -> sm.setState(RobotState.SCORE3))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        );
-        driveY.onTrue(
-        Commands.runOnce(() -> sm.setState(RobotState.SCORE4))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        ); 
-
-        drivePovUP.onTrue(
-                Commands.runOnce(() -> sm.setState(RobotState.SupaPinchScore))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        ); 
-        
         
 
         driveRightBumper.onTrue(aimAtTagR);
@@ -795,29 +398,17 @@ public class RobotContainer {
         //AUX COMMANDS
 
         
-        auxA.onTrue(
+        auxRightTrigger.onTrue(
         Commands.runOnce(() -> sm.setState(RobotState.START_CONFIG))
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         );
         
 
-        auxRightBumper.onTrue(
-                Commands.runOnce(() -> {
-                        System.out.println("-------------------AUXA");
-                        sm.setState(RobotState.L1);
-
-                        
-                })
+        auxA.onTrue(
+                Commands.runOnce(() -> sm.setState(RobotState.L1))
                         .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         );
-        auxA.onFalse(
-                Commands.runOnce(() -> {
-                        System.out.println("-------------------AUXA OFFF");
-                        
 
-                        
-                })
-        );
         auxB.onTrue(
                 Commands.runOnce(() -> sm.setState(RobotState.L2))
                         .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
@@ -831,7 +422,7 @@ public class RobotContainer {
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         );
 
-
+        /* 
         //default elevator and arm manual control
         m_auxController.start().whileTrue(new youPary(elevatorSubsystem));
         elevatorSubsystem.setDefaultCommand(new RunCommand(() -> {
@@ -846,44 +437,44 @@ public class RobotContainer {
             arm.manualControl(-leftYAxis*0.2);
         }, arm)
         .alongWith(Commands.print("Arm Manual Controlling: "+m_auxController.getLeftY())));
+        */
 
-        auxLeftBumper.onTrue(
-        Commands.defer(
-                () -> {
+        auxLeftBumperArmed.onTrue(
+        Commands.runOnce(() -> {
                 RobotState cur = sm.getState();
                 RobotState target;
+
                 if (cur == RobotState.SupaPinchHIGHGrab) {
-                        target = RobotState.SupaPinchBarge;
+                target = RobotState.SupaPinchBarge;
                 } else {
-                        target = RobotState.SupaPinchHIGHGrab;
+                target = RobotState.SupaPinchHIGHGrab;
                 }
+
+                
+
                 sm.setState(target);
-                return sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake);
-                },
-                java.util.Set.of(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake)
-        )
+        })
+        .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        .andThen(pulseGate(auxLBGate))
         );
-        /* 
-        auxRightBumper.onTrue(
-                Commands.runOnce(() -> sm.setState(RobotState.SupaPinchBarge))
-                        .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        );
-*/
-        auxLeftTrigger.onTrue(
-        Commands.defer(
-                () -> {
+
+        auxLeftTriggerArmed.onTrue(
+        Commands.runOnce(() -> {
                 RobotState cur = sm.getState();
                 RobotState target;
+
                 if (cur == RobotState.SupaPinchLOWGrab) {
-                        target = RobotState.SupaPinchBarge;
+                target = RobotState.SupaPinchBarge;
                 } else {
-                        target = RobotState.SupaPinchLOWGrab;
+                target = RobotState.SupaPinchLOWGrab;
                 }
+
+                
+
                 sm.setState(target);
-                return sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake);
-                },
-                java.util.Set.of(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake)
-        )
+        })
+        .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        .andThen(pulseGate(auxLTGate))
         );
 
 
