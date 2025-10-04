@@ -33,6 +33,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -326,17 +327,29 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
         // end of swerve drive bindings
 
-        /*
+        
         driveRightTriggerArmed.onTrue(
                 Commands.runOnce(() -> {
                         RobotState cur = sm.getState();
                         RobotState target;
-                        System.out.println("------------------------------ROBOT STATE : " + cur);
 
-                        
-                }).andThen(pulseGate(rtGate))
-        );
-        */
+                        if (cur == RobotState.INTAKE_DOWN) {
+                                target = RobotState.HANDOFF;
+                                } else {
+                                target = RobotState.INTAKE_DOWN;
+                                }
+
+                                System.out.println("------------------------------ ROBOT STATE : " + cur + " -> " + target);
+
+                                sm.setState(target);
+                                
+
+                })
+                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+                .andThen(pulseGate(rtGate))
+                );
+        
+        /*
         driveRightTriggerArmed.onTrue(
                 Commands.runOnce(() -> {
                         RobotState cur = sm.getState();
@@ -348,7 +361,7 @@ public class RobotContainer {
                         target = RobotState.INTAKE_DOWN;
                         }
 
-                        //System.out.println("------------------------------ ROBOT STATE : " + cur + " -> " + target);
+                        System.out.println("------------------------------ ROBOT STATE : " + cur + " -> " + target);
 
                         sm.setState(target);
                 })
@@ -356,7 +369,7 @@ public class RobotContainer {
                 .andThen(pulseGate(rtGate))
         );
 
-        
+        */
         driveLeftTriggerArmed.onTrue(
         Commands.runOnce(() -> {
                 RobotState cur = sm.getState();
