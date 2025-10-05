@@ -89,6 +89,7 @@ public final class Constants {
     public static final Angle SCORE_STAGE_2_ANGLE_VERTICAL        = Degrees.of(60);
     public static final Angle SCORE_STAGE_3_ANGLE_VERTICAL        = Degrees.of(40);
     public static final Angle SCORE_STAGE_4_ANGLE_VERTICAL        = Degrees.of(40);
+    public static final Angle SAFE_SCORE_STAGE_4_ANGLE_VERTICAL        = Degrees.of(90);
 
     public static final Angle ARM_PINCH_HIGH_ANGLE_VERTICAL        = Degrees.of(90);
     public static final Angle ARM_PINCH_LOW_ANGLE_VERTICAL        = Degrees.of(90);
