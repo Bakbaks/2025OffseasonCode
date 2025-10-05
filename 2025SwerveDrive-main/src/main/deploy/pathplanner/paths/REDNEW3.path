@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 16.443503289473682,
-        "y": 0.9749177631578948
+        "x": 16.424259868421053,
+        "y": 0.5708059210526312
       },
       "prevControl": null,
       "nextControl": {
-        "x": 16.558963815789472,
-        "y": 1.7061677631578946
+        "x": 16.539720394736843,
+        "y": 1.302055921052631
       },
       "isLocked": false,
       "linkedName": "SourceFeed"
@@ -48,7 +48,7 @@
   "folder": "R_REDPATH",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 38.08877288097542
+    "rotation": -145.2221686336361
   },
   "useDefaultConstraints": true
 }
