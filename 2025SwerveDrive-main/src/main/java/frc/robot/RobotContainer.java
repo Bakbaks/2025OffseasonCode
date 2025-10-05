@@ -491,7 +491,11 @@ public class RobotContainer {
                                 
 
                 })
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+                .andThen(new edu.wpi.first.wpilibj2.command.ProxyCommand(
+                        () -> sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake)
+                                .withInterruptBehavior(edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior.kCancelSelf)
+                                .withName("SM:" + sm.getState())
+                ))
                 .andThen(pulseGate(rtGate))
                 );
         
@@ -543,7 +547,11 @@ public class RobotContainer {
 
                 sm.setState(target);
         })
-        .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        .andThen(new edu.wpi.first.wpilibj2.command.ProxyCommand(
+        () -> sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake)
+                .withInterruptBehavior(edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior.kCancelSelf)
+                .withName("SM:" + sm.getState())
+        ))
         .andThen(pulseGate(ltGate))
         );
         
