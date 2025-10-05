@@ -477,7 +477,7 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
         // end of swerve drive bindings
 
-        
+        /* 
         driveRightTriggerArmed.onTrue(
                 Commands.runOnce(() -> {
                         RobotState cur = sm.getState();
@@ -502,6 +502,38 @@ public class RobotContainer {
                 ))
                 .andThen(pulseGate(rtGate))
                 );
+        */
+
+        driveLeftTrigger.onTrue(
+        Commands.runOnce(() -> sm.setState(RobotState.HANDOFF))
+                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        );
+
+        driveRightTrigger.onTrue(
+        Commands.runOnce(() -> sm.setState(RobotState.INTAKE_DOWN))
+                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        ); 
+        
+        driveA.onTrue(
+        Commands.runOnce(() -> sm.setState(RobotState.SCOREL1))
+                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        );
+        driveB.onTrue(
+        Commands.runOnce(() -> sm.setState(RobotState.SCORE2))
+                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        );
+        driveX.onTrue(
+        Commands.runOnce(() -> sm.setState(RobotState.SCORE3))
+                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        );
+        driveY.onTrue(
+        Commands.runOnce(() -> sm.setState(RobotState.SCORE4))
+                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        );
+        
+        
+
+
         
         /*
         driveRightTriggerArmed.onTrue(
@@ -524,6 +556,8 @@ public class RobotContainer {
         );
 
         */
+
+        /*
         driveLeftTriggerArmed.onTrue(
         Commands.runOnce(() -> {
                 RobotState cur = sm.getState();
@@ -559,7 +593,7 @@ public class RobotContainer {
         .andThen(pulseGate(ltGate))
         );
         
-
+        */
 
         driveRightBumper.onTrue(aimAtTagR);
         driveLeftBumper.onTrue(aimAtTagL);
