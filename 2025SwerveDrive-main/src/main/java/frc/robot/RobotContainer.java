@@ -1,65 +1,54 @@
 package frc.robot;
 
-import frc.robot.RobotStateMachine;
-import frc.robot.RobotState;
-import frc.robot.Constants.ArmConstant;
-import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.GroundIntakeConstants;
-import frc.robot.commands.ArmCommand.ArmSetPositionCommand;
-import frc.robot.commands.ArmCommand.youParyArm;
-import frc.robot.commands.AutoCommands.ElevatorAutonComomands;
-import frc.robot.commands.AutoCommands.ArmAutonCommands;
-import frc.robot.commands.AutoCommands.AutonIntakeWithDetectionCommand;
-import frc.robot.commands.ElevatorCommand.ElevatorSetPositionCommand;
-import frc.robot.commands.ElevatorCommand.youPary;
-import frc.robot.commands.GroundIntakeCommands.SpinGroundIntakeCommand;
-import frc.robot.commands.GroundIntakeCommands.SwingGroundIntakeCommand;
-import frc.robot.commands.IntakeCommand.IntakeWithDetectionCommand;
-import frc.robot.commands.IntakeCommand.IntakeHoldPositionCommand;
-import frc.robot.commands.IntakeCommand.IntakeSpinCommand;
-import frc.robot.commands.AimAtTagCommand;
-import frc.robot.commands.RobotCommandHandler;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ArmSubsystem.ArmState;
-import frc.robot.subsystems.GroundIntakeSubsystem.SwingGroundIntakeSubsystem;
-import frc.robot.subsystems.GroundIntakeSubsystem.SpinGroundIntakeSubsystem;
-import frc.robot.subsystems.ClimbSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.SwerveSubsystem.CommandSwerveDrivetrain;
-import frc.robot.subsystems.SwerveSubsystem.TunerConstants;
-import frc.robot.subsystems.VisionSubsystem;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import edu.wpi.first.math.geometry.Rotation2d;
-
-import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import static edu.wpi.first.units.Units.*;
-
-import java.io.IOException;
-
-import org.json.simple.parser.ParseException;
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathConstraints;
+
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.Constants.ArmConstant;
+import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.GroundIntakeConstants;
+import frc.robot.Constants.OIConstants;
+import frc.robot.commands.AimAtTagCommand;
+import frc.robot.commands.RobotCommandHandler;
+import frc.robot.commands.ArmCommand.ArmSetPositionCommand;
+import frc.robot.commands.AutoCommands.ArmAutonCommands;
+import frc.robot.commands.AutoCommands.AutonIntakeWithDetectionCommand;
+import frc.robot.commands.AutoCommands.ElevatorAutonComomands;
+import frc.robot.commands.ElevatorCommand.ElevatorSetPositionCommand;
+import frc.robot.commands.GroundIntakeCommands.SpinGroundIntakeCommand;
+import frc.robot.commands.GroundIntakeCommands.SwingGroundIntakeCommand;
+import frc.robot.commands.IntakeCommand.IntakeHoldPositionCommand;
+import frc.robot.commands.IntakeCommand.IntakeSpinCommand;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmSubsystem.ArmState;
+import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.GroundIntakeSubsystem.SpinGroundIntakeSubsystem;
+import frc.robot.subsystems.GroundIntakeSubsystem.SwingGroundIntakeSubsystem;
+import frc.robot.subsystems.SwerveSubsystem.CommandSwerveDrivetrain;
+import frc.robot.subsystems.SwerveSubsystem.TunerConstants;
 
 public class RobotContainer {
 
@@ -477,7 +466,7 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
         // end of swerve drive bindings
 
-        /* 
+        
         driveRightTriggerArmed.onTrue(
                 Commands.runOnce(() -> {
                         RobotState cur = sm.getState();
@@ -495,15 +484,17 @@ public class RobotContainer {
                                 
 
                 })
-                .andThen(new edu.wpi.first.wpilibj2.command.ProxyCommand(
-                        () -> sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake)
-                                .withInterruptBehavior(edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior.kCancelSelf)
-                                .withName("SM:" + sm.getState())
-                ))
-                .andThen(pulseGate(rtGate))
-                );
-        */
+                .andThen(Commands.parallel(
+                new edu.wpi.first.wpilibj2.command.ProxyCommand(
+                () -> sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake)
+                        .withInterruptBehavior(edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior.kCancelSelf)
+                        .withName("SM:" + sm.getState())
+                ),
+                pulseGate(rtGate) // re-arm regardless of command duration
+        )));
+        
 
+        /* 
         driveLeftTrigger.onTrue(
         Commands.runOnce(() -> sm.setState(RobotState.HANDOFF))
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
@@ -513,6 +504,7 @@ public class RobotContainer {
         Commands.runOnce(() -> sm.setState(RobotState.INTAKE_DOWN))
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         ); 
+        
         
         driveA.onTrue(
         Commands.runOnce(() -> sm.setState(RobotState.SCOREL1))
@@ -530,7 +522,7 @@ public class RobotContainer {
         Commands.runOnce(() -> sm.setState(RobotState.SCORE4))
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         );
-        
+        */
         
 
 
@@ -557,7 +549,7 @@ public class RobotContainer {
 
         */
 
-        /*
+        
         driveLeftTriggerArmed.onTrue(
         Commands.runOnce(() -> {
                 RobotState cur = sm.getState();
@@ -593,7 +585,7 @@ public class RobotContainer {
         .andThen(pulseGate(ltGate))
         );
         
-        */
+        
 
         driveRightBumper.onTrue(aimAtTagR);
         driveLeftBumper.onTrue(aimAtTagL);
@@ -683,6 +675,10 @@ public class RobotContainer {
         .andThen(pulseGate(auxLTGate))
         );
 
+        driveA.onTrue(
+        Commands.runOnce(() -> sm.setState(RobotState.SupaPinchScore))
+                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        );
 
         
         //Climber Bindings
