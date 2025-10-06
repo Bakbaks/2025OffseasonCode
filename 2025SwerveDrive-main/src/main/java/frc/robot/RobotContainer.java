@@ -86,7 +86,7 @@ public class RobotContainer {
     private final SpinGroundIntakeSubsystem spinGroundIntake = new SpinGroundIntakeSubsystem();
     PathConstraints lims = new PathConstraints(
     5.0,                     // max m/s
-    5,                     // max m/s^2
+    3,                     // max m/s^2
     Math.toRadians(540.0),   // max rad/s
     Math.toRadians(720.0)    // max rad/s^2
     );
@@ -466,7 +466,7 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
         // end of swerve drive bindings
 
-        
+        /* 
         driveRightTriggerArmed.onTrue(
                 Commands.runOnce(() -> {
                         RobotState cur = sm.getState();
@@ -493,8 +493,8 @@ public class RobotContainer {
                 pulseGate(rtGate) // re-arm regardless of command duration
         )));
         
-
-        /* 
+        */
+        
         driveLeftTrigger.onTrue(
         Commands.runOnce(() -> sm.setState(RobotState.HANDOFF))
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
@@ -505,7 +505,7 @@ public class RobotContainer {
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         ); 
         
-        
+        /* 
         driveA.onTrue(
         Commands.runOnce(() -> sm.setState(RobotState.SCOREL1))
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
@@ -522,8 +522,8 @@ public class RobotContainer {
         Commands.runOnce(() -> sm.setState(RobotState.SCORE4))
                 .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         );
-        */
         
+        */
 
 
         
@@ -549,7 +549,7 @@ public class RobotContainer {
 
         */
 
-        
+        /* 
         driveLeftTriggerArmed.onTrue(
         Commands.runOnce(() -> {
                 RobotState cur = sm.getState();
@@ -585,7 +585,7 @@ public class RobotContainer {
         .andThen(pulseGate(ltGate))
         );
         
-        
+        */
 
         driveRightBumper.onTrue(aimAtTagR);
         driveLeftBumper.onTrue(aimAtTagL);
