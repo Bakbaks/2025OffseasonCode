@@ -227,7 +227,7 @@ public final class Constants {
     public static final Distance STAGE_2_HEIGHT_DELTA  = Inches.of(0); 
     public static final Distance STAGE_3_HEIGHT_DELTA  = Inches.of(7); // needs changing
     public static final Distance STAGE_4_HEIGHT_DELTA  = Inches.of(27);
-    public static final Distance STAGE_PINCH_HIGH_HEIGHT_DELTA = Inches.of(16);
+    public static final Distance STAGE_PINCH_HIGH_HEIGHT_DELTA = Inches.of(12);
     public static final Distance STAGE_PINCH_LOW_HEIGHT_DELTA = Inches.of(0);
 
     public static final Distance SCORE_STAGE_2_HEIGHT_DELTA  = Inches.of(STAGE_2_HEIGHT_DELTA.in(Inches) - 2);

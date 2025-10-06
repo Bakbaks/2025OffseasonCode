@@ -97,7 +97,7 @@ public class RobotContainer {
     private final SpinGroundIntakeSubsystem spinGroundIntake = new SpinGroundIntakeSubsystem();
     PathConstraints lims = new PathConstraints(
     5.0,                     // max m/s
-    3,                     // max m/s^2
+    5,                     // max m/s^2
     Math.toRadians(540.0),   // max rad/s
     Math.toRadians(720.0)    // max rad/s^2
     );
@@ -159,11 +159,11 @@ public class RobotContainer {
     }
 
     Command AutoAimR = new SequentialCommandGroup(
-        new AimAtTagCommand(Constants.VisionConstants.TAG_TO_GOAL_RIGHT, drivetrain, vision, lims, 0.1).withTimeout(0.8),
+        new AimAtTagCommand(Constants.VisionConstants.TAG_TO_GOAL_RIGHT, drivetrain, vision, lims, 0.1).withTimeout(1.2),
         new InstantCommand(() -> drivetrain.resetOdometry(drivetrain.getPose()))
         );
    Command AutoAimL = new SequentialCommandGroup(
-        new AimAtTagCommand(Constants.VisionConstants.TAG_TO_GOAL_LEFT, drivetrain, vision, lims, 0.1).withTimeout(0.8),
+        new AimAtTagCommand(Constants.VisionConstants.TAG_TO_GOAL_LEFT, drivetrain, vision, lims, 0.1).withTimeout(1.2),
         new InstantCommand(() -> drivetrain.resetOdometry(drivetrain.getPose()))
         );
 
@@ -236,7 +236,7 @@ public class RobotContainer {
 
     Command NewStationLoad = new SequentialCommandGroup(
         Commands.deadline(
-            Commands.waitSeconds(1.5),
+            Commands.waitSeconds(3),
             new ElevatorSetPositionCommand(elevatorSubsystem, ElevatorConstants.STAGE_0_HEIGHT_DELTA)
                 //.alongWith(Commands.print("Elevator default: " + ElevatorConstants.STAGE_4_HEIGHT_DELTA.in(Meters))),
             , new SwingGroundIntakeCommand(SwingGroundIntake, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
@@ -686,8 +686,8 @@ public class RobotContainer {
 
         
         //Climber Bindings
-        //auxPovUP.onTrue(new RunCommand(() -> {climb.expand();}, climb)).onFalse(new RunCommand(() -> {climb.stop();}, climb));
-        //auxPovDOWN.onTrue(new RunCommand(() -> {climb.retract();}, climb)).onFalse(new RunCommand(() -> {climb.stop();}, climb));
+        auxPovUP.onTrue(new RunCommand(() -> {climb.expand();}, climb)).onFalse(new RunCommand(() -> {climb.stop();}, climb));
+        auxPovDOWN.onTrue(new RunCommand(() -> {climb.retract();}, climb)).onFalse(new RunCommand(() -> {climb.stop();}, climb));
 
         //auxPovLEFT.onTrue(new RunCommand(() -> {intake.feedEast(0.1);}, intake)).onFalse(new RunCommand(() -> {intake.stop();}, intake));
         //auxPovRIGHT.onTrue(new RunCommand(() -> {intake.feedWest(0.1);}, intake)).onFalse(new RunCommand(() -> {intake.stop();}, intake));
