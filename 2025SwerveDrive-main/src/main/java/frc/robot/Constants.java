@@ -139,7 +139,7 @@ public final class Constants {
 
     public static final Angle GroundIntake_FEED_ANGLE_VERTICAL = Degrees.of(0);
     //public static final Angle GroundIntake_LOWERED_ANGLE_VERTICAL = Degrees.of(-145);
-    public static final Angle GroundIntake_LOWERED_ANGLE_VERTICAL = Degrees.of(-145);
+    public static final Angle GroundIntake_LOWERED_ANGLE_VERTICAL = Degrees.of(-150);
     public static final Angle GroundIntake_LEVEL1_ANGLE_VERTICAL = Degrees.of(-70);
 
     public static final double kGroundP = 0.05;
