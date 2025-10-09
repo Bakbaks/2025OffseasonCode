@@ -24,11 +24,11 @@ public class IntakeSpinCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        intake.stop();                // always stop after timeout/race/cancel
+        //intake.stop();                // always stop after timeout/race/cancel
     }
 
     @Override
     public boolean isFinished() {
-        return false;                 // time it from the caller (withTimeout / race)
+        return true;                 // time it from the caller (withTimeout / race)
     }
 }
