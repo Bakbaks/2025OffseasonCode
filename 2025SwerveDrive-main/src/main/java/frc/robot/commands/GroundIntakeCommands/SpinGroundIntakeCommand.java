@@ -26,11 +26,11 @@ public class SpinGroundIntakeCommand extends Command{
 
     @Override
     public void end(boolean interrupted){
-        intake.stop();
+        //intake.stop();
     }
 
     @Override
     public boolean isFinished(){
-        return false;
+        return true;
     }
 }

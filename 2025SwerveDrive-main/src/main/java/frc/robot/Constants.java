@@ -81,15 +81,17 @@ public final class Constants {
 
     public static final Angle CORAL_STATION_ANGLE_VERTICAL  = Degrees.of(-15);
     public static final Angle STAGE_1_ANGLE_VERTICAL        = Degrees.of(0); 
-    public static final Angle STAGE_2_ANGLE_VERTICAL        = Degrees.of(90);
+    public static final Angle STAGE_2_ANGLE_VERTICAL        = Degrees.of(115);
     public static final Angle STAGE_3_ANGLE_VERTICAL        = Degrees.of(130);
     public static final Angle STAGE_4_ANGLE_VERTICAL        = Degrees.of(140);
 
     public static final Angle SCORE_STAGE_1_ANGLE_VERTICAL        = Degrees.of(0); 
     public static final Angle SCORE_STAGE_2_ANGLE_VERTICAL        = Degrees.of(60);
-    public static final Angle SCORE_STAGE_3_ANGLE_VERTICAL        = Degrees.of(40);
-    public static final Angle SCORE_STAGE_4_ANGLE_VERTICAL        = Degrees.of(40);
+    public static final Angle SCORE_STAGE_3_ANGLE_VERTICAL        = Degrees.of(80);
+    public static final Angle SCORE_STAGE_4_ANGLE_VERTICAL        = Degrees.of(80);
     public static final Angle SAFE_SCORE_STAGE_4_ANGLE_VERTICAL        = Degrees.of(90);
+
+    public static final Angle CLIMB_ANGLE_VERTICAL                = Degrees.of(-90);
 
     public static final Angle ARM_PINCH_HIGH_ANGLE_VERTICAL        = Degrees.of(90);
     public static final Angle ARM_PINCH_LOW_ANGLE_VERTICAL        = Degrees.of(90);
@@ -139,7 +141,7 @@ public final class Constants {
 
     public static final Angle GroundIntake_FEED_ANGLE_VERTICAL = Degrees.of(0);
     //public static final Angle GroundIntake_LOWERED_ANGLE_VERTICAL = Degrees.of(-145);
-    public static final Angle GroundIntake_LOWERED_ANGLE_VERTICAL = Degrees.of(-145);
+    public static final Angle GroundIntake_LOWERED_ANGLE_VERTICAL = Degrees.of(-150);
     public static final Angle GroundIntake_LEVEL1_ANGLE_VERTICAL = Degrees.of(-70);
 
     public static final double kGroundP = 0.05;
@@ -221,14 +223,17 @@ public final class Constants {
     //Elevator stages effective data
     public static final Distance ELEVATOR_SOURCE_DELTA = Inches.of(14);//check
     public static final Distance ELEVATOR_BASE_DELTA = Inches.of(0);
-    public static final Distance ELEVATOR_HANDOFF_DELTA = Inches.of(1); //needs changing
+    public static final Distance ELEVATOR_HANDOFF_DELTA = Inches.of(3); //needs changing
     public static final Distance STAGE_0_HEIGHT_DELTA = Inches.of(9);
     public static final Distance STAGE_1_HEIGHT_DELTA  = Inches.of(9); //needs changing
     public static final Distance STAGE_2_HEIGHT_DELTA  = Inches.of(0); 
     public static final Distance STAGE_3_HEIGHT_DELTA  = Inches.of(7); // needs changing
-    public static final Distance STAGE_4_HEIGHT_DELTA  = Inches.of(27);
+    public static final Distance STAGE_4_HEIGHT_DELTA  = Inches.of(29); // also barge scoring height
+
     public static final Distance STAGE_PINCH_HIGH_HEIGHT_DELTA = Inches.of(12);
     public static final Distance STAGE_PINCH_LOW_HEIGHT_DELTA = Inches.of(0);
+    public static final Distance STAGE_PINCH_MEDIUM_HEIGHT_DELTA = Inches.of(0);
+    public static final Distance STAGE_PINCH_LINEUP_HEIGHT_DELTA = Inches.of(22);
 
     public static final Distance SCORE_STAGE_2_HEIGHT_DELTA  = Inches.of(STAGE_2_HEIGHT_DELTA.in(Inches) - 2);
     public static final Distance SCORE_STAGE_3_HEIGHT_DELTA  = Inches.of(6);

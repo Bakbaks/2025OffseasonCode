@@ -14,6 +14,9 @@ public enum RobotState {
     SCOREL1,
     SupaPinchHIGHGrab,
     SupaPinchLOWGrab,
+    SupaPinchTravel,
     SupaPinchBarge,
     SupaPinchScore,
+    ClimbUp,
+    ClimbDown
 }

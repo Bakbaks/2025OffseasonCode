@@ -30,7 +30,7 @@ public class ArmSetPositionCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
         // System.out.println(arm.getArmAngle());
         // if(Math.abs(arm.getArmAngle() - targetPositionRotations) < frc.robot.Constants.ArmConstant.TOLERANCE){
         //     System.out.println("ElevatorSetPositionCommand isFinished");
