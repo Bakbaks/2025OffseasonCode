@@ -113,7 +113,7 @@ public class RobotStateMachine {
                         , new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
                             //.alongWith(Commands.print("Arm BASE: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
                         , new IntakeSpinCommand(intake, 0),
-                        new SpinGroundIntakeCommand(spin, 0.5)
+                        new SpinGroundIntakeCommand(spin, 0.7)
                             //.alongWith(Commands.print("GRAHRHRHHGHHGHGHGHGHGGHGHGHGHGH"))
                     )
                 ).withName("INTAKE_DOWN")),
@@ -155,18 +155,18 @@ public class RobotStateMachine {
                         new ElevatorSetPositionCommand(elevator, ElevatorConstants.ELEVATOR_HANDOFF_DELTA)
                             //.alongWith(Commands.print("Elevator BASE: " + ElevatorConstants.ELEVATOR_HANDOFF_DELTA.in(Meters))),
                         , new SpinGroundIntakeCommand(spin, 0.7),
-                        new IntakeSpinCommand(intake, -0.3)
+                        new IntakeSpinCommand(intake, -0.6)
                     ),
 
 
                     Commands.deadline(
-                        Commands.waitSeconds(1),
+                        Commands.waitSeconds(0.5),
                         new SwingGroundIntakeCommand(swing, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees)),
                         new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees)),
                         new ElevatorSetPositionCommand(elevator, ElevatorConstants.ELEVATOR_HANDOFF_DELTA)
                             //.alongWith(Commands.print("Elevator BASE: " + ElevatorConstants.ELEVATOR_HANDOFF_DELTA.in(Meters))),
-                        , new SpinGroundIntakeCommand(spin, -0.5).withTimeout(1),
-                        new IntakeSpinCommand(intake, -0.5).withTimeout(1)
+                        , new SpinGroundIntakeCommand(spin, -0.7).withTimeout(1),
+                        new IntakeSpinCommand(intake, -0.6).withTimeout(1)
                     ),
 
 
@@ -179,7 +179,7 @@ public class RobotStateMachine {
                         , new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
                             //.alongWith(Commands.print("Arm BASE: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
                         , new SpinGroundIntakeCommand(spin, 0),
-                        new IntakeSpinCommand(intake, 0)
+                        new IntakeSpinCommand(intake, -0.6)
                     )
 
 
@@ -195,7 +195,7 @@ public class RobotStateMachine {
                             //.alongWith(Commands.print("Swing FEED: " + GroundIntakeConstants.GroundIntake_LEVEL1_ANGLE_VERTICAL.in(Degrees))),
                         , new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
                             //.alongWith(Commands.print("Arm BASE: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
-                        , new SpinGroundIntakeCommand(spin, 0.3),
+                        , new SpinGroundIntakeCommand(spin, 0.6),
                         new IntakeSpinCommand(intake, 0)
                     )
                 ).withName("L1")),
@@ -211,7 +211,7 @@ public class RobotStateMachine {
                         , new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
                             //.alongWith(Commands.print("Arm BASE: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
                         , new SpinGroundIntakeCommand(spin, 0),
-                        new IntakeSpinCommand(intake, -0.3)
+                        new IntakeSpinCommand(intake, -0.6)
                     ),
                     Commands.deadline(
                         Commands.waitSeconds(0.25),
@@ -222,7 +222,7 @@ public class RobotStateMachine {
                         , new ArmSetPositionCommand(arm, ArmConstant.STAGE_2_ANGLE_VERTICAL.in(Degrees))
                             //.alongWith(Commands.print("Arm BASE: " + ArmConstant.STAGE_2_ANGLE_VERTICAL.in(Degrees))),
                         , new SpinGroundIntakeCommand(spin, 0),
-                        new IntakeSpinCommand(intake, -0.3)
+                        new IntakeSpinCommand(intake, -0.6)
                     ),
                     Commands.deadline(
                         //Commands.waitSeconds(0.25),
@@ -233,7 +233,7 @@ public class RobotStateMachine {
                         , new ArmSetPositionCommand(arm, ArmConstant.STAGE_2_ANGLE_VERTICAL.in(Degrees))
                             //.alongWith(Commands.print("Arm BASE: " + ArmConstant.STAGE_2_ANGLE_VERTICAL.in(Degrees))),
                         , new SpinGroundIntakeCommand(spin, 0),
-                        new IntakeSpinCommand(intake, -0.3)
+                        new IntakeSpinCommand(intake, -0.6)
                     )
                 ).withName("L2")),
 
@@ -249,7 +249,7 @@ public class RobotStateMachine {
                         , new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
                             //.alongWith(Commands.print("Arm BASE: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
                         , new SpinGroundIntakeCommand(spin, 0),
-                        new IntakeSpinCommand(intake, -0.3)
+                        new IntakeSpinCommand(intake, -0.6)
                     ),
                     Commands.deadline(
                         //Commands.waitSeconds(0.25),
@@ -260,7 +260,7 @@ public class RobotStateMachine {
                         , new ArmSetPositionCommand(arm, ArmConstant.STAGE_3_ANGLE_VERTICAL.in(Degrees))
                             //.alongWith(Commands.print("Arm BASE: " + ArmConstant.STAGE_3_ANGLE_VERTICAL.in(Degrees))),
                         , new SpinGroundIntakeCommand(spin, 0),
-                        new IntakeSpinCommand(intake, -0.3)
+                        new IntakeSpinCommand(intake, -0.6)
                     )
                 ).withName("L3")),
 
@@ -276,7 +276,7 @@ public class RobotStateMachine {
                         , new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
                             //.alongWith(Commands.print("Arm BASE: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
                         , new SpinGroundIntakeCommand(spin, 0),
-                        new IntakeSpinCommand(intake, -0.3)
+                        new IntakeSpinCommand(intake, -0.6)
                     ),
                     Commands.deadline(
                         //Commands.waitSeconds(0.25),
@@ -287,7 +287,7 @@ public class RobotStateMachine {
                         , new ArmSetPositionCommand(arm, ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))
                             //.alongWith(Commands.print("Arm BASE: " + ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))),
                         , new SpinGroundIntakeCommand(spin, 0),
-                        new IntakeSpinCommand(intake, -0.3)
+                        new IntakeSpinCommand(intake, -0.6)
                     )
                 ).withName("L4")),
 
@@ -522,7 +522,7 @@ public class RobotStateMachine {
                 new SequentialCommandGroup(
 
                     Commands.deadline(
-                        Commands.waitSeconds(0.125),
+                        Commands.waitSeconds(0.325),
                         new ElevatorSetPositionCommand(elevator, ElevatorConstants.STAGE_PINCH_SCORE_HEIGHT_DELTA),
                         new ArmSetPositionCommand(arm, ArmConstant.ARM_SUPERSCORE_ANGLE_VERTICAL.in(Degrees)),
                         new SwingGroundIntakeCommand(swing, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees)),

@@ -31,9 +31,11 @@ public class ArmSubsystem extends SubsystemBase {
         m_armCANCoder = new CANcoder(ArmConstant.kArmCANCoderID, ArmConstant.kArmCANbus);
 
         var CANCoderConfig = new CANcoderConfiguration();
-        CANCoderConfig.MagnetSensor.MagnetOffset = -0.503; //-0.350
+        CANCoderConfig.MagnetSensor.MagnetOffset = -0.518; //-0.350 503
+
         m_armCANCoder.getConfigurator().apply(CANCoderConfig);
         var talonFXConfigs = new TalonFXConfiguration();
+
 
         // set slot 0 gains
         // var slot0Configs = talonFXConfigs.Slot0;

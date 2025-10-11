@@ -85,8 +85,8 @@ public class RobotContainer {
     private final SwingGroundIntakeSubsystem SwingGroundIntake = new SwingGroundIntakeSubsystem();
     private final SpinGroundIntakeSubsystem spinGroundIntake = new SpinGroundIntakeSubsystem();
     PathConstraints lims = new PathConstraints(
-    5.0,                     // max m/s
-    3,                     // max m/s^2
+    3.0,                     // max m/s
+    3.0,                     // max m/s^2
     Math.toRadians(540.0),   // max rad/s
     Math.toRadians(720.0)    // max rad/s^2
     );
@@ -152,7 +152,7 @@ public class RobotContainer {
         new InstantCommand(() -> drivetrain.resetOdometry(drivetrain.getPose()))
         );
    Command AutoAimL = new SequentialCommandGroup(
-        new AimAtTagCommand(Constants.VisionConstants.TAG_TO_GOAL_LEFT, drivetrain, vision, lims, 0.1).withTimeout(1.5),
+        new AimAtTagCommand(Constants.VisionConstants.TAG_TO_GOAL_LEFT, drivetrain, vision, lims, 0.1).withTimeout(2),
         new InstantCommand(() -> drivetrain.resetOdometry(drivetrain.getPose()))
         );
 
@@ -182,7 +182,7 @@ public class RobotContainer {
                 );
     Command NewScoreL4 = new SequentialCommandGroup(
         Commands.deadline(
-            Commands.waitSeconds(0.01),
+            Commands.waitSeconds(0.1),
             new ElevatorSetPositionCommand(elevatorSubsystem, ElevatorConstants.STAGE_4_HEIGHT_DELTA)
                 //.alongWith(Commands.print("Elevator default: " + ElevatorConstants.STAGE_4_HEIGHT_DELTA.in(Meters))),
             , new SwingGroundIntakeCommand(SwingGroundIntake, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
@@ -194,7 +194,7 @@ public class RobotContainer {
         ),
 
         Commands.deadline(
-            Commands.waitSeconds(0.2),
+            Commands.waitSeconds(0.15),
             new ElevatorSetPositionCommand(elevatorSubsystem, ElevatorConstants.SCORE_STAGE_4_HEIGHT_DELTA)
                 //.alongWith(Commands.print("Elevator default: " + ElevatorConstants.SCORE_STAGE_4_HEIGHT_DELTA.in(Meters))),
             , new SwingGroundIntakeCommand(SwingGroundIntake, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
@@ -216,11 +216,31 @@ public class RobotContainer {
                 //.alongWith(Commands.print("Arm BASE: " + ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))),
             , new SpinGroundIntakeCommand(spinGroundIntake, 0),
             //new IntakeSpinCommand(intake, 0.1).withTimeout(1.0)
-            new IntakeSpinCommand(intake, -0.3).withTimeout(1.0)
+            new IntakeSpinCommand(intake, 0.3).withTimeout(1.0)
         )
 
 
    
+    );
+
+    Command NewDefault = new SequentialCommandGroup(
+        Commands.deadline(
+            Commands.waitSeconds(0.1),
+            new ElevatorSetPositionCommand(elevatorSubsystem, ElevatorConstants.STAGE_0_HEIGHT_DELTA)
+            //.alongWith(Commands.print("Elevator default: " + ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Meters)))
+        ),
+       
+        Commands.deadline(
+            Commands.waitSeconds(0.25),
+            new ElevatorSetPositionCommand(elevatorSubsystem, ElevatorConstants.STAGE_0_HEIGHT_DELTA)
+                //.alongWith(Commands.print("Elevator default: " + ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Meters))),
+            , new SwingGroundIntakeCommand(SwingGroundIntake, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
+                //.alongWith(Commands.print("Swing FEED: " + GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),
+            , new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
+                //.alongWith(Commands.print("Arm BASE: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
+            , new SpinGroundIntakeCommand(spinGroundIntake, 0.2),
+            new IntakeSpinCommand(intake, -0.3)
+        )
     );
 
     Command NewStationLoad = new SequentialCommandGroup(
@@ -232,12 +252,12 @@ public class RobotContainer {
                 //.alongWith(Commands.print("Swing FEED: " + GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),
             , new ArmSetPositionCommand(arm, ArmConstant.ARM_PINCH_HIGH_ANGLE_VERTICAL.in(Degrees))
                 //.alongWith(Commands.print("Arm BASE: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
-            , new SpinGroundIntakeCommand(spinGroundIntake, .4),
+            , new SpinGroundIntakeCommand(spinGroundIntake, 0.6),
             new IntakeSpinCommand(intake, 0)
         ),
         
         Commands.deadline(
-                Commands.waitSeconds(0.1),
+                Commands.waitSeconds(0.3),
                         new SwingGroundIntakeCommand(SwingGroundIntake, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
                             //.alongWith(Commands.print("Swing LOWERED: " + GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))),
                         , new ElevatorSetPositionCommand(elevatorSubsystem, ElevatorConstants.STAGE_0_HEIGHT_DELTA)
@@ -245,7 +265,7 @@ public class RobotContainer {
                         , new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
                             //.alongWith(Commands.print("Arm BASE: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
                         , new IntakeSpinCommand(intake, 0),
-                        new SpinGroundIntakeCommand(spinGroundIntake, 0.4) // start spin
+                        new SpinGroundIntakeCommand(spinGroundIntake, 0.6) // start spin
                 ),
                    
                 
@@ -253,18 +273,18 @@ public class RobotContainer {
 
 
         Commands.deadline(
-                Commands.waitSeconds(0.1),
+                Commands.waitSeconds(0.3),
                         new SwingGroundIntakeCommand(SwingGroundIntake, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees)),
                         new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees)),
                         new ElevatorSetPositionCommand(elevatorSubsystem, ElevatorConstants.ELEVATOR_HANDOFF_DELTA)
                             //.alongWith(Commands.print("Elevator BASE: " + ElevatorConstants.ELEVATOR_HANDOFF_DELTA.in(Meters))),
-                        , new SpinGroundIntakeCommand(spinGroundIntake, 0.4),
-                        new IntakeSpinCommand(intake, -0.4)
+                        , new SpinGroundIntakeCommand(spinGroundIntake, 0.6),
+                        new IntakeSpinCommand(intake, -0.5)
                 ),
 
 
                 Commands.deadline(
-                        Commands.waitSeconds(0.2),
+                        Commands.waitSeconds(0.3),
                         new SwingGroundIntakeCommand(SwingGroundIntake, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees)),
                         new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees)),
                         new ElevatorSetPositionCommand(elevatorSubsystem, ElevatorConstants.ELEVATOR_HANDOFF_DELTA)
@@ -275,7 +295,7 @@ public class RobotContainer {
 
 
                 Commands.deadline(
-                        Commands.waitSeconds(0.1),
+                        Commands.waitSeconds(0.3),
                         new ElevatorSetPositionCommand(elevatorSubsystem, ElevatorConstants.STAGE_0_HEIGHT_DELTA)
                             //.alongWith(Commands.print("Elevator default: " + ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Meters))),
                         , new SwingGroundIntakeCommand(SwingGroundIntake, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
@@ -283,7 +303,7 @@ public class RobotContainer {
                         , new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
                             //.alongWith(Commands.print("Arm BASE: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
                         , new SpinGroundIntakeCommand(spinGroundIntake, 0),
-                        new IntakeSpinCommand(intake, 0)
+                        new IntakeSpinCommand(intake, -0.5)
                 )
 
     );
@@ -359,7 +379,7 @@ public class RobotContainer {
 
 
     public RobotContainer() {
-
+        NamedCommands.registerCommand("NewDefault", NewDefault);
         NamedCommands.registerCommand("AutoAlignR", AutoAimR);
         NamedCommands.registerCommand("AutoAlignL", AutoAimL);
         NamedCommands.registerCommand("NewL4", NewL4);

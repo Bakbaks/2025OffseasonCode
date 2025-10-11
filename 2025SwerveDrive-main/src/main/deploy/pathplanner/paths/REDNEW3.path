@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 16.866858552631577,
-        "y": -0.02574013157894683
+        "x": 17.40567434210526,
+        "y": -0.26628289473684164
       },
       "prevControl": null,
       "nextControl": {
-        "x": 15.934694833309358,
-        "y": 0.3245845001297571
+        "x": 16.473510622783042,
+        "y": 0.08404173697186218
       },
       "isLocked": false,
       "linkedName": "SourceFeed"
     },
     {
       "anchor": {
-        "x": 14.32672697368421,
-        "y": 2.1487664473684207
+        "x": 15.086842105263155,
+        "y": 1.3309210526315791
       },
       "prevControl": {
-        "x": 15.030605024343402,
-        "y": 1.582384782809593
+        "x": 15.760361842105262,
+        "y": 0.6092927631578946
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.0,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 110.69545073406329
+    "rotation": 130.23635830927407
   },
   "reversed": false,
   "folder": "R_REDPATH",
@@ -50,5 +50,5 @@
     "velocity": 0,
     "rotation": -142.2243156940456
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

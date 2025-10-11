@@ -108,7 +108,7 @@ public final class Constants {
 
     //random stuff
     public static final double test = 0.0;
-    public static final double kArmP = 2.5;
+    public static final double kArmP = 3;
     public static final double kArmI = 0; // 0.003;
     public static final double kArmD = 0; // 0.001;
 
@@ -134,7 +134,7 @@ public final class Constants {
     public static final int kGroundIntakeID = 51;
     public static final int kGroundSwingID = 50;
     public static final int kGroundIntakeSwingCurrentLimit = 70;
-    public static final int kGroundIntakeCurrentLimit = 50;
+    public static final int kGroundIntakeCurrentLimit = 80;
 
     public static final double GroundIntakeGearRatio = 40.9090909090909090909090909090909090909090909090909090909090901 / 1.0000000; // need to set
 
@@ -223,7 +223,7 @@ public final class Constants {
     //Elevator stages effective data
     public static final Distance ELEVATOR_SOURCE_DELTA = Inches.of(14);//check
     public static final Distance ELEVATOR_BASE_DELTA = Inches.of(0);
-    public static final Distance ELEVATOR_HANDOFF_DELTA = Inches.of(2); //needs changing
+    public static final Distance ELEVATOR_HANDOFF_DELTA = Inches.of(0.5); //needs changing
     public static final Distance STAGE_0_HEIGHT_DELTA = Inches.of(9);
     public static final Distance STAGE_1_HEIGHT_DELTA  = Inches.of(9); //needs changing
     public static final Distance STAGE_2_HEIGHT_DELTA  = Inches.of(0); 
