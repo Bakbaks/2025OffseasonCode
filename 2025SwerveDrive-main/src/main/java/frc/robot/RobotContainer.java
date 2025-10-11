@@ -148,11 +148,11 @@ public class RobotContainer {
     }
 
     Command AutoAimR = new SequentialCommandGroup(
-        new AimAtTagCommand(Constants.VisionConstants.TAG_TO_GOAL_RIGHT, drivetrain, vision, lims, 0.1).withTimeout(1.2),
+        new AimAtTagCommand(Constants.VisionConstants.TAG_TO_GOAL_RIGHT, drivetrain, vision, lims, 0.1).withTimeout(1.5),
         new InstantCommand(() -> drivetrain.resetOdometry(drivetrain.getPose()))
         );
    Command AutoAimL = new SequentialCommandGroup(
-        new AimAtTagCommand(Constants.VisionConstants.TAG_TO_GOAL_LEFT, drivetrain, vision, lims, 0.1).withTimeout(1.2),
+        new AimAtTagCommand(Constants.VisionConstants.TAG_TO_GOAL_LEFT, drivetrain, vision, lims, 0.1).withTimeout(1.5),
         new InstantCommand(() -> drivetrain.resetOdometry(drivetrain.getPose()))
         );
 

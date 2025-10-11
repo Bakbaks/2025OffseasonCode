@@ -113,7 +113,7 @@ public class RobotStateMachine {
                         , new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
                             //.alongWith(Commands.print("Arm BASE: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
                         , new IntakeSpinCommand(intake, 0),
-                        new SpinGroundIntakeCommand(spin, 0.3)
+                        new SpinGroundIntakeCommand(spin, 0.5)
                             //.alongWith(Commands.print("GRAHRHRHHGHHGHGHGHGHGGHGHGHGHGH"))
                     )
                 ).withName("INTAKE_DOWN")),
@@ -130,7 +130,7 @@ public class RobotStateMachine {
                         , new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
                             //.alongWith(Commands.print("Arm BASE: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
                         , new IntakeSpinCommand(intake, 0),
-                        new SpinGroundIntakeCommand(spin, 0.6) // start spin
+                        new SpinGroundIntakeCommand(spin, 0.7) // start spin
                     ),
                    
                    
@@ -142,7 +142,7 @@ public class RobotStateMachine {
                         new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees)),
                         new ElevatorSetPositionCommand(elevator, ElevatorConstants.STAGE_0_HEIGHT_DELTA)
                             //.alongWith(Commands.print("Elevator BASE: " + ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Meters))),
-                        , new SpinGroundIntakeCommand(spin, 0.6),
+                        , new SpinGroundIntakeCommand(spin, 0.7),
                         new IntakeSpinCommand(intake, 0)
                     ),
                    
@@ -154,7 +154,7 @@ public class RobotStateMachine {
                         new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees)),
                         new ElevatorSetPositionCommand(elevator, ElevatorConstants.ELEVATOR_HANDOFF_DELTA)
                             //.alongWith(Commands.print("Elevator BASE: " + ElevatorConstants.ELEVATOR_HANDOFF_DELTA.in(Meters))),
-                        , new SpinGroundIntakeCommand(spin, 0.6),
+                        , new SpinGroundIntakeCommand(spin, 0.7),
                         new IntakeSpinCommand(intake, -0.3)
                     ),
 
@@ -171,7 +171,7 @@ public class RobotStateMachine {
 
 
                     Commands.deadline(
-                        Commands.waitSeconds(1.5),
+                        Commands.waitSeconds(0.5),
                         new ElevatorSetPositionCommand(elevator, ElevatorConstants.STAGE_0_HEIGHT_DELTA)
                             //.alongWith(Commands.print("Elevator default: " + ElevatorConstants.STAGE_0_HEIGHT_DELTA.in(Meters))),
                         , new SwingGroundIntakeCommand(swing, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
@@ -522,9 +522,9 @@ public class RobotStateMachine {
                 new SequentialCommandGroup(
 
                     Commands.deadline(
-                        Commands.waitSeconds(0.15),
-                        new ElevatorSetPositionCommand(elevator, ElevatorConstants.STAGE_4_HEIGHT_DELTA),
-                        new ArmSetPositionCommand(arm, ArmConstant.ARM_SUPERSWING_ANGLE_VERTICAL.in(Degrees)),
+                        Commands.waitSeconds(0.125),
+                        new ElevatorSetPositionCommand(elevator, ElevatorConstants.STAGE_PINCH_SCORE_HEIGHT_DELTA),
+                        new ArmSetPositionCommand(arm, ArmConstant.ARM_SUPERSCORE_ANGLE_VERTICAL.in(Degrees)),
                         new SwingGroundIntakeCommand(swing, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees)),
                         new SpinGroundIntakeCommand(spin, 0),
                         new IntakeSpinCommand(intake, -0.8)
@@ -534,11 +534,11 @@ public class RobotStateMachine {
 
                     Commands.deadline(
                         //Commands.waitSeconds(0.25),
-                        new ElevatorSetPositionCommand(elevator, ElevatorConstants.STAGE_4_HEIGHT_DELTA)
+                        new ElevatorSetPositionCommand(elevator, ElevatorConstants.STAGE_PINCH_SCORE_HEIGHT_DELTA)
                             //.alongWith(Commands.print("Elevator default: " + ElevatorConstants.SCORE_STAGE_4_HEIGHT_DELTA.in(Meters))),
                         , new SwingGroundIntakeCommand(swing, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
                             //.alongWith(Commands.print("Swing FEED: " + GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),
-                        , new ArmSetPositionCommand(arm, ArmConstant.ARM_SUPERSWING_ANGLE_VERTICAL.in(Degrees))
+                        , new ArmSetPositionCommand(arm, ArmConstant.ARM_SUPERSCORE_ANGLE_VERTICAL.in(Degrees))
                             //.alongWith(Commands.print("Arm BASE: " + ArmConstant.ARM_SUPERSCORE_ANGLE_VERTICAL.in(Degrees))),
                         , new SpinGroundIntakeCommand(spin, 0),
                         new IntakeSpinCommand(intake, 1)

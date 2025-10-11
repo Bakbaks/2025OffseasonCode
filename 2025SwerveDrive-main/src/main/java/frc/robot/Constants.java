@@ -95,7 +95,7 @@ public final class Constants {
 
     public static final Angle ARM_PINCH_HIGH_ANGLE_VERTICAL        = Degrees.of(90);
     public static final Angle ARM_PINCH_LOW_ANGLE_VERTICAL        = Degrees.of(90);
-    public static final Angle ARM_SUPERSCORE_ANGLE_VERTICAL        = Degrees.of(180);
+    public static final Angle ARM_SUPERSCORE_ANGLE_VERTICAL        = Degrees.of(176);
     public static final Angle ARM_SUPERSWING_ANGLE_VERTICAL        = Degrees.of(160);
 
 
@@ -190,12 +190,12 @@ public final class Constants {
 
     public static final double kElevatorMinOutput = -1;
     public static final double kElevatorMaxOutput = 1;
-    public static final int kElevatorCurrentLimit = 60;
+    public static final int kElevatorCurrentLimit = 70;
 
     //public static final double TOLERANCE = 1; // 1 rotation from motor, 2.51cm// determine if need to delete
 
     public static final Distance kMinHeight = Inches.of(0); // Lowest safe position
-    public static final Distance kMaxHeight = Inches.of(27); // Highest safe position
+    public static final Distance kMaxHeight = Inches.of(36); // Highest safe position
 
     public static final double kManualSpeedMultiplier = 1000; // Adjust for fine control
 
@@ -223,18 +223,18 @@ public final class Constants {
     //Elevator stages effective data
     public static final Distance ELEVATOR_SOURCE_DELTA = Inches.of(14);//check
     public static final Distance ELEVATOR_BASE_DELTA = Inches.of(0);
-    public static final Distance ELEVATOR_HANDOFF_DELTA = Inches.of(3); //needs changing
+    public static final Distance ELEVATOR_HANDOFF_DELTA = Inches.of(2); //needs changing
     public static final Distance STAGE_0_HEIGHT_DELTA = Inches.of(9);
     public static final Distance STAGE_1_HEIGHT_DELTA  = Inches.of(9); //needs changing
     public static final Distance STAGE_2_HEIGHT_DELTA  = Inches.of(0); 
     public static final Distance STAGE_3_HEIGHT_DELTA  = Inches.of(7); // needs changing
     public static final Distance STAGE_4_HEIGHT_DELTA  = Inches.of(29); // also barge scoring height
 
-    public static final Distance STAGE_PINCH_HIGH_HEIGHT_DELTA = Inches.of(12);
+    public static final Distance STAGE_PINCH_HIGH_HEIGHT_DELTA = Inches.of(15);
     public static final Distance STAGE_PINCH_LOW_HEIGHT_DELTA = Inches.of(0);
     public static final Distance STAGE_PINCH_MEDIUM_HEIGHT_DELTA = Inches.of(0);
-    public static final Distance STAGE_PINCH_LINEUP_HEIGHT_DELTA = Inches.of(22);
-
+    public static final Distance STAGE_PINCH_LINEUP_HEIGHT_DELTA = Inches.of(0);
+    public static final Distance STAGE_PINCH_SCORE_HEIGHT_DELTA  = Inches.of(36);
     public static final Distance SCORE_STAGE_2_HEIGHT_DELTA  = Inches.of(STAGE_2_HEIGHT_DELTA.in(Inches) - 2);
     public static final Distance SCORE_STAGE_3_HEIGHT_DELTA  = Inches.of(6);
     public static final Distance SCORE_STAGE_4_HEIGHT_DELTA  = Inches.of(23);
