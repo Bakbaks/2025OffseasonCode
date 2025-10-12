@@ -181,19 +181,33 @@ public class VisionSubsystem extends SubsystemBase {
     Rotation3d r3 = t3.getRotation();
 
     Rotation2d yaw2d = t3.getRotation().toRotation2d();
-    
-    double deg = yaw2d.getDegrees();
+    double origDeg = yaw2d.getDegrees();
 
-    deg = Math.IEEEremainder(deg, 360.0);
-    
+    double deg = Math.IEEEremainder(origDeg, 360.0);
+
+    boolean flipped = false;
     if (deg > 90.0) {
+      // fold across the 180 boundary and note we flipped the facing 180°
       deg = -(180.0 - deg);
+      flipped = true;
     } else if (deg < -90.0) {
-      deg = 180.0 + deg;  
+      deg = 180.0 + deg;
+      flipped = true;
+    }
+
+    // If we folded the yaw by 180°, the translation in the camera frame should be
+    // rotated by 180° as well (equivalent to negating X and Y) to keep the
+    // pose consistent. Failing to do this can leave translation and rotation
+    // inconsistent and cause path/heading to be flipped (robot driving "backwards").
+    double tx = tr.getX();
+    double ty = tr.getY();
+    if (flipped) {
+      tx = -tx;
+      ty = -ty;
     }
 
     Rotation2d folded = Rotation2d.fromDegrees(deg);
 
-    return new Transform2d(new Translation2d(tr.getX(), tr.getY()), folded);
+    return new Transform2d(new Translation2d(tx, ty), folded);
   }
 }

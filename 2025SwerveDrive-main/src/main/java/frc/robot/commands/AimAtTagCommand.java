@@ -31,7 +31,12 @@ public class AimAtTagCommand extends Command {
   private Command followCmd;
   private Pose2d targetPose;
   private Transform2d robot2goal;
-
+  
+  // Tracking state
+  private double lastValidTargetDistance = Double.POSITIVE_INFINITY;
+  private static final double CLOSE_DISTANCE_THRESHOLD = 1.0; // meters
+  private static final double SIGNIFICANT_POSE_CHANGE = 0.1; // meters
+  private int debugCounter = 0;
   
   public AimAtTagCommand(
     Transform2d robot2goal,
@@ -100,9 +105,70 @@ public class AimAtTagCommand extends Command {
 
   @Override
   public void execute() {
+    debugCounter++;
+    Pose2d currentPose = drivetrain.getPose();
+    
+    // Try to update vision if we're not too close
+    if (lastValidTargetDistance > CLOSE_DISTANCE_THRESHOLD || targetPose == null) {
+      VisionSubsystem.PathPlan plan = vision.getPlan(robot2goal);
+      if (plan != null) {
+        Transform2d robotToGoal = plan.robotToGoal;
+        Pose2d newTargetPose = currentPose.transformBy(robotToGoal);
+        
+        // Calculate distance to target
+        double dx = newTargetPose.getX() - currentPose.getX();
+        double dy = newTargetPose.getY() - currentPose.getY();
+        lastValidTargetDistance = Math.hypot(dx, dy);
+        
+        boolean significantChange = 
+            targetPose == null || 
+            Math.abs(targetPose.getX() - newTargetPose.getX()) > SIGNIFICANT_POSE_CHANGE ||
+            Math.abs(targetPose.getY() - newTargetPose.getY()) > SIGNIFICANT_POSE_CHANGE;
+            
+        // Update path if target moved significantly
+        if (significantChange) {
+          targetPose = newTargetPose;
+          updatePath(currentPose, dx, dy, plan.tagId);
+        }
+        
+        // Debug output every 10 cycles
+        if (debugCounter % 10 == 0) {
+          System.out.printf("[AutoAim] Dist:%.2fm Tag:%d Vision:%s Mem:%b dX:%.2f dY:%.2f\n",
+              lastValidTargetDistance, 
+              plan.tagId,
+              plan.cameraName,
+              lastValidTargetDistance <= CLOSE_DISTANCE_THRESHOLD,
+              dx, dy);
+        }
+      }
+    }
+    
+    // Execute current path
     if (followCmd != null) {
       followCmd.execute();
     }
+  }
+  
+  private void updatePath(Pose2d start, double dx, double dy, int tagId) {
+    Rotation2d travelDir = new Rotation2d(dx, dy);
+    Pose2d startForPath = new Pose2d(start.getTranslation(), travelDir);
+    Pose2d endForPath = new Pose2d(targetPose.getTranslation(), travelDir);
+    
+    List<Waypoint> wps = PathPlannerPath.waypointsFromPoses(startForPath, endForPath);
+    GoalEndState goal = new GoalEndState(0.0, targetPose.getRotation());
+    PathPlannerPath path = new PathPlannerPath(wps, limits, null, goal, false);
+    
+    // Switch to new path
+    if (followCmd != null) {
+      followCmd.end(false);
+    }
+    followCmd = AutoBuilder.followPath(path);
+    followCmd.initialize();
+    
+    System.out.println("[AutoAim] New path to tag " + tagId + 
+                      String.format(" dist=%.2fm heading=%.1f°", 
+                      lastValidTargetDistance,
+                      targetPose.getRotation().getDegrees()));
   }
 
   @Override
