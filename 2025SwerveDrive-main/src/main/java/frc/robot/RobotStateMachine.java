@@ -328,7 +328,7 @@ public class RobotStateMachine {
                             //.alongWith(Commands.print("Arm BASE: " + ArmConstant.STAGE_2_ANGLE_VERTICAL.in(Degrees))),
                         , new SpinGroundIntakeCommand(spin, 0),
                         //new IntakeSpinCommand(intake, 0.1).withTimeout(1.0)
-                        new IntakeSpinCommand(intake, 0.3).withTimeout(1.0)
+                        new IntakeSpinCommand(intake, -0.3)
                     )
                
                 ).withName("SCORE2")),
@@ -369,7 +369,7 @@ public class RobotStateMachine {
                             //.alongWith(Commands.print("Arm BASE: " + ArmConstant.STAGE_3_ANGLE_VERTICAL.in(Degrees))),
                         , new SpinGroundIntakeCommand(spin, 0),
                         //new IntakeSpinCommand(intake, 0.1).withTimeout(1.0)
-                        new IntakeSpinCommand(intake, 0.3).withTimeout(1.0)
+                        new IntakeSpinCommand(intake, -0.3)
                     )
                
                 ).withName("SCOREL3")),
@@ -411,7 +411,7 @@ public class RobotStateMachine {
                             //.alongWith(Commands.print("Arm BASE: " + ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))),
                         , new SpinGroundIntakeCommand(spin, 0),
                         //new IntakeSpinCommand(intake, 0.1).withTimeout(1.0)
-                        new IntakeSpinCommand(intake, 0.3).withTimeout(1.0)
+                        new IntakeSpinCommand(intake, -0.3)
                     )
                
                 ).withName("SCOREL4")),

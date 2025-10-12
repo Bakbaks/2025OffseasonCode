@@ -352,12 +352,12 @@ public final class Constants {
   
     // Camera extrinsics in ROBOT frame (+X fwd, +Y left, +Z up), meters/radians
     // Right camera
-    public static final double R_X = 0.2601976;
-    public static final double R_Y = -0.3239008;          // right is negative Y
+    public static final double R_X = 0.2601976;//0.2601976
+    public static final double R_Y = 0.3239008;     // right is negative Y
     public static final double R_Z = 0.2067306;           // height
     public static final double R_ROLL  = 0.0;
     public static final double R_PITCH = Math.toRadians(15.0);
-    public static final double R_YAW   = Math.toRadians(-35.0); 
+    public static final double R_YAW   = Math.toRadians(-35); //-35
   
     // Left camera
     public static final double L_X = 0.2601976; // negative makes the robot end up further from the wall
