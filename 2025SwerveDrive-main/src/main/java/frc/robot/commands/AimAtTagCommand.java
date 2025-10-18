@@ -80,13 +80,19 @@ public class AimAtTagCommand extends Command {
 
     
     //path planner magic with waypoints
-    Rotation2d travelDir = new Rotation2d(dx, dy);
-    Pose2d startForPath = new Pose2d(start.getTranslation(), travelDir);
-    Pose2d endForPath   = new Pose2d(targetPose.getTranslation(), travelDir);
+    // Rotation2d travelDir = new Rotation2d(dx, dy);
+    // Pose2d startForPath = new Pose2d(start.getTranslation(), travelDir);
+    // Pose2d endForPath   = new Pose2d(targetPose.getTranslation(), travelDir);
+    // List<Waypoint> wps = PathPlannerPath.waypointsFromPoses(startForPath, endForPath);
+
+    Rotation2d desiredHeading = new Rotation2d(dx, dy);
+
+    Pose2d startForPath = new Pose2d(start.getTranslation(), desiredHeading);
+    Pose2d endForPath = new Pose2d(targetPose.getTranslation(), desiredHeading);
     List<Waypoint> wps = PathPlannerPath.waypointsFromPoses(startForPath, endForPath);
 
     
-    GoalEndState goal = new GoalEndState(0.0, finalHeading);
+    GoalEndState goal = new GoalEndState(0.0, desiredHeading);
 
     
     PathPlannerPath path = new PathPlannerPath(wps, limits, null, goal, false);
