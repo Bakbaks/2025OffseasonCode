@@ -114,8 +114,7 @@ public class VisionSubsystem extends SubsystemBase {
       || t.getFiducialId() == 4
       || t.getFiducialId() == 5
       || t.getFiducialId() == 3
-      || t.getFiducialId() == 2
-      || t.getFiducialId() == 1) continue; // photon vision function that checks if the april tag is legit
+       || t.getFiducialId() == 1) continue; // photon vision function that checks if the april tag is legit
 
       Tag obs = new Tag();
       obs.tagId = t.getFiducialId();
@@ -186,28 +185,10 @@ public class VisionSubsystem extends SubsystemBase {
     double deg = yaw2d.getDegrees();
 
     deg = Math.IEEEremainder(deg, 360.0);
-
-    boolean flipped =false;
-    
-    if (deg > 90.0) {
-      deg = -(180.0 - deg);
-      //flipped = true;
-    } else if (deg < -90.0) {
-      deg = 180.0 + deg;  
-      //flipped = true;
-    }
-   
     
     double tx = tr.getX();
     double ty = tr.getY();
 
-    /* 
-    if(flipped){
-      tx = -tx;
-      ty = -ty;
-    }
-
-    */
     Rotation2d folded = Rotation2d.fromDegrees(deg);//deg
 
     return new Transform2d(new Translation2d(tx, ty), folded);
