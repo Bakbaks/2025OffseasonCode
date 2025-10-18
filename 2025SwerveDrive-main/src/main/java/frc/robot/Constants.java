@@ -350,7 +350,7 @@ public final class Constants {
     public static final String RIGHT_CAM_NAME = "right";
     public static final String LEFT_CAM_NAME  = "left";
   
-    // Camera extrinsics in ROBOT frame (+X fwd, +Y left, +Z up), meters/radians
+    
     // Right camera
     public static final double R_X = 0.3239008;//0.2601976
     public static final double R_Y = -0.260194;     // right is negative Y
@@ -359,7 +359,7 @@ public final class Constants {
     public static final double R_PITCH = Math.toRadians(-15.0);
     public static final double R_YAW   = Math.toRadians(35);
   
-    // Left camera
+    // Left camera this is wrong
     public static final double L_X = 0.2601976; // negative makes the robot end up further from the wall
     public static final double L_Y = 0.085725;    // left is positive Y
     public static final double L_Z = 0.2067306;
@@ -372,7 +372,7 @@ public final class Constants {
     
 
     //point to go to relative to the tag
-    public static final Transform2d TAG_TO_GOAL_RIGHT = new Transform2d(new Translation2d(-1, -.4), new Rotation2d());//meters
+    public static final Transform2d TAG_TO_GOAL_RIGHT = new Transform2d(new Translation2d(-0.32, -.4), new Rotation2d());//meters
     public static final Transform2d TAG_TO_GOAL_LEFT = new Transform2d(new Translation2d(-0.32, 0.1), new Rotation2d());//meters
   
 
