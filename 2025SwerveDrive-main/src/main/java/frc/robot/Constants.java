@@ -356,7 +356,7 @@ public final class Constants {
     public static final double R_Y = -0.260194;     // right is negative Y
     public static final double R_Z = 0.2067306;           // height
     public static final double R_ROLL  = 0.0;
-    public static final double R_PITCH = Math.toRadians(15.0);
+    public static final double R_PITCH = Math.toRadians(-15.0);
     public static final double R_YAW   = Math.toRadians(35);
   
     // Left camera
@@ -364,7 +364,7 @@ public final class Constants {
     public static final double L_Y = 0.085725;    // left is positive Y
     public static final double L_Z = 0.2067306;
     public static final double L_ROLL  = 0.0;
-    public static final double L_PITCH = Math.toRadians(15.0);
+    public static final double L_PITCH = Math.toRadians(-15.0);
     public static final double L_YAW   = Math.toRadians(0.0);
   
     // Tag stuff
@@ -372,8 +372,8 @@ public final class Constants {
     
 
     //point to go to relative to the tag
-    public static final Transform2d TAG_TO_GOAL_RIGHT = new Transform2d(new Translation2d(0, -.4), new Rotation2d());//meters
-    public static final Transform2d TAG_TO_GOAL_LEFT = new Transform2d(new Translation2d(0, 0.1), new Rotation2d());//meters
+    public static final Transform2d TAG_TO_GOAL_RIGHT = new Transform2d(new Translation2d(-0.32, -.4), new Rotation2d());//meters
+    public static final Transform2d TAG_TO_GOAL_LEFT = new Transform2d(new Translation2d(-0.32, 0.1), new Rotation2d());//meters
   
 
 
