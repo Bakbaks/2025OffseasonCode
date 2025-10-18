@@ -181,19 +181,35 @@ public class VisionSubsystem extends SubsystemBase {
     Rotation3d r3 = t3.getRotation();
 
     Rotation2d yaw2d = t3.getRotation().toRotation2d();
-    
+    double origDeg = yaw2d.getDegrees();
+
     double deg = yaw2d.getDegrees();
 
     deg = Math.IEEEremainder(deg, 360.0);
+
+    boolean flipped =false;
     
     if (deg > 90.0) {
       deg = -(180.0 - deg);
+      //flipped = true;
     } else if (deg < -90.0) {
       deg = 180.0 + deg;  
+      //flipped = true;
+    }
+   
+    
+    double tx = tr.getX();
+    double ty = tr.getY();
+
+    /* 
+    if(flipped){
+      tx = -tx;
+      ty = -ty;
     }
 
-    Rotation2d folded = Rotation2d.fromDegrees(deg);
+    */
+    Rotation2d folded = Rotation2d.fromDegrees(deg);//deg
 
-    return new Transform2d(new Translation2d(tr.getX(), tr.getY()), folded);
+    return new Transform2d(new Translation2d(tx, ty), folded);
   }
 }
