@@ -13,7 +13,7 @@ import frc.robot.subsystems.VisionSubsystem.PathPlan;
 import frc.robot.Constants.VisionConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
-public class AimAtTagPIDCommand extends Command{
+public class AimAtTagPIDCommand extends Command {
     private final CommandSwerveDrivetrain drivetrain;
     private final VisionSubsystem vision;
     private final Transform2d robot2goal;
@@ -33,49 +33,45 @@ public class AimAtTagPIDCommand extends Command{
         hasTarget = false;
         PathPlan plan = vision.getPlan(robot2goal);
         if (plan == null) {
-        System.out.println("AimAtTagPID No valid tag plan found.");
-        return;
+            System.out.println("AimAtTagPID: No valid tag plan found.");
+            return;
         }
+
         currentError = plan.robotToGoal;
         hasTarget = true;
-        /* 
-        System.out.println("[AimAtTagPID] Got tag " + plan.tagId + " from " + plan.cameraName +
-                        " -> target offset (m): x=" + String.format("%.3f", currentError.getX()) +
-                        " y=" + String.format("%.3f", currentError.getY()) +
-                        " rot=" + String.format("%.2f°", currentError.getRotation().getDegrees()));
-                        */
+
+        System.out.println("[AimAtTagPID] Moving toward tag " + plan.tagId + 
+                           " with offset (x=" + String.format("%.3f", currentError.getX()) + 
+                           " y=" + String.format("%.3f", currentError.getY()) + ")");
     }
 
     @Override
     public void execute() {
         if (!hasTarget) return;
 
-        // Extract robot-to-goal local transform
-        double xErr = currentError.getX();   // forward/backward (m)
-        double yErr = currentError.getY();   // left/right (m)
-        double thErr = currentError.getRotation().getRadians(); // rotation (rad)
+        
+        double xErr = currentError.getX(); // forward/backward
+        double yErr = currentError.getY(); // left/right
 
-        // Apply deadbands
-        if (Math.abs(xErr) < VisionConstants.XY_DEADBAND_M) xErr = 0.0;
-        if (Math.abs(yErr) < VisionConstants.XY_DEADBAND_M) yErr = 0.0;
-        if (Math.abs(thErr) < VisionConstants.TH_DEADBAND_RAD) thErr = 0.0;
+        
+        if (Math.abs(xErr) < VisionConstants.XY_DEADBAND_M) xErr = 0;
+        if (Math.abs(yErr) < VisionConstants.XY_DEADBAND_M) yErr = 0;
 
-        // Simple proportional control (robot-relative)
-        double vx = VisionConstants.KP_XY * xErr; // forward speed (m/s)
-        double vy = VisionConstants.KP_XY * yErr; // strafe speed (m/s)
-        double omega = VisionConstants.KP_THETA * thErr; // rotational speed (rad/s)
+        
+        double vx = VisionConstants.KP_XY * xErr; // forward speed
+        double vy = VisionConstants.KP_XY * yErr; // strafe speed
+        double omega = 0.0;
 
-        // Clamp to max limits
+       
         vx = MathUtil.clamp(vx, -VisionConstants.MAX_VX_M_PER_S, VisionConstants.MAX_VX_M_PER_S);
         vy = MathUtil.clamp(vy, -VisionConstants.MAX_VX_M_PER_S, VisionConstants.MAX_VX_M_PER_S);
-        omega = MathUtil.clamp(omega, -VisionConstants.MAX_OMEGA_RAD_PER_S, VisionConstants.MAX_OMEGA_RAD_PER_S);
 
+        
         drivetrain.setOperatorPerspectiveForward(Rotation2d.kZero);
-
         drivetrain.setControl(
             new SwerveRequest.ApplyRobotSpeeds()
                 .withSpeeds(new ChassisSpeeds(vx, vy, omega))
-                .withCenterOfRotation(new Translation2d())
+                .withCenterOfRotation(new Translation2d(0, 0))
         );
     }
 
@@ -85,11 +81,10 @@ public class AimAtTagPIDCommand extends Command{
 
         double xErr = Math.abs(currentError.getX());
         double yErr = Math.abs(currentError.getY());
-        double thErr = Math.abs(currentError.getRotation().getRadians());
 
+        // Only finish once the robot is close enough in position
         return xErr < VisionConstants.GOAL_POS_EPS_M &&
-            yErr < VisionConstants.GOAL_POS_EPS_M &&
-            thErr < VisionConstants.GOAL_ANG_EPS_RAD;
+               yErr < VisionConstants.GOAL_POS_EPS_M;
     }
 
     @Override
@@ -98,4 +93,3 @@ public class AimAtTagPIDCommand extends Command{
         System.out.println("[AimAtTagPID] " + (interrupted ? "Interrupted" : "Completed") + ".");
     }
 }
-
