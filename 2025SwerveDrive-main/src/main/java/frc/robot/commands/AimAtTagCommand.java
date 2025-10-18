@@ -92,7 +92,7 @@ public class AimAtTagCommand extends Command {
     List<Waypoint> wps = PathPlannerPath.waypointsFromPoses(startForPath, endForPath);
 
     
-    GoalEndState goal = new GoalEndState(0.0, desiredHeading);
+    GoalEndState goal = new GoalEndState(0.0, finalHeading);
 
     
     PathPlannerPath path = new PathPlannerPath(wps, limits, null, goal, false);

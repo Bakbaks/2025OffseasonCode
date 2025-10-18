@@ -127,6 +127,7 @@ public class VisionSubsystem extends SubsystemBase {
         System.out.println("----------------" + camToTag3d + "----------____________");
         obs.camToTag2d = project3d2d(camToTag3d);
       } else {
+        System.out.println("-============================= USED Manual Calculations ====================");
         double camHeight = robotToCam.getTranslation().getZ();
         double tagHeight = VisionConstants.TAG_HEIGHT_M;
         double camPitch  = robotToCam.getRotation().getY();
@@ -141,8 +142,8 @@ public class VisionSubsystem extends SubsystemBase {
         }
 
         double yawRad = Math.toRadians(t.getYaw());
-        Translation2d planar = new Translation2d(distance * Math.cos(yawRad),
-                                                 distance * Math.sin(yawRad));
+        Translation2d planar = new Translation2d(distance * Math.sin(yawRad),
+                                                 distance * Math.cos(yawRad)); // cos and sin used to be swapped resulting in a coordinate swap
         obs.camToTag2d = new Transform2d(planar, new Rotation2d(yawRad));
       }
 

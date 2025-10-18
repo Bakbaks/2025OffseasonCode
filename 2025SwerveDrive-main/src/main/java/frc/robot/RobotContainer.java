@@ -29,6 +29,7 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.GroundIntakeConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.AimAtTagCommand;
+import frc.robot.commands.AimAtTagPIDCommand;
 import frc.robot.commands.RobotCommandHandler;
 import frc.robot.commands.ArmCommand.ArmSetPositionCommand;
 import frc.robot.commands.AutoCommands.ArmAutonCommands;
@@ -90,10 +91,17 @@ public class RobotContainer {
     Math.toRadians(540.0),   // max rad/s
     Math.toRadians(720.0)    // max rad/s^2
     );
-    
+    /* 
     private final AimAtTagCommand aimAtTagL = new AimAtTagCommand(Constants.VisionConstants.TAG_TO_GOAL_LEFT, drivetrain, vision, lims, 0.1);
     private final AimAtTagCommand aimAtTagR = new AimAtTagCommand(Constants.VisionConstants.TAG_TO_GOAL_RIGHT, drivetrain, vision, lims, 0.1);
-        
+      */  
+
+    private final AimAtTagPIDCommand aimAtTagL =
+        new AimAtTagPIDCommand(Constants.VisionConstants.TAG_TO_GOAL_LEFT, drivetrain, vision);
+
+    private final AimAtTagPIDCommand aimAtTagR =
+        new AimAtTagPIDCommand(Constants.VisionConstants.TAG_TO_GOAL_RIGHT, drivetrain, vision);
+
 
     private final Trigger auxY = m_auxController.y();
     private final Trigger auxA = m_auxController.a();
@@ -633,8 +641,8 @@ public class RobotContainer {
         );
         
 
-        driveRightBumper.onTrue(aimAtTagR);
-        driveLeftBumper.onTrue(aimAtTagL);
+        driveRightBumper.whileTrue(aimAtTagR);
+        driveLeftBumper.whileTrue(aimAtTagL);
 
 
         
