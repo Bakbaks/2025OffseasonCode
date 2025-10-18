@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -69,11 +70,12 @@ public class AimAtTagPIDCommand extends Command{
         vy = MathUtil.clamp(vy, -VisionConstants.MAX_VX_M_PER_S, VisionConstants.MAX_VX_M_PER_S);
         omega = MathUtil.clamp(omega, -VisionConstants.MAX_OMEGA_RAD_PER_S, VisionConstants.MAX_OMEGA_RAD_PER_S);
 
-        // Apply robot-relative chassis speeds (no field awareness)
+        drivetrain.setOperatorPerspectiveForward(Rotation2d.kZero);
+
         drivetrain.setControl(
             new SwerveRequest.ApplyRobotSpeeds()
-                .withSpeeds(new ChassisSpeeds(vx, vy, omega))
-                .withCenterOfRotation(new Translation2d(0, 0))
+                .withSpeeds(new ChassisSpeeds(0.0, 0.0, 2.0))
+                .withCenterOfRotation(new Translation2d())
         );
     }
 
