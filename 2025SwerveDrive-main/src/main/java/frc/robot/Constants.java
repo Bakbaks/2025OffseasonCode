@@ -372,7 +372,7 @@ public final class Constants {
     
 
     //point to go to relative to the tag
-    public static final Transform2d TAG_TO_GOAL_RIGHT = new Transform2d(new Translation2d(-0.32, -.4), new Rotation2d(0));//meters
+    public static final Transform2d TAG_TO_GOAL_RIGHT = new Transform2d(new Translation2d(-0.34, -.4), new Rotation2d(0));//meters
     public static final Transform2d TAG_TO_GOAL_LEFT = new Transform2d(new Translation2d(-0.34, 0.1), new Rotation2d(0));//meters
   
 

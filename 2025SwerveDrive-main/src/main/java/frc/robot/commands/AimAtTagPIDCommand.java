@@ -1,11 +1,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.subsystems.SwerveSubsystem.CommandSwerveDrivetrain;
 import frc.robot.subsystems.VisionSubsystem;
@@ -18,7 +19,7 @@ public class AimAtTagPIDCommand extends Command {
     private final VisionSubsystem vision;
     private final Transform2d robot2goal;
 
-    private Transform2d currentError;
+    private Pose2d goalPose;
     private boolean hasTarget = false;
 
     public AimAtTagPIDCommand(Transform2d robot2goal, CommandSwerveDrivetrain drivetrain, VisionSubsystem vision) {
@@ -31,42 +32,54 @@ public class AimAtTagPIDCommand extends Command {
     @Override
     public void initialize() {
         hasTarget = false;
+
         PathPlan plan = vision.getPlan(robot2goal);
         if (plan == null) {
             System.out.println("AimAtTagPID: No valid tag plan found.");
             return;
         }
 
-        currentError = plan.robotToGoal;
+        // Compute goal in *field space* (odometry + vision offset)
+        Pose2d robotPose = drivetrain.getPose();
+        goalPose = robotPose.transformBy(plan.robotToGoal);
         hasTarget = true;
 
-        System.out.println("[AimAtTagPID] Moving toward tag " + plan.tagId + 
-                           " with offset (x=" + String.format("%.3f", currentError.getX()) + 
-                           " y=" + String.format("%.3f", currentError.getY()) + ")");
+        System.out.println("[AimAtTagPID] Moving toward tag " + plan.tagId +
+                " target at (" + String.format("%.3f", goalPose.getX()) + ", " +
+                String.format("%.3f", goalPose.getY()) + ")");
     }
 
     @Override
     public void execute() {
         if (!hasTarget) return;
 
-        
-        double xErr = currentError.getX(); // forward/backward
-        double yErr = currentError.getY(); // left/right
+        // Get current position
+        Pose2d currentPose = drivetrain.getPose();
 
-        
-        if (Math.abs(xErr) < VisionConstants.XY_DEADBAND_M) xErr = 0;
-        if (Math.abs(yErr) < VisionConstants.XY_DEADBAND_M) yErr = 0;
+        // Compute error in *field coordinates*
+        double dx = goalPose.getX() - currentPose.getX();
+        double dy = goalPose.getY() - currentPose.getY();
 
-        
-        double vx = VisionConstants.KP_XY * xErr; // forward speed
-        double vy = VisionConstants.KP_XY * yErr; // strafe speed
-        double omega = 0.0;
+        // Rotate that error into robot-relative frame
+        Translation2d fieldError = new Translation2d(dx, dy);
+        Translation2d robotError = fieldError.rotateBy(currentPose.getRotation().unaryMinus());
 
-       
+        double xErr = robotError.getX();  // forward/backward
+        double yErr = robotError.getY();  // left/right
+
+        // Apply deadbands
+        if (Math.abs(xErr) < VisionConstants.XY_DEADBAND_M) xErr = 0.0;
+        if (Math.abs(yErr) < VisionConstants.XY_DEADBAND_M) yErr = 0.0;
+
+        // Proportional control
+        double vx = VisionConstants.KP_XY * xErr;
+        double vy = VisionConstants.KP_XY * yErr;
+        double omega = 0.0; // still no rotation
+
+        // Clamp speeds
         vx = MathUtil.clamp(vx, -VisionConstants.MAX_VX_M_PER_S, VisionConstants.MAX_VX_M_PER_S);
         vy = MathUtil.clamp(vy, -VisionConstants.MAX_VX_M_PER_S, VisionConstants.MAX_VX_M_PER_S);
 
-        
         drivetrain.setOperatorPerspectiveForward(Rotation2d.kZero);
         drivetrain.setControl(
             new SwerveRequest.ApplyRobotSpeeds()
@@ -79,12 +92,12 @@ public class AimAtTagPIDCommand extends Command {
     public boolean isFinished() {
         if (!hasTarget) return true;
 
-        double xErr = Math.abs(currentError.getX());
-        double yErr = Math.abs(currentError.getY());
+        Pose2d currentPose = drivetrain.getPose();
+        double dx = goalPose.getX() - currentPose.getX();
+        double dy = goalPose.getY() - currentPose.getY();
+        double dist = Math.hypot(dx, dy);
 
-        // Only finish once the robot is close enough in position
-        return xErr < VisionConstants.GOAL_POS_EPS_M &&
-               yErr < VisionConstants.GOAL_POS_EPS_M;
+        return dist < VisionConstants.GOAL_POS_EPS_M;
     }
 
     @Override
