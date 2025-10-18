@@ -73,6 +73,7 @@ public class AimAtTagPIDCommand extends Command{
         drivetrain.setControl(
             new SwerveRequest.ApplyRobotSpeeds()
                 .withSpeeds(new ChassisSpeeds(vx, vy, omega))
+                .withCenterOfRotation(new Translation2d(0, 0))
         );
     }
 
