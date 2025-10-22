@@ -35,48 +35,44 @@ public class AimAtTagPIDCommand extends Command {
 
         PathPlan plan = vision.getPlan(robot2goal);
         if (plan == null) {
-            System.out.println("AimAtTagPID: No valid tag plan found.");
+            System.out.println("No valid tag plan found.");
             return;
         }
 
-        // Compute goal in *field space* (odometry + vision offset)
+        
         Pose2d robotPose = drivetrain.getPose();
         goalPose = robotPose.transformBy(plan.robotToGoal);
         hasTarget = true;
 
-        System.out.println("[AimAtTagPID] Moving toward tag " + plan.tagId +
-                " target at (" + String.format("%.3f", goalPose.getX()) + ", " +
-                String.format("%.3f", goalPose.getY()) + ")");
     }
 
     @Override
     public void execute() {
         if (!hasTarget) return;
 
-        // Get current position
+    
         Pose2d currentPose = drivetrain.getPose();
 
-        // Compute error in *field coordinates*
         double dx = goalPose.getX() - currentPose.getX();
         double dy = goalPose.getY() - currentPose.getY();
 
-        // Rotate that error into robot-relative frame
+ 
         Translation2d fieldError = new Translation2d(dx, dy);
         Translation2d robotError = fieldError.rotateBy(currentPose.getRotation().unaryMinus());
 
-        double xErr = robotError.getX();  // forward/backward
-        double yErr = robotError.getY();  // left/right
+        double xErr = robotError.getX(); 
+        double yErr = robotError.getY(); 
 
-        // Apply deadbands
+  
         if (Math.abs(xErr) < VisionConstants.XY_DEADBAND_M) xErr = 0.0;
         if (Math.abs(yErr) < VisionConstants.XY_DEADBAND_M) yErr = 0.0;
 
-        // Proportional control
+   
         double vx = VisionConstants.KP_XY * xErr;
         double vy = VisionConstants.KP_XY * yErr;
-        double omega = 0.0; // still no rotation
+        double omega = 0.0;// no rotate for now
 
-        // Clamp speeds
+    
         vx = MathUtil.clamp(vx, -VisionConstants.MAX_VX_M_PER_S, VisionConstants.MAX_VX_M_PER_S);
         vy = MathUtil.clamp(vy, -VisionConstants.MAX_VX_M_PER_S, VisionConstants.MAX_VX_M_PER_S);
 

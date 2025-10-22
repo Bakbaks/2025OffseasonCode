@@ -127,7 +127,7 @@ public class VisionSubsystem extends SubsystemBase {
         System.out.println("----------------" + camToTag3d + "----------____________");
         obs.camToTag2d = project3d2d(camToTag3d);
       } else {
-        System.out.println("-============================= USED Manual Calculations ====================");
+        System.out.println("-=============================  Manual ====================");
         double camHeight = robotToCam.getTranslation().getZ();
         double tagHeight = VisionConstants.TAG_HEIGHT_M;
         double camPitch  = robotToCam.getRotation().getY();

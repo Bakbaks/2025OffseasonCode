@@ -30,7 +30,6 @@ import frc.robot.Constants.GroundIntakeConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.AimAtTagCommand;
 import frc.robot.commands.AimAtTagPIDCommand;
-import frc.robot.commands.RobotCommandHandler;
 import frc.robot.commands.ArmCommand.ArmSetPositionCommand;
 import frc.robot.commands.AutoCommands.ArmAutonCommands;
 import frc.robot.commands.AutoCommands.AutonIntakeWithDetectionCommand;
@@ -798,10 +797,7 @@ public class RobotContainer {
 
     }
 
-    public Command buildState0() {
-        return new RobotCommandHandler(
-            0, elevatorSubsystem, arm, climb, intake, SwingGroundIntake, spinGroundIntake);
-      }
+    
 
     private void handleIntakeByArmState(ArmState state, double speed) {
     switch (state) {

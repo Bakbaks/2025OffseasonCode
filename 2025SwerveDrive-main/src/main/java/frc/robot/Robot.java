@@ -8,6 +8,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -78,7 +79,6 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    CommandScheduler.getInstance().schedule(m_robotContainer.buildState0());
   }
 
   @Override
