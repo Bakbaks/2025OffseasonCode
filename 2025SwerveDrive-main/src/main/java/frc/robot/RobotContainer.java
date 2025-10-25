@@ -88,8 +88,8 @@ public class RobotContainer {
     private final SpinGroundIntakeSubsystem spinGroundIntake = new SpinGroundIntakeSubsystem();
     
     // Vision subsystems for fusion
-    //private final VisionSubsystem visionRight;
-    //private final VisionSubsystem visionLeft;
+    private final VisionSubsystem visionRight;
+    private final VisionSubsystem visionLeft;
     PathConstraints lims = new PathConstraints(
     3.0,                     // max m/s
     1.0,                     // max m/s^2
@@ -378,7 +378,7 @@ public class RobotContainer {
 
     public RobotContainer() {
         // Initialize vision subsystems for fusion
-        /*
+        
         visionRight = new VisionSubsystem(
             VisionConstants.Cameras.right, 
             () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red
@@ -387,9 +387,8 @@ public class RobotContainer {
             VisionConstants.Cameras.left, 
             () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red
         );
-         */
-        Commands.runOnce(() -> sm.setState(RobotState.START_CONFIG))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake));
+         
+        
         
         NamedCommands.registerCommand("NewDefault", NewDefault);
         NamedCommands.registerCommand("NewL4", NewL4);
@@ -878,6 +877,12 @@ public class RobotContainer {
         return true;
     }
     */
+
+    public void setZero(){
+
+        Commands.runOnce(() -> sm.setState(RobotState.START_CONFIG))
+                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake));
+    }
     public Command getAutonomousCommand() {
 //        return new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.STAGE_4_HEIGHT_DELTA);
         return autoChooser.getSelected();

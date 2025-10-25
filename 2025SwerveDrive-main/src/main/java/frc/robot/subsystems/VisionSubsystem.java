@@ -67,6 +67,7 @@ public class VisionSubsystem extends SubsystemBase {
   private PhotonCamera camera;
   private Constants.VisionConstants.Cameras cameraEnum;
   private PhotonPipelineResult pipeline;
+  /* 
   private static final AprilTagFieldLayout FIELD_LAYOUT;
   static {
     AprilTagFieldLayout tempLayout = null;
@@ -79,7 +80,7 @@ public class VisionSubsystem extends SubsystemBase {
     FIELD_LAYOUT = tempLayout;
 }
 
-private final AprilTagFieldLayout aprilTagFieldLayout = FIELD_LAYOUT;
+private final AprilTagFieldLayout aprilTagFieldLayout = FIELD_LAYOUT;*/
   PhotonPoseEstimator photonPoseEstimator;
   //private CommandSwerveDrivetrain driveTrain = CommandSwerveDrivetrain.getInstance();
   private BooleanSupplier redSide;
@@ -89,19 +90,22 @@ private final AprilTagFieldLayout aprilTagFieldLayout = FIELD_LAYOUT;
     String name = cameraEnum.toString();
     int index = cameraEnum.ordinal();
     camera = new PhotonCamera(name);
+    /* 
     photonPoseEstimator =
         new PhotonPoseEstimator(
             aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camToRobots[index]);
     this.redSide = redSide;
+
+    */
     for (var x : camera.getAllUnreadResults()) {
       pipeline = x;
     }
   }
   
   
-  public AprilTagFieldLayout getAprilTagFieldLayout() {
-    return this.aprilTagFieldLayout;
-  }
+  // public AprilTagFieldLayout getAprilTagFieldLayout() {
+  //   return this.aprilTagFieldLayout;
+  // }
 
   public PhotonPipelineResult getPipelineResult() {
     return pipeline;
@@ -160,42 +164,42 @@ private final AprilTagFieldLayout aprilTagFieldLayout = FIELD_LAYOUT;
 
   public record VisionEstimate(Pose2d pose, double timestamp, Matrix<N3, N1> stdDevs) {}
 
-  public Optional<VisionEstimate> getEstimatedPose() {
-    PhotonPipelineResult pipelineResult = getPipelineResult();
+//   public Optional<VisionEstimate> getEstimatedPose() {
+//     PhotonPipelineResult pipelineResult = getPipelineResult();
 
-    // Basic validity checks
-    if (pipelineResult == null || !hasTarget(pipelineResult)) return Optional.empty();
+//     // Basic validity checks
+//     if (pipelineResult == null || !hasTarget(pipelineResult)) return Optional.empty();
 
-    // Compute the estimated pose
-    Optional<EstimatedRobotPose> estimated3d = getMultiTagPose3d(savedResult);
-    if (estimated3d.isEmpty()) return Optional.empty();
+//     // Compute the estimated pose
+//     Optional<EstimatedRobotPose> estimated3d = getMultiTagPose3d(savedResult);
+//     if (estimated3d.isEmpty()) return Optional.empty();
 
-    Pose2d estimatedPose = estimated3d.get().estimatedPose.toPose2d();
-    savedResult = estimatedPose; // keep track
+//     Pose2d estimatedPose = estimated3d.get().estimatedPose.toPose2d();
+//     savedResult = estimatedPose; // keep track
 
-    // Calculate a default vision uncertainty matrix (can be tuned per camera)
-    double distance = 1.0;
-    try {
-        int tagID = pipelineResult.getBestTarget().getFiducialId();
-        distance = this.getAprilTagFieldLayout()
-            .getTagPose(tagID)
-            .get()
-            .getTranslation()
-            .getDistance(new Translation3d(estimated3d.get().estimatedPose.getTranslation().getX(),
-                                           estimated3d.get().estimatedPose.getTranslation().getY(),
-                                           0));
-    } catch (Exception e) {
-        // fallback if tag info not available
-    }
+//     // Calculate a default vision uncertainty matrix (can be tuned per camera)
+//     double distance = 1.0;
+//     try {
+//         int tagID = pipelineResult.getBestTarget().getFiducialId();
+//         distance = this.getAprilTagFieldLayout()
+//             .getTagPose(tagID)
+//             .get()
+//             .getTranslation()
+//             .getDistance(new Translation3d(estimated3d.get().estimatedPose.getTranslation().getX(),
+//                                            estimated3d.get().estimatedPose.getTranslation().getY(),
+//                                            0));
+//     } catch (Exception e) {
+//         // fallback if tag info not available
+//     }
 
-    // Decrease trust as distance increases
-    double xStd = 0.1 + 0.2 * distance;
-    double yStd = 0.1 + 0.2 * distance;
-    double thetaStd = Math.toRadians(10); // ~10 degree uncertainty
-    Matrix<N3, N1> stdDevs = VecBuilder.fill(xStd, yStd, thetaStd);
+//     // Decrease trust as distance increases
+//     double xStd = 0.1 + 0.2 * distance;
+//     double yStd = 0.1 + 0.2 * distance;
+//     double thetaStd = Math.toRadians(10); // ~10 degree uncertainty
+//     Matrix<N3, N1> stdDevs = VecBuilder.fill(xStd, yStd, thetaStd);
 
-    return Optional.of(new VisionEstimate(estimatedPose, pipelineResult.getTimestampSeconds(), stdDevs));
-}
+//     return Optional.of(new VisionEstimate(estimatedPose, pipelineResult.getTimestampSeconds(), stdDevs));
+// }
 
 
 
