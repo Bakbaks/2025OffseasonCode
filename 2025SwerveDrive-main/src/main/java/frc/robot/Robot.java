@@ -5,8 +5,9 @@
 package frc.robot;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.util.datalog.DataLog;
-import edu.wpi.first.util.datalog.DataLogManager;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -28,8 +29,8 @@ public class Robot extends TimedRobot {
   private final boolean kUseLimelight = false;
 
   public Robot() {
+    DataLogManager.start();
     m_robotContainer = new RobotContainer();
-
   }
 
   private static final double LOG_PERIOD = 0.02; // 50Hz logging
