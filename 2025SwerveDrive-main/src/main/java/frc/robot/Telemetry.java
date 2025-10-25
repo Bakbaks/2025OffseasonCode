@@ -25,7 +25,7 @@ public class Telemetry {
 
     public Telemetry(double maxSpeed) {
         MaxSpeed = maxSpeed;//Meters per second
-        //SignalLogger.start();
+        SignalLogger.start();
     }
 
     private final NetworkTableInstance inst = NetworkTableInstance.getDefault();
