@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.numbers.N1;
@@ -30,11 +31,16 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 
 public class VisionSubsystem extends SubsystemBase {
+    // Reuse objects for vision processing
+    private final Matrix<N3, N1> stdDevs = VecBuilder.fill(0, 0, 0);
+    private final VisionEstimate cachedEstimate;
+    private static final double VISION_UPDATE_PERIOD = 0.02; // 50Hz updates
+    private double lastVisionUpdate = 0;
 
- List<Integer> reefIDs =
-      new ArrayList<Integer>(Arrays.asList(19, 20, 21, 22, 17, 18, 6, 7, 8, 9, 10, 11));
-  List<Integer> blueReefID = new ArrayList<Integer>(Arrays.asList(19, 20, 21, 22, 17, 18));
-  List<Integer> redReefID = new ArrayList<Integer>(Arrays.asList(6, 7, 8, 9, 10, 11));
+    List<Integer> reefIDs =
+        new ArrayList<Integer>(Arrays.asList(19, 20, 21, 22, 17, 18, 6, 7, 8, 9, 10, 11));
+    List<Integer> blueReefID = new ArrayList<Integer>(Arrays.asList(19, 20, 21, 22, 17, 18));
+    List<Integer> redReefID = new ArrayList<Integer>(Arrays.asList(6, 7, 8, 9, 10, 11));
 
   private Pose2d savedResult = new Pose2d(0, 0, Rotation2d.fromRadians(0));
   private static VisionSubsystem[] systemList =
@@ -181,18 +187,35 @@ public class VisionSubsystem extends SubsystemBase {
     double xStd = 0.1 + 0.2 * distance;
     double yStd = 0.1 + 0.2 * distance;
     double thetaStd = Math.toRadians(10); // ~10 degree uncertainty
-    Matrix<N3, N1> stdDevs = VecBuilder.fill(xStd, yStd, thetaStd);
+    
+    // Reuse cached Matrix object
+    stdDevs.set(0, 0, xStd);
+    stdDevs.set(1, 0, yStd);
+    stdDevs.set(2, 0, thetaStd);
 
-    return Optional.of(new VisionEstimate(estimatedPose, pipelineResult.getTimestampSeconds(), stdDevs));
+    // Update cached estimate instead of creating new objects
+    cachedEstimate.pose = estimatedPose;
+    cachedEstimate.timestamp = pipelineResult.getTimestampSeconds();
+    // stdDevs is already referenced in cachedEstimate
+
+    return Optional.of(cachedEstimate);
 }
 
 
 
   @Override
   public void periodic() {
-    for (var x : camera.getAllUnreadResults()) {
-      pipeline = x;
-    }
+      double currentTime = Timer.getFPGATimestamp();
+      if (currentTime - lastVisionUpdate < VISION_UPDATE_PERIOD) {
+          return;
+      }
+      lastVisionUpdate = currentTime;
+      
+      // Only get most recent result
+      var result = camera.getLatestResult();
+      if (result.hasTargets()) {
+          pipeline = result;
+      }
   }
 
   

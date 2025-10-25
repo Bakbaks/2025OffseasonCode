@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.ctre.phoenix6.SignalLogger;
+import edu.wpi.first.wpilibj.Timer;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -22,10 +23,14 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 
 public class Telemetry {
     private final double MaxSpeed;
-
+    private static final double UPDATE_PERIOD = 0.05; // 20Hz updates
+    private double lastUpdateTime = 0;
+    private static final Mechanism2d SHARED_MECHANISM = new Mechanism2d(1, 1);
+    
     public Telemetry(double maxSpeed) {
         MaxSpeed = maxSpeed;//Meters per second
         //SignalLogger.start();
+        initializeMechanisms();
     }
 
     private final NetworkTableInstance inst = NetworkTableInstance.getDefault();
@@ -76,6 +81,12 @@ public class Telemetry {
 
     /** Accept the swerve drive state and telemeterize it to SmartDashboard and SignalLogger. */
     public void telemeterize(SwerveDriveState state) {
+        double currentTime = Timer.getFPGATimestamp();
+        if (currentTime - lastUpdateTime < UPDATE_PERIOD) {
+            return; // Skip this update
+        }
+        lastUpdateTime = currentTime;
+
         /* Telemeterize the swerve drive state */
         drivePose.set(state.Pose);
         driveSpeeds.set(state.Speeds);

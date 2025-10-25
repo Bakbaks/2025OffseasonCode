@@ -5,6 +5,10 @@
 package frc.robot;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DataLogManager;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -28,12 +32,30 @@ public class Robot extends TimedRobot {
 
   }
 
+  private static final double LOG_PERIOD = 0.02; // 50Hz logging
+  private double lastLogTime = 0;
+  private final DataLog log = DataLogManager.getLog();
+  private final DoubleLogEntry memoryEntry = new DoubleLogEntry(log, "/memory/free");
+
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
-    // Vision fusion with CTRE Phoenix Kalman filter
-    m_robotContainer.fuseVisionMeasurements();
+    double currentTime = Timer.getFPGATimestamp();
+    if (currentTime - lastLogTime >= LOG_PERIOD) {
+      // Vision fusion with CTRE Phoenix Kalman filter
+      m_robotContainer.fuseVisionMeasurements();
+      
+      // Log memory usage
+      Runtime runtime = Runtime.getRuntime();
+      double freeMemoryMB = runtime.freeMemory() / (1024.0 * 1024.0);
+      double totalMemoryMB = runtime.totalMemory() / (1024.0 * 1024.0);
+      memoryEntry.append(freeMemoryMB);
+      SmartDashboard.putNumber("Free Memory (MB)", freeMemoryMB);
+      SmartDashboard.putNumber("Total Memory (MB)", totalMemoryMB);
+      
+      lastLogTime = currentTime;
+    }
   }
 
   @Override
