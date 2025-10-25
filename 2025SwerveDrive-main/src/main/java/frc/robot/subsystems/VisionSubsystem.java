@@ -74,17 +74,17 @@ public class VisionSubsystem extends SubsystemBase {
   
 
   
-  private static final AprilTagFieldLayout FIELD_LAYOUT;
-  static {
-    AprilTagFieldLayout tempLayout = null;
-    try { 
-        tempLayout = new AprilTagFieldLayout(jsonPath);
-        System.out.println("[VisionSubsystem] Loaded Reefscape field layout successfully.");
-    } catch (Exception e) {
-        System.err.println("[VisionSubsystem] Failed to load field layout: " + e.getMessage());
-    }
-    FIELD_LAYOUT = tempLayout;
-}
+  private static final AprilTagFieldLayout FIELD_LAYOUT = null;
+//   static {
+//     AprilTagFieldLayout tempLayout = null;
+//     try { 
+//         tempLayout = new AprilTagFieldLayout(jsonPath);
+//         System.out.println("[VisionSubsystem] Loaded Reefscape field layout successfully.");
+//     } catch (Exception e) {
+//         System.err.println("[VisionSubsystem] Failed to load field layout: " + e.getMessage());
+//     }
+//     FIELD_LAYOUT = tempLayout;
+// }
 
 //private final AprilTagFieldLayout aprilTagFieldLayout = FIELD_LAYOUT;
 
