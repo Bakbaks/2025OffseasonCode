@@ -36,7 +36,7 @@ public class VisionSubsystem extends SubsystemBase {
   List<Integer> blueReefID = new ArrayList<Integer>(Arrays.asList(19, 20, 21, 22, 17, 18));
   List<Integer> redReefID = new ArrayList<Integer>(Arrays.asList(6, 7, 8, 9, 10, 11));
 
-  Pose2d savedResult = new Pose2d(0, 0, new Rotation2d(0, 0));
+  private Pose2d savedResult = new Pose2d(0, 0, Rotation2d.fromRadians(0));
   private static VisionSubsystem[] systemList =
       new VisionSubsystem[Constants.VisionConstants.Cameras.values().length];
   private Transform3d[] camToRobots = {
@@ -97,13 +97,14 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   public Optional<EstimatedRobotPose> getMultiTagPose3d(Pose2d previousRobotPose) {
+    if (pipeline == null) return Optional.empty();       
     photonPoseEstimator.setReferencePose(previousRobotPose);
     return photonPoseEstimator.update(pipeline);
   }
 
    public Pose2d getPose2d() {
     Optional<EstimatedRobotPose> pose3d = getMultiTagPose3d(savedResult);
-    if (pose3d.isEmpty()) return null;
+    if (pose3d.isEmpty()) return savedResult;
     savedResult = pose3d.get().estimatedPose.toPose2d();
     return savedResult;
   }
