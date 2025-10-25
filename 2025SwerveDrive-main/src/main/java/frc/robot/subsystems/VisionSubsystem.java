@@ -6,7 +6,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.numbers.N1;
 import java.util.Optional;
 import edu.wpi.first.math.geometry.*;
-
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -18,6 +18,7 @@ import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -67,12 +68,17 @@ public class VisionSubsystem extends SubsystemBase {
   private PhotonCamera camera;
   private Constants.VisionConstants.Cameras cameraEnum;
   private PhotonPipelineResult pipeline;
-  /* 
+
+
+  private static final Path jsonPath = Filesystem.getDeployDirectory().toPath().resolve("2025-reefscape-andymark.json");
+  
+
+  
   private static final AprilTagFieldLayout FIELD_LAYOUT;
   static {
     AprilTagFieldLayout tempLayout = null;
     try { 
-        tempLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
+        tempLayout = new AprilTagFieldLayout(jsonPath);
         System.out.println("[VisionSubsystem] Loaded Reefscape field layout successfully.");
     } catch (Exception e) {
         System.err.println("[VisionSubsystem] Failed to load field layout: " + e.getMessage());
@@ -80,10 +86,12 @@ public class VisionSubsystem extends SubsystemBase {
     FIELD_LAYOUT = tempLayout;
 }
 
-private final AprilTagFieldLayout aprilTagFieldLayout = FIELD_LAYOUT;*/
+private final AprilTagFieldLayout aprilTagFieldLayout = FIELD_LAYOUT;
 
   // AprilTagFieldLayout aprilTagFieldLayout =
   //     AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
+
+ 
   PhotonPoseEstimator photonPoseEstimator;
   //private CommandSwerveDrivetrain driveTrain = CommandSwerveDrivetrain.getInstance();
   private BooleanSupplier redSide;
