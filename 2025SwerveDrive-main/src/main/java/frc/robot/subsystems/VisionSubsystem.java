@@ -15,6 +15,7 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.PhotonUtils;
+<<<<<<< Updated upstream
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -22,6 +23,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BooleanSupplier;
+=======
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+>>>>>>> Stashed changes
 
 import frc.robot.Constants;
 import frc.robot.Constants.VisionConstants;
@@ -30,7 +35,10 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 
 public class VisionSubsystem extends SubsystemBase {
+    private final PhotonCamera rightCamera = new PhotonCamera(VisionConstants.RIGHT_CAM_NAME);
+    private final PhotonCamera leftCamera = new PhotonCamera(VisionConstants.LEFT_CAM_NAME);
 
+<<<<<<< Updated upstream
  List<Integer> reefIDs =
       new ArrayList<Integer>(Arrays.asList(19, 20, 21, 22, 17, 18, 6, 7, 8, 9, 10, 11));
   List<Integer> blueReefID = new ArrayList<Integer>(Arrays.asList(19, 20, 21, 22, 17, 18));
@@ -207,4 +215,51 @@ private final AprilTagFieldLayout aprilTagFieldLayout = FIELD_LAYOUT;
   }
 
   
+=======
+    public Transform2d getPlan(PhotonCamera cam, Transform3d robotToCam, CommandXboxController controller){
+        boolean targetVisible = false;
+        double targetYaw = 0.0;
+        double targetRange = 0.0;
+        
+        // Get controller values using Constants
+        double forward = -controller.getLeftY() * Constants.Swerve.kMaxLinearSpeed;
+        double strafe = -controller.getLeftX() * Constants.Swerve.kMaxLinearSpeed;
+        double turn = -controller.getRightX() * Constants.Swerve.kMaxAngularSpeed;
+        
+        var results = cam.getAllUnreadResults();
+        if (!results.isEmpty()) {
+            var result = results.get(results.size() - 1);
+            if (result.hasTargets()) {
+                for (var target : result.getTargets()) {
+                    if (target.getFiducialId() == 7) {
+                        targetYaw = target.getYaw();
+                        targetRange = PhotonUtils.calculateDistanceToTargetMeters(
+                            0.5,
+                            1.435,
+                            Units.degreesToRadians(-30.0),
+                            Units.degreesToRadians(target.getPitch())
+                        );
+                        targetVisible = true;
+                    }
+                }
+            }
+        }
+
+        // Override turn with vision correction if target is visible
+        if (targetVisible) {
+            turn = (VisionConstants.VISION_DES_ANGLE_deg - targetYaw) 
+                * VisionConstants.VISION_TURN_kP 
+                * Constants.Swerve.kMaxAngularSpeed;
+            forward =
+                    (VisionConstants.VISION_DES_RANGE_m - targetRange)
+                    * VisionConstants.VISION_STRAFE_kP
+                    * Constants.Swerve.kMaxLinearSpeed;
+        }
+        
+        Translation2d translation = new Translation2d(forward, strafe);
+        Rotation2d rotation = new Rotation2d(turn);
+        
+        return new Transform2d(translation, rotation);
+    }
+>>>>>>> Stashed changes
 }

@@ -75,7 +75,8 @@ public class RobotContainer {
 
     // end of swerve drive things
 
-    private final CommandXboxController m_driverController = new CommandXboxController(
+    // MAKE PRIVATE LATER
+    public final CommandXboxController m_driverController = new CommandXboxController(
             OIConstants.kDriverControllerPort);
     public static CommandXboxController m_auxController = new CommandXboxController(OIConstants.kAuxControllerPort);
     public static XboxController m_Controller = new XboxController(OIConstants.kAuxControllerPort);

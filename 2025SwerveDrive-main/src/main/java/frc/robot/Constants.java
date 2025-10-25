@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
+import frc.robot.subsystems.SwerveSubsystem.TunerConstants;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -339,6 +340,11 @@ public final class Constants {
 
   }
 
+  public static final class Swerve {
+    public static final double kMaxLinearSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
+    public static final double kMaxAngularSpeed = RotationsPerSecond.of(0.75).in(RadiansPerSecond);
+}
+
   public static final class AutoConstants {// copied from last year's code, not sure how this works, delete if needed
     public static final double kSwerveDiscreteTimestep = 0.02;
 
@@ -356,6 +362,11 @@ public final class Constants {
 
     public static final String RIGHT_CAM_NAME = "right";
     public static final String LEFT_CAM_NAME  = "left";
+
+    public static final double VISION_DES_ANGLE_deg = 0.0;  // Target straight ahead change this
+    public static final double VISION_TURN_kP = 0.01;
+    public static final double VISION_DES_RANGE_m = 0.0;  // Target range in meters
+    public static final double VISION_STRAFE_kP = 0.01;
   
     
     // Right camera
