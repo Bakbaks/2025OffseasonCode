@@ -82,8 +82,8 @@ public class VisionSubsystem extends SubsystemBase {
 
 private final AprilTagFieldLayout aprilTagFieldLayout = FIELD_LAYOUT;*/
 
-  AprilTagFieldLayout aprilTagFieldLayout =
-      AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
+  // AprilTagFieldLayout aprilTagFieldLayout =
+  //     AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
   PhotonPoseEstimator photonPoseEstimator;
   //private CommandSwerveDrivetrain driveTrain = CommandSwerveDrivetrain.getInstance();
   private BooleanSupplier redSide;
