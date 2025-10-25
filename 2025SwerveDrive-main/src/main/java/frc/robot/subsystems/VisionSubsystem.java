@@ -86,7 +86,7 @@ public class VisionSubsystem extends SubsystemBase {
     FIELD_LAYOUT = tempLayout;
 }
 
-private final AprilTagFieldLayout aprilTagFieldLayout = FIELD_LAYOUT;
+//private final AprilTagFieldLayout aprilTagFieldLayout = FIELD_LAYOUT;
 
   // AprilTagFieldLayout aprilTagFieldLayout =
   //     AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
