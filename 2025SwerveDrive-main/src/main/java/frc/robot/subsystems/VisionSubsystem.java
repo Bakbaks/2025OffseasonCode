@@ -1,197 +1,198 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.numbers.N1;
+import java.util.Optional;
 import edu.wpi.first.math.geometry.*;
+
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
+import frc.robot.Constants;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.subsystems.SwerveSubsystem.CommandSwerveDrivetrain;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 
 public class VisionSubsystem extends SubsystemBase {
 
-  // Cameras
-  private final PhotonCamera rightCamera = new PhotonCamera(VisionConstants.RIGHT_CAM_NAME);
-  private final PhotonCamera leftCamera  = new PhotonCamera(VisionConstants.LEFT_CAM_NAME);
+ List<Integer> reefIDs =
+      new ArrayList<Integer>(Arrays.asList(19, 20, 21, 22, 17, 18, 6, 7, 8, 9, 10, 11));
+  List<Integer> blueReefID = new ArrayList<Integer>(Arrays.asList(19, 20, 21, 22, 17, 18));
+  List<Integer> redReefID = new ArrayList<Integer>(Arrays.asList(6, 7, 8, 9, 10, 11));
 
-  //camera extrinsics
-  private final Transform3d robotToRight = new Transform3d(
-      new Translation3d(VisionConstants.R_X, VisionConstants.R_Y, VisionConstants.R_Z),
-      new Rotation3d(VisionConstants.R_ROLL, VisionConstants.R_PITCH, VisionConstants.R_YAW));
+  Pose2d savedResult = new Pose2d(0, 0, new Rotation2d(0, 0));
+  private static VisionSubsystem[] systemList =
+      new VisionSubsystem[Constants.VisionConstants.Cameras.values().length];
+  private Transform3d[] camToRobots = {
+    // right Camera transform
+    new Transform3d(
+        new Translation3d(
+            Constants.VisionConstants.RIGHT_CAM_TO_ROBOT_TRANSLATION_X,
+            Constants.VisionConstants.RIGHT_CAM_TO_ROBOT_TRANSLATION_Y,
+            Constants.VisionConstants.RIGHT_CAM_TO_ROBOT_TRANSLATION_Z),
+        new Rotation3d(
+            Constants.VisionConstants.RIGHT_CAM_TO_ROBOT_ROTATION_ROLL,
+            Constants.VisionConstants.RIGHT_CAM_TO_ROBOT_ROTATION_PITCH,
+            Constants.VisionConstants.RIGHT_CAM_TO_ROBOT_ROTATION_YAW)),
+    // left Camera
+    new Transform3d(
+        new Translation3d(
+            Constants.VisionConstants.LEFT_CAM_TO_ROBOT_TRANSLATION_X,
+            Constants.VisionConstants.LEFT_CAM_TO_ROBOT_TRANSLATION_Y,
+            Constants.VisionConstants.LEFT_CAM_TO_ROBOT_TRANSLATION_Z),
+        new Rotation3d(
+            Constants.VisionConstants.LEFT_CAM_TO_ROBOT_ROTATION_ROLL,
+            Constants.VisionConstants.LEFT_CAM_TO_ROBOT_ROTATION_PITCH,
+            Constants.VisionConstants.LEFT_CAM_TO_ROBOT_ROTATION_YAW)),
 
-  private final Transform3d robotToLeft = new Transform3d(
-      new Translation3d(VisionConstants.L_X, VisionConstants.L_Y, VisionConstants.L_Z),
-      new Rotation3d(VisionConstants.L_ROLL, VisionConstants.L_PITCH, VisionConstants.L_YAW));
-
-  public static class Snapshot {
-    public long timestampMs;
-    public List<Tag> observed = new ArrayList<>();
-  }
-
-  public static class Tag {
-    public int tagId;
-    public Transform2d camToTag2d;
-    public double ambiguity;
-  }
-
-  public static class PathPlan {
-    public String cameraName;
-    public int tagId;
-    public Transform2d robotToGoal;
-
-    @Override
-    public String toString() {
-      return "[Plan cam=" + cameraName + " tag=" + tagId +
-             " dx=" + String.format("%.3f", robotToGoal.getX()) +
-             " dy=" + String.format("%.3f", robotToGoal.getY()) +
-             " dtheta=" + String.format("%.3f", robotToGoal.getRotation().getDegrees()) + " DEG]";
-    }
-  }
-
-  
-  public PathPlan getPlan(Transform2d robot2goal) {
-    Snapshot rightSnap = takeSnapshot(rightCamera, robotToRight);
-    Snapshot leftSnap  = takeSnapshot(leftCamera,  robotToLeft);
-
-    Tag rightFirst = getTag(rightSnap);
-    Tag leftFirst  = getTag(leftSnap);
-
-    if (rightFirst == null && leftFirst == null) {
-      System.out.println("[Vision] No tags on either camera.");
-      return null;
-    }
-
-    //choose lower photon vision ambiguity
-    boolean chooseRight = false;
-    if (rightFirst != null && leftFirst == null) {
-      chooseRight = true;
-    } else if (rightFirst == null && leftFirst != null) {
-      chooseRight = false;
-    } else {
-      chooseRight = rightFirst.ambiguity <= leftFirst.ambiguity;
-    }
-
-    // Robot to Goal = Robot to Cam   +   Cam to Tag    + Tag to Goal
-    PathPlan plan = new PathPlan();
-    if (chooseRight) {
-      plan.cameraName = "right";
-      plan.tagId = rightFirst.tagId;
-      Transform2d robotToCam2d = project3d2d(robotToRight);
-      plan.robotToGoal = robotToCam2d.plus(rightFirst.camToTag2d).plus(robot2goal);
-    } else {
-      plan.cameraName = "left";
-      plan.tagId = leftFirst.tagId;
-      Transform2d robotToCam2d = project3d2d(robotToLeft);
-      plan.robotToGoal = robotToCam2d.plus(leftFirst.camToTag2d).plus(robot2goal);
-    }
-
-    System.out.println("[Vision] " + plan);
-    return plan;
-  }
-
-
-  private Snapshot takeSnapshot(PhotonCamera cam, Transform3d robotToCam) {
-    Snapshot snap = new Snapshot();
-    snap.timestampMs = System.currentTimeMillis();
-
-    PhotonPipelineResult result = cam.getLatestResult();// change to undeprecated method
-    if (result == null || !result.hasTargets()) {
-      return snap;
-    }
-
-    for (PhotonTrackedTarget t : result.getTargets()) {
-      if (t == null) continue;
-      if (t.getFiducialId() <= 0 
-      || t.getFiducialId() == 13
-      || t.getFiducialId() == 12
-      || t.getFiducialId() == 16
-      || t.getFiducialId() == 14
-      || t.getFiducialId() == 15
-      || t.getFiducialId() == 4
-      || t.getFiducialId() == 5
-      || t.getFiducialId() == 3
-       || t.getFiducialId() == 1) continue; // photon vision function that checks if the april tag is legit
-
-      Tag obs = new Tag();
-      obs.tagId = t.getFiducialId();
-      obs.ambiguity = t.getPoseAmbiguity();
-      if (obs.ambiguity < 0) obs.ambiguity = 1.0; // unknown ambiguities are set to the highest
-
-      // use photon vision 3d pose only if available
-      Transform3d camToTag3d = t.getBestCameraToTarget();
-      if (camToTag3d != null) {
-        System.out.println("----------------" + camToTag3d + "----------____________");
-        obs.camToTag2d = project3d2d(camToTag3d);
-      } else {
-        System.out.println("-=============================  Manual ====================");
-        double camHeight = robotToCam.getTranslation().getZ();
-        double tagHeight = VisionConstants.TAG_HEIGHT_M;
-        double camPitch  = robotToCam.getRotation().getY();
-
-        double distance = PhotonUtils.calculateDistanceToTargetMeters(
-            camHeight, tagHeight, camPitch, Math.toRadians(t.getPitch()));
-
-        if (!Double.isFinite(distance) || distance <= 0) {
-          System.out.println("No Photon vision Pose and Detected an invalid target");
-          continue; // invavlid results
-          
-        }
-
-        double yawRad = Math.toRadians(t.getYaw());
-        Translation2d planar = new Translation2d(distance * Math.sin(yawRad),
-                                                 distance * Math.cos(yawRad)); // cos and sin used to be swapped resulting in a coordinate swap
-        obs.camToTag2d = new Transform2d(planar, new Rotation2d(yawRad));
-      }
-
-      snap.observed.add(obs);
-    }
-
-    return snap;
-  }
-
-  private Tag getTag(Snapshot snap) {
-    if (snap == null || snap.observed == null || snap.observed.isEmpty()) return null;
-  
-    Tag best = null;
-    double bestDist = Double.POSITIVE_INFINITY;
-  
-    for (Tag t : snap.observed) {
-      if (t.camToTag2d == null) continue;
-      double dx = t.camToTag2d.getX();
-      double dy = t.camToTag2d.getY();
-      double planar = Math.hypot(dx, dy);   // distance in the X–Y plane
-  
-      // prefer lower ambiguity when distances are ~equal
-      if (planar < bestDist - 1e-6 ||
-          (Math.abs(planar - bestDist) <= 1e-6 && best != null && t.ambiguity < best.ambiguity)) {
-        best = t;
-        bestDist = planar;
-      }
-    }
-    return best;
-  }
-
-  //x,y,yaw
-  private static Transform2d project3d2d(Transform3d t3) {
-    Translation3d tr = t3.getTranslation();
-    Rotation3d r3 = t3.getRotation();
-
-    Rotation2d yaw2d = t3.getRotation().toRotation2d();
-    double origDeg = yaw2d.getDegrees();
-
-    double deg = yaw2d.getDegrees();
-
-    deg = Math.IEEEremainder(deg, 360.0);
     
-    double tx = tr.getX();
-    double ty = tr.getY();
+  };
 
-    Rotation2d folded = Rotation2d.fromDegrees(deg);//deg
+  private PhotonCamera camera;
+  private Constants.VisionConstants.Cameras cameraEnum;
+  private PhotonPipelineResult pipeline;
+  AprilTagFieldLayout aprilTagFieldLayout =
+      AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
+  PhotonPoseEstimator photonPoseEstimator;
+  //private CommandSwerveDrivetrain driveTrain = CommandSwerveDrivetrain.getInstance();
+  private BooleanSupplier redSide;
 
-    return new Transform2d(new Translation2d(tx, ty), folded);
+  public VisionSubsystem(Constants.VisionConstants.Cameras cameraEnum, BooleanSupplier redSide) {
+    this.cameraEnum = cameraEnum;
+    String name = cameraEnum.toString();
+    int index = cameraEnum.ordinal();
+    camera = new PhotonCamera(name);
+    photonPoseEstimator =
+        new PhotonPoseEstimator(
+            aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camToRobots[index]);
+    this.redSide = redSide;
+    for (var x : camera.getAllUnreadResults()) {
+      pipeline = x;
+    }
   }
+  
+  
+  public AprilTagFieldLayout getAprilTagFieldLayout() {
+    return this.aprilTagFieldLayout;
+  }
+
+  public PhotonPipelineResult getPipelineResult() {
+    return pipeline;
+  }
+
+  public Optional<EstimatedRobotPose> getMultiTagPose3d(Pose2d previousRobotPose) {
+    photonPoseEstimator.setReferencePose(previousRobotPose);
+    return photonPoseEstimator.update(pipeline);
+  }
+
+   public Pose2d getPose2d() {
+    Optional<EstimatedRobotPose> pose3d = getMultiTagPose3d(savedResult);
+    if (pose3d.isEmpty()) return null;
+    savedResult = pose3d.get().estimatedPose.toPose2d();
+    return savedResult;
+  }
+
+  public Pose2d getSaved() {
+    return savedResult;
+  }
+  /* 
+   public Double getDistance() {
+    return this.getAprilTagFieldLayout()
+        .getTagPose(getPipelineResult().getBestTarget().getFiducialId())
+        .get()
+        .getTranslation()
+        .getDistance(
+            new Translation3d(
+                driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
+  }
+
+  public static VisionSystem getInstance(Constants.Vision.Cameras name, BooleanSupplier redSide) {
+    if (systemList[name.ordinal()] == null) {
+      systemList[name.ordinal()] = new VisionSystem(name, redSide);
+    }
+
+    return systemList[name.ordinal()];
+  }
+   */
+
+  public boolean hasTarget(PhotonPipelineResult pipeline) {
+    if (pipeline == null) {
+      return false;
+    }
+    return pipeline.hasTargets();
+  }
+
+
+  public void setReference(Pose2d newPose) {
+    if (newPose == null) {
+      return;
+    }
+    savedResult = newPose;
+  }
+
+  public record VisionEstimate(Pose2d pose, double timestamp, Matrix<N3, N1> stdDevs) {}
+
+  public Optional<VisionEstimate> getEstimatedPose() {
+    PhotonPipelineResult pipelineResult = getPipelineResult();
+
+    // Basic validity checks
+    if (pipelineResult == null || !hasTarget(pipelineResult)) return Optional.empty();
+
+    // Compute the estimated pose
+    Optional<EstimatedRobotPose> estimated3d = getMultiTagPose3d(savedResult);
+    if (estimated3d.isEmpty()) return Optional.empty();
+
+    Pose2d estimatedPose = estimated3d.get().estimatedPose.toPose2d();
+    savedResult = estimatedPose; // keep track
+
+    // Calculate a default vision uncertainty matrix (can be tuned per camera)
+    double distance = 1.0;
+    try {
+        int tagID = pipelineResult.getBestTarget().getFiducialId();
+        distance = this.getAprilTagFieldLayout()
+            .getTagPose(tagID)
+            .get()
+            .getTranslation()
+            .getDistance(new Translation3d(estimated3d.get().estimatedPose.getTranslation().getX(),
+                                           estimated3d.get().estimatedPose.getTranslation().getY(),
+                                           0));
+    } catch (Exception e) {
+        // fallback if tag info not available
+    }
+
+    // Decrease trust as distance increases
+    double xStd = 0.1 + 0.2 * distance;
+    double yStd = 0.1 + 0.2 * distance;
+    double thetaStd = Math.toRadians(10); // ~10 degree uncertainty
+    Matrix<N3, N1> stdDevs = VecBuilder.fill(xStd, yStd, thetaStd);
+
+    return Optional.of(new VisionEstimate(estimatedPose, pipelineResult.getTimestampSeconds(), stdDevs));
+}
+
+
+
+  @Override
+  public void periodic() {
+    for (var x : camera.getAllUnreadResults()) {
+      pipeline = x;
+    }
+  }
+
+  
 }

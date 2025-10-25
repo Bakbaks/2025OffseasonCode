@@ -347,25 +347,32 @@ public final class Constants {
   
   public static class VisionConstants {
     // photon vision camera namez
+
+    public static enum Cameras {
+      left,
+      right
+
+    }
+
     public static final String RIGHT_CAM_NAME = "right";
     public static final String LEFT_CAM_NAME  = "left";
   
     
     // Right camera
-    public static final double R_X = 0.3239008;//0.2601976
-    public static final double R_Y = -0.260194;     // right is negative Y
-    public static final double R_Z = 0.2067306;           // height
-    public static final double R_ROLL  = 0.0;
-    public static final double R_PITCH = Math.toRadians(15.0);
-    public static final double R_YAW   = Math.toRadians(35);
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_X = 0.3239008;//0.2601976
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Y = -0.260194;     // right is negative Y
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Z = 0.2067306;           // height
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_ROLL  = 0.0;
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_PITCH = Math.toRadians(15.0);
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_YAW   = Math.toRadians(35);
   
     // Left camera this is wrong
-    public static final double L_X = 0.2601976; // negative makes the robot end up further from the wall
-    public static final double L_Y = 0.085725;    // left is positive Y
-    public static final double L_Z = 0.2067306;
-    public static final double L_ROLL  = 0.0;
-    public static final double L_PITCH = Math.toRadians(15.0);
-    public static final double L_YAW   = Math.toRadians(0.0);
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_X = 0.2601976; // negative makes the robot end up further from the wall
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Y = 0.085725;    // left is positive Y
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Z = 0.2067306;
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_ROLL  = 0.0;
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_PITCH = Math.toRadians(15.0);
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Math.toRadians(0.0);
   
     // Tag stuff
     public static final double TAG_HEIGHT_M = 0.3079764224;

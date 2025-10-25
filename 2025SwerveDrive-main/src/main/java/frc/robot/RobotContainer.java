@@ -28,8 +28,6 @@ import frc.robot.Constants.ArmConstant;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.GroundIntakeConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.AimAtTagCommand;
-import frc.robot.commands.AimAtTagPIDCommand;
 import frc.robot.commands.ArmCommand.ArmSetPositionCommand;
 import frc.robot.commands.AutoCommands.ArmAutonCommands;
 import frc.robot.commands.AutoCommands.AutonIntakeWithDetectionCommand;
@@ -44,11 +42,16 @@ import frc.robot.subsystems.ArmSubsystem.ArmState;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.GroundIntakeSubsystem.SpinGroundIntakeSubsystem;
 import frc.robot.subsystems.GroundIntakeSubsystem.SwingGroundIntakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem.CommandSwerveDrivetrain;
 import frc.robot.subsystems.SwerveSubsystem.TunerConstants;
+import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.Constants.VisionConstants;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.math.geometry.Pose2d;
+import java.util.Optional;
 
 public class RobotContainer {
 
@@ -81,9 +84,12 @@ public class RobotContainer {
     private final ArmSubsystem arm = new ArmSubsystem();
     private final ClimbSubsystem climb = new ClimbSubsystem();
     private final IntakeSubsystem intake = new IntakeSubsystem();
-    private final VisionSubsystem vision = new VisionSubsystem();
     private final SwingGroundIntakeSubsystem SwingGroundIntake = new SwingGroundIntakeSubsystem();
     private final SpinGroundIntakeSubsystem spinGroundIntake = new SpinGroundIntakeSubsystem();
+    
+    // Vision subsystems for fusion
+    private final VisionSubsystem visionRight;
+    private final VisionSubsystem visionLeft;
     PathConstraints lims = new PathConstraints(
     3.0,                     // max m/s
     1.0,                     // max m/s^2
@@ -94,13 +100,6 @@ public class RobotContainer {
     private final AimAtTagCommand aimAtTagL = new AimAtTagCommand(Constants.VisionConstants.TAG_TO_GOAL_LEFT, drivetrain, vision, lims, 0.1);
     private final AimAtTagCommand aimAtTagR = new AimAtTagCommand(Constants.VisionConstants.TAG_TO_GOAL_RIGHT, drivetrain, vision, lims, 0.1);
       */  
-
-    private final AimAtTagPIDCommand aimAtTagL =
-        new AimAtTagPIDCommand(Constants.VisionConstants.TAG_TO_GOAL_LEFT, drivetrain, vision);
-
-    private final AimAtTagPIDCommand aimAtTagR =
-        new AimAtTagPIDCommand(Constants.VisionConstants.TAG_TO_GOAL_RIGHT, drivetrain, vision);
-
 
     private final Trigger auxY = m_auxController.y();
     private final Trigger auxA = m_auxController.a();
@@ -154,14 +153,6 @@ public class RobotContainer {
         );
     }
 
-    Command AutoAimR = new SequentialCommandGroup(
-        new AimAtTagCommand(Constants.VisionConstants.TAG_TO_GOAL_RIGHT, drivetrain, vision, lims, 0.1).withTimeout(1.5),
-        new InstantCommand(() -> drivetrain.resetOdometry(drivetrain.getPose()))
-        );
-   Command AutoAimL = new SequentialCommandGroup(
-        new AimAtTagCommand(Constants.VisionConstants.TAG_TO_GOAL_LEFT, drivetrain, vision, lims, 0.1).withTimeout(2),
-        new InstantCommand(() -> drivetrain.resetOdometry(drivetrain.getPose()))
-        );
 
     Command NewL4 = new SequentialCommandGroup(
                     Commands.deadline(
@@ -386,9 +377,17 @@ public class RobotContainer {
 
 
     public RobotContainer() {
+        // Initialize vision subsystems for fusion
+        visionRight = new VisionSubsystem(
+            VisionConstants.Cameras.right, 
+            () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red
+        );
+        visionLeft = new VisionSubsystem(
+            VisionConstants.Cameras.left, 
+            () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red
+        );
+        
         NamedCommands.registerCommand("NewDefault", NewDefault);
-        NamedCommands.registerCommand("AutoAlignR", AutoAimR);
-        NamedCommands.registerCommand("AutoAlignL", AutoAimL);
         NamedCommands.registerCommand("NewL4", NewL4);
         NamedCommands.registerCommand("NewScoreL4", NewScoreL4);
         NamedCommands.registerCommand("NewStationLoad", NewStationLoad);
@@ -640,9 +639,6 @@ public class RobotContainer {
         );
         
 
-        driveRightBumper.whileTrue(aimAtTagR);
-        driveLeftBumper.whileTrue(aimAtTagL);
-
 
         
 
@@ -774,6 +770,111 @@ public class RobotContainer {
 
 
 
+    }
+
+    /**
+     * Fuses vision measurements from both cameras with the swerve drive odometry using CTRE Phoenix Kalman filter
+     * This method should be called from Robot.robotPeriodic()
+     */
+    public void fuseVisionMeasurements() {
+        try {
+            // Get current robot pose for reference
+            Pose2d currentPose = drivetrain.getPose();
+            
+            // Get vision estimates from both cameras
+            Optional<VisionSubsystem.VisionEstimate> rightEstimate = visionRight.getEstimatedPose();
+            Optional<VisionSubsystem.VisionEstimate> leftEstimate = visionLeft.getEstimatedPose();
+        
+        // Update reference poses for next iteration
+        visionRight.setReference(currentPose);
+        visionLeft.setReference(currentPose);
+        
+        // Telemetry for debugging
+        SmartDashboard.putBoolean("Vision/Right Camera Has Target", rightEstimate.isPresent());
+        SmartDashboard.putBoolean("Vision/Left Camera Has Target", leftEstimate.isPresent());
+        
+        // Add vision measurements to CTRE Phoenix Kalman filter if available
+        if (rightEstimate.isPresent()) {
+            VisionSubsystem.VisionEstimate estimate = rightEstimate.get();
+            
+            // Validate the vision measurement before adding it
+            if (isValidVisionMeasurement(estimate, currentPose)) {
+                // Use CTRE Phoenix's built-in Kalman filter for vision fusion
+                drivetrain.addVisionMeasurement(
+                    estimate.pose(), 
+                    estimate.timestamp(), 
+                    estimate.stdDevs()
+                );
+                SmartDashboard.putBoolean("Vision/Right Camera Used", true);
+                SmartDashboard.putNumber("Vision/Right Camera X", estimate.pose().getX());
+                SmartDashboard.putNumber("Vision/Right Camera Y", estimate.pose().getY());
+                SmartDashboard.putNumber("Vision/Right Camera Rotation", estimate.pose().getRotation().getDegrees());
+            } else {
+                SmartDashboard.putBoolean("Vision/Right Camera Used", false);
+            }
+        } else {
+            SmartDashboard.putBoolean("Vision/Right Camera Used", false);
+        }
+        
+        if (leftEstimate.isPresent()) {
+            VisionSubsystem.VisionEstimate estimate = leftEstimate.get();
+            
+            // Validate the vision measurement before adding it
+            if (isValidVisionMeasurement(estimate, currentPose)) {
+                // Use CTRE Phoenix's built-in Kalman filter for vision fusion
+                drivetrain.addVisionMeasurement(
+                    estimate.pose(), 
+                    estimate.timestamp(), 
+                    estimate.stdDevs()
+                );
+                SmartDashboard.putBoolean("Vision/Left Camera Used", true);
+                SmartDashboard.putNumber("Vision/Left Camera X", estimate.pose().getX());
+                SmartDashboard.putNumber("Vision/Left Camera Y", estimate.pose().getY());
+                SmartDashboard.putNumber("Vision/Left Camera Rotation", estimate.pose().getRotation().getDegrees());
+            } else {
+                SmartDashboard.putBoolean("Vision/Left Camera Used", false);
+            }
+        } else {
+            SmartDashboard.putBoolean("Vision/Left Camera Used", false);
+        }
+        
+            // Display current robot pose (fused by CTRE Phoenix Kalman filter)
+            SmartDashboard.putNumber("Robot/Pose X", currentPose.getX());
+            SmartDashboard.putNumber("Robot/Pose Y", currentPose.getY());
+            SmartDashboard.putNumber("Robot/Pose Rotation", currentPose.getRotation().getDegrees());
+        } catch (Exception e) {
+            // Log vision fusion errors without crashing the robot
+            System.err.println("Vision fusion error: " + e.getMessage());
+            SmartDashboard.putBoolean("Vision/Fusion Error", true);
+        }
+    }
+    
+    /**
+     * Validates a vision measurement before adding it to CTRE Phoenix Kalman filter
+     * @param estimate The vision estimate to validate
+     * @param currentPose The current robot pose
+     * @return true if the measurement is valid and should be used
+     */
+    private boolean isValidVisionMeasurement(VisionSubsystem.VisionEstimate estimate, Pose2d currentPose) {
+        // Check if the measurement is recent (within 0.5 seconds)
+        double timeDiff = System.currentTimeMillis() / 1000.0 - estimate.timestamp();
+        if (timeDiff > 0.5) {
+            return false;
+        }
+        
+        // Check if the pose is reasonable (not too far from current pose)
+        double distance = estimate.pose().getTranslation().getDistance(currentPose.getTranslation());
+        if (distance > 2.0) { // 2 meter threshold
+            return false;
+        }
+        
+        // Check if the rotation is reasonable
+        double rotationDiff = Math.abs(estimate.pose().getRotation().minus(currentPose.getRotation()).getRadians());
+        if (rotationDiff > Math.PI / 2) { // 90 degree threshold
+            return false;
+        }
+        
+        return true;
     }
 
     public Command getAutonomousCommand() {
