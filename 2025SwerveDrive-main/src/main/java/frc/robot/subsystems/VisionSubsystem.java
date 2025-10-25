@@ -74,7 +74,7 @@ public class VisionSubsystem extends SubsystemBase {
   
 
   
-  private static final AprilTagFieldLayout FIELD_LAYOUT = null;
+  //private static final AprilTagFieldLayout FIELD_LAYOUT = null;
 //   static {
 //     AprilTagFieldLayout tempLayout = null;
 //     try { 
