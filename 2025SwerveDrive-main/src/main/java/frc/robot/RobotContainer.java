@@ -12,6 +12,8 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -81,7 +83,8 @@ public class RobotContainer {
     private final ArmSubsystem arm = new ArmSubsystem();
     private final ClimbSubsystem climb = new ClimbSubsystem();
     private final IntakeSubsystem intake = new IntakeSubsystem();
-    private final VisionSubsystem vision = new VisionSubsystem();
+    private final BooleanSupplier redSide = () -> DriverStation.getAlliance() == Alliance.Red;
+    private final VisionSubsystem vision = new VisionSubsystem(redSide);
     private final SwingGroundIntakeSubsystem SwingGroundIntake = new SwingGroundIntakeSubsystem();
     private final SpinGroundIntakeSubsystem spinGroundIntake = new SpinGroundIntakeSubsystem();
     PathConstraints lims = new PathConstraints(

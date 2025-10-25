@@ -346,37 +346,66 @@ public final class Constants {
 
   
   public static class VisionConstants {
-    // photon vision camera namez
-    public static final String RIGHT_CAM_NAME = "right";
-    public static final String LEFT_CAM_NAME  = "left";
+    public static enum Cameras {
+      RIGHT("right"),
+      LEFT("left");
+
+      private final String name;
+
+      Cameras(String name) {
+        this.name = name;
+      }
+
+      @Override
+      public String toString() {
+        return name;
+      }
+
+      public String getLoggingName() {
+        return name;
+      }
+    }
+
+    // Camera names
+    public static final String RIGHT_CAM_NAME = Cameras.RIGHT.toString();
+    public static final String LEFT_CAM_NAME = Cameras.LEFT.toString();
   
     // Camera extrinsics in ROBOT frame (+X fwd, +Y left, +Z up), meters/radians
     // Right camera
-    public static final double R_X = 0.2601976;//0.2601976
-    public static final double R_Y = 0.3239008;     // right is negative Y
-    public static final double R_Z = 0.2067306;           // height
-    public static final double R_ROLL  = 0.0;
-    public static final double R_PITCH = Math.toRadians(15.0);
-    public static final double R_YAW   = Math.toRadians(-35); //-35
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_X = 0.2601976;
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Y = 0.3239008;  // right is negative Y
+    public static final double RIGHT_CAM_TO_ROBOT_TRANSLATION_Z = 0.2067306;  // height
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_ROLL = 0.0;
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_PITCH = Math.toRadians(15.0);
+    public static final double RIGHT_CAM_TO_ROBOT_ROTATION_YAW = Math.toRadians(-35);
   
     // Left camera
-    public static final double L_X = 0.2601976; // negative makes the robot end up further from the wall
-    public static final double L_Y = 0.085725;    // left is positive Y
-    public static final double L_Z = 0.2067306;
-    public static final double L_ROLL  = 0.0;
-    public static final double L_PITCH = Math.toRadians(15.0);
-    public static final double L_YAW   = Math.toRadians(0.0);
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_X = 0.2601976;
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Y = 0.085725;  // left is positive Y
+    public static final double LEFT_CAM_TO_ROBOT_TRANSLATION_Z = 0.2067306;
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_ROLL = 0.0;
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_PITCH = Math.toRadians(15.0);
+    public static final double LEFT_CAM_TO_ROBOT_ROTATION_YAW = Math.toRadians(0.0);
   
-    // Tag stuff
-    public static final double TAG_HEIGHT_M     = 0.3079764224;
+    // Field and tag properties
+    public static final double TAG_HEIGHT_M = 0.3079764224;
+    public static final double FIELD_LENGTH_METERS = 16.54175;
+    public static final double FIELD_WIDTH_METERS = 8.0137;
+
+    // Vision processing
+    public static final double MAX_POSE_AMBIGUITY = 0.2;  // Maximum allowed pose ambiguity
+    public static final double MIN_TARGET_DISTANCE = 0.5;  // Minimum distance to target in meters
+    public static final double MAX_TARGET_DISTANCE = 4.0;  // Maximum distance to target in meters
     
-
-    //point to go to relative to the tag
-    public static final Transform2d TAG_TO_GOAL_RIGHT = new Transform2d(new Translation2d(0, -.4), new Rotation2d());//meters
-    public static final Transform2d TAG_TO_GOAL_LEFT = new Transform2d(new Translation2d(0, 0.1), new Rotation2d());//meters
-  
-
-
+    // Goal transforms relative to tags
+    public static final Transform2d TAG_TO_GOAL_RIGHT = new Transform2d(
+        new Translation2d(0, -0.4),
+        new Rotation2d()
+    );
+    public static final Transform2d TAG_TO_GOAL_LEFT = new Transform2d(
+        new Translation2d(0, 0.1),
+        new Rotation2d()
+    );
 
     // PID gains and limits
     public static final double KP_XY = 2.0;// m/s per m error
