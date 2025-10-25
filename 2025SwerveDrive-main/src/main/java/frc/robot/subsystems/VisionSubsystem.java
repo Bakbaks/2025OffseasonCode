@@ -67,8 +67,19 @@ public class VisionSubsystem extends SubsystemBase {
   private PhotonCamera camera;
   private Constants.VisionConstants.Cameras cameraEnum;
   private PhotonPipelineResult pipeline;
-  AprilTagFieldLayout aprilTagFieldLayout =
-      AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
+  private static final AprilTagFieldLayout FIELD_LAYOUT;
+  static {
+    AprilTagFieldLayout tempLayout = null;
+    try { 
+        tempLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
+        System.out.println("[VisionSubsystem] Loaded Reefscape field layout successfully.");
+    } catch (Exception e) {
+        System.err.println("[VisionSubsystem] Failed to load field layout: " + e.getMessage());
+    }
+    FIELD_LAYOUT = tempLayout;
+}
+
+private final AprilTagFieldLayout aprilTagFieldLayout = FIELD_LAYOUT;
   PhotonPoseEstimator photonPoseEstimator;
   //private CommandSwerveDrivetrain driveTrain = CommandSwerveDrivetrain.getInstance();
   private BooleanSupplier redSide;
