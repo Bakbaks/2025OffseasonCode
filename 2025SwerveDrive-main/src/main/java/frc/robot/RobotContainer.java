@@ -779,6 +779,8 @@ public class RobotContainer {
      * Fuses vision measurements from both cameras with the swerve drive odometry using CTRE Phoenix Kalman filter
      * This method should be called from Robot.robotPeriodic()
      */
+
+     /*
     public void fuseVisionMeasurements() {
         try {
             // Get current robot pose for reference
@@ -852,12 +854,7 @@ public class RobotContainer {
         }
     }
     
-    /**
-     * Validates a vision measurement before adding it to CTRE Phoenix Kalman filter
-     * @param estimate The vision estimate to validate
-     * @param currentPose The current robot pose
-     * @return true if the measurement is valid and should be used
-     */
+    
     private boolean isValidVisionMeasurement(VisionSubsystem.VisionEstimate estimate, Pose2d currentPose) {
         // Check if the measurement is recent (within 0.5 seconds)
         double timeDiff = System.currentTimeMillis() / 1000.0 - estimate.timestamp();
@@ -879,7 +876,7 @@ public class RobotContainer {
         
         return true;
     }
-
+    */
     public Command getAutonomousCommand() {
 //        return new ElevatorSetPositionCommand(elevatorSubsystem, Constants.ElevatorConstants.STAGE_4_HEIGHT_DELTA);
         return autoChooser.getSelected();
