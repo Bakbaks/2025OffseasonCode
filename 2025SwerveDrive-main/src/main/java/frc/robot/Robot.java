@@ -33,7 +33,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
 
     // Vision fusion with CTRE Phoenix Kalman filter
-    m_robotContainer.fuseVisionMeasurements();
+    //m_robotContainer.fuseVisionMeasurements();
   }
 
   @Override
@@ -68,6 +68,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
 
   }
 

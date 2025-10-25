@@ -386,6 +386,9 @@ public class RobotContainer {
             VisionConstants.Cameras.left, 
             () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red
         );
+
+        Commands.runOnce(() -> sm.setState(RobotState.START_CONFIG))
+                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake));
         
         NamedCommands.registerCommand("NewDefault", NewDefault);
         NamedCommands.registerCommand("NewL4", NewL4);
