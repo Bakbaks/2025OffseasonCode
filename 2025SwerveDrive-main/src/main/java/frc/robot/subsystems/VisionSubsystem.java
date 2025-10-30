@@ -69,18 +69,30 @@ public class VisionSubsystem extends SubsystemBase {
   private Constants.VisionConstants.Cameras cameraEnum;
   private PhotonPipelineResult pipeline;
 
+  private static final Path fieldJsonPath =
+      Filesystem.getDeployDirectory().toPath().resolve("2025-reefscape-andymark.json");
+  private static AprilTagFieldLayout fieldLayout;
 
-  private static final Path jsonPath = Filesystem.getDeployDirectory().toPath().resolve("2025-reefscape-andymark.json");
+  static {
+    try {
+      fieldLayout = new AprilTagFieldLayout(fieldJsonPath);
+      System.out.println("Loaded PhtonVision field layout successfully.");
+    } catch (Exception e) {
+      System.err.println("Failed to load AprilTagFieldLayout: " + e.getMessage());
+    }
+  }
+
+  //private static final Path jsonPath = Filesystem.getDeployDirectory().toPath().resolve("2025-reefscape-andymark.json");
   
 
   
-  AprilTagFieldLayout aprilTagFieldLayout =
-      AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
+  // AprilTagFieldLayout aprilTagFieldLayout =
+  //     AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
 
 //private final AprilTagFieldLayout aprilTagFieldLayout = FIELD_LAYOUT;
 
   // AprilTagFieldLayout aprilTagFieldLayout =
-  //     AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
+  //      AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
 
  
   PhotonPoseEstimator photonPoseEstimator;

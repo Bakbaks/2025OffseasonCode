@@ -66,7 +66,7 @@ public final class Constants {
     public static final int kArmCANCoderID = 34;
     public static final double TOLERANCE = 0.01;
 
-    public static final double ArmGearRatio = 52.09722 / 1;
+    public static final double ArmGearRatio = 52.09722 / 1; // 
 
     public static final Distance ArmLength = Inches.of(16.1);
 
@@ -80,24 +80,25 @@ public final class Constants {
  */
 
     public static final Angle CORAL_STATION_ANGLE_VERTICAL  = Degrees.of(-15);
-    public static final Angle STAGE_1_ANGLE_VERTICAL        = Degrees.of(0); 
-    public static final Angle STAGE_2_ANGLE_VERTICAL        = Degrees.of(115);
-    public static final Angle STAGE_3_ANGLE_VERTICAL        = Degrees.of(130);
-    public static final Angle STAGE_4_ANGLE_VERTICAL        = Degrees.of(140);
+    public static final Angle STAGE_1_ANGLE_VERTICAL        = Degrees.of(0);
+    public static final Angle STAGE_2_ANGLE_VERTICAL        = Degrees.of(165);
+    public static final Angle STAGE_3_ANGLE_VERTICAL        = Degrees.of(185.7);
+    public static final Angle STAGE_4_ANGLE_VERTICAL        = Degrees.of(200);
 
     public static final Angle SCORE_STAGE_1_ANGLE_VERTICAL        = Degrees.of(0); 
-    public static final Angle SCORE_STAGE_2_ANGLE_VERTICAL        = Degrees.of(60);
-    public static final Angle SCORE_STAGE_3_ANGLE_VERTICAL        = Degrees.of(80);
-    public static final Angle SCORE_STAGE_4_ANGLE_VERTICAL        = Degrees.of(80);
-    public static final Angle SAFE_SCORE_STAGE_4_ANGLE_VERTICAL        = Degrees.of(90);
+    public static final Angle SCORE_STAGE_2_ANGLE_VERTICAL        = Degrees.of(85.7);
+    public static final Angle SCORE_STAGE_3_ANGLE_VERTICAL        = Degrees.of(114.28);
+    public static final Angle SCORE_STAGE_4_ANGLE_VERTICAL        = Degrees.of(114.28);
+    public static final Angle SAFE_SCORE_STAGE_4_ANGLE_VERTICAL        = Degrees.of(128.57);
 
-    public static final Angle CLIMB_ANGLE_VERTICAL                = Degrees.of(-90);
+    public static final Angle CLIMB_ANGLE_VERTICAL                = Degrees.of(-128.57);
 
-    public static final Angle ARM_PINCH_HIGH_ANGLE_VERTICAL        = Degrees.of(90);
-    public static final Angle ARM_PINCH_LOW_ANGLE_VERTICAL        = Degrees.of(90);
-    public static final Angle ARM_SUPERSCORE_ANGLE_VERTICAL        = Degrees.of(176);
-    public static final Angle ARM_SUPERSWING_ANGLE_VERTICAL        = Degrees.of(160);
-
+    public static final Angle ARM_PINCH_HIGH_ANGLE_VERTICAL        = Degrees.of(128.57);
+    public static final Angle ARM_PINCH_LOW_ANGLE_VERTICAL        = Degrees.of(128.57);
+    public static final Angle ARM_SUPERSCORE_ANGLE_VERTICAL        = Degrees.of(251.43);
+    public static final Angle ARM_BACKSWING_ANGLE_VERTICAL        = Degrees.of(290.57);
+    public static final Angle ARM_SUPERSWING_ANGLE_VERTICAL        = Degrees.of(228.57);
+    public static final Angle ARM_LOLI_ANGLE_VERTICAL              = Degrees.of(78.29);
 
     //public static final Angle SAD_CORAL_STATION_ANGLE_VERTICAL  = Degrees.of(CORAL_STATION_ANGLE_VERTICAL.in(Degrees) * -1);
     //public static final Angle SAD_CORAL_STATION_ANGLE_VERTICAL  = Degrees.of(CORAL_STATION_ANGLE_VERTICAL.in(Degrees) * -1);
@@ -108,9 +109,9 @@ public final class Constants {
 
     //random stuff
     public static final double test = 0.0;
-    public static final double kArmP = 3;
+    public static final double kArmP = 4;
     public static final double kArmI = 0; // 0.003;
-    public static final double kArmD = 0; // 0.001;
+    public static final double kArmD = 0.5; // 0.001;
 
     public static final double kMaxAngle = 225;
     public static final double kMinAngle = -225;
@@ -141,7 +142,7 @@ public final class Constants {
 
     public static final Angle GroundIntake_FEED_ANGLE_VERTICAL = Degrees.of(0);
     //public static final Angle GroundIntake_LOWERED_ANGLE_VERTICAL = Degrees.of(-145);
-    public static final Angle GroundIntake_LOWERED_ANGLE_VERTICAL = Degrees.of(-150);
+    public static final Angle GroundIntake_LOWERED_ANGLE_VERTICAL = Degrees.of(-140);
     public static final Angle GroundIntake_LEVEL1_ANGLE_VERTICAL = Degrees.of(-70);
 
     public static final double kGroundP = 0.05;
@@ -233,7 +234,7 @@ public final class Constants {
     public static final Distance STAGE_PINCH_HIGH_HEIGHT_DELTA = Inches.of(15);
     public static final Distance STAGE_PINCH_LOW_HEIGHT_DELTA = Inches.of(0);
     public static final Distance STAGE_PINCH_MEDIUM_HEIGHT_DELTA = Inches.of(0);
-    public static final Distance STAGE_PINCH_LINEUP_HEIGHT_DELTA = Inches.of(0);
+    public static final Distance STAGE_PINCH_LINEUP_HEIGHT_DELTA = Inches.of(32);
     public static final Distance STAGE_PINCH_SCORE_HEIGHT_DELTA  = Inches.of(36);
     public static final Distance SCORE_STAGE_2_HEIGHT_DELTA  = Inches.of(STAGE_2_HEIGHT_DELTA.in(Inches) - 2);
     public static final Distance SCORE_STAGE_3_HEIGHT_DELTA  = Inches.of(6);

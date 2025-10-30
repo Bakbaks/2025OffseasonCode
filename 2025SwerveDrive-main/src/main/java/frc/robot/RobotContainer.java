@@ -626,11 +626,15 @@ public class RobotContainer {
                 target = RobotState.SCORE4;
                 } else if (cur == RobotState.SupaPinchBarge) {
                 target = RobotState.SupaPinchScore;
+                } else if (cur == RobotState.Lolipop){
+                target = RobotState.Processor;
+                
                 } else if (cur == RobotState.SCOREL1
                         || cur == RobotState.SCORE2
                         || cur == RobotState.SCORE3
                         || cur == RobotState.SCORE4
-                        || cur == RobotState.SupaPinchScore) {
+                        || cur == RobotState.SupaPinchScore
+                        || cur == RobotState.Processor) {
                 target = cur; // already scoring or releasing; keep it
                 } else {
                 target = cur; // default
@@ -695,7 +699,7 @@ public class RobotContainer {
                 RobotState cur = sm.getState();
                 RobotState target;
                 
-                if (cur == RobotState.SupaPinchHIGHGrab) {
+                if (cur == RobotState.SupaPinchHIGHGrab || cur == RobotState.Lolipop) {
                     target = RobotState.SupaPinchTravel;
                 } else if(cur == RobotState.SupaPinchTravel) {
                     target = RobotState.SupaPinchBarge;
@@ -720,7 +724,7 @@ public class RobotContainer {
                 RobotState cur = sm.getState();
                 RobotState target;
 
-                if (cur == RobotState.SupaPinchLOWGrab) {
+                if (cur == RobotState.SupaPinchLOWGrab || cur == RobotState.Lolipop) {
                     target = RobotState.SupaPinchTravel;
                 } else if(cur == RobotState.SupaPinchTravel) {
                     target = RobotState.SupaPinchBarge;
@@ -735,8 +739,11 @@ public class RobotContainer {
         .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
         );
 
+        auxRightBumper.onTrue(
+                Commands.runOnce(() -> sm.setState(RobotState.Lolipop))
+                        .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
+        );
         
-
         
         //Climber Bindings
 

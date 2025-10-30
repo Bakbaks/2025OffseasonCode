@@ -18,5 +18,7 @@ public enum RobotState {
     SupaPinchBarge,
     SupaPinchScore,
     ClimbUp,
-    ClimbDown
+    ClimbDown,
+    Lolipop,
+    Processor
 }
