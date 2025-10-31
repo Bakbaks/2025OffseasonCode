@@ -52,6 +52,7 @@ import frc.robot.subsystems.VisionAim;
 import frc.robot.Constants.VisionConstants;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.geometry.Pose2d;
 import java.util.Optional;
 
@@ -92,7 +93,7 @@ public class RobotContainer {
     // Vision subsystems for fusion
     private final VisionSubsystem visionRight;
     private final VisionSubsystem visionLeft;
-    private final VisionAim vision = new VisionAim();
+    private final VisionAim vision;
     PathConstraints lims = new PathConstraints(
     3.0,                     // max m/s
     1.0,                     // max m/s^2
@@ -104,9 +105,8 @@ public class RobotContainer {
     private final AimAtTagCommand aimAtTagR = new AimAtTagCommand(Constants.VisionConstants.TAG_TO_GOAL_RIGHT, drivetrain, vision, lims, 0.1);
       */  
 
-    private final AimAtTagPIDCommand aimAtTagL = new AimAtTagPIDCommand(Constants.VisionConstants.TAG_TO_GOAL_LEFT, drivetrain, vision);
-    private final AimAtTagPIDCommand aimAtTagR = new AimAtTagPIDCommand(Constants.VisionConstants.TAG_TO_GOAL_RIGHT, drivetrain, vision);
-    
+    AimAtTagPIDCommand aimAtTagR;
+    AimAtTagPIDCommand aimAtTagL;
 
     private final Trigger auxY = m_auxController.y();
     private final Trigger auxA = m_auxController.a();
@@ -394,9 +394,15 @@ public class RobotContainer {
             VisionConstants.Cameras.left, 
             () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red, drivetrain
         );
-         
+
+        vision = new VisionAim(visionRight.getAprilTagFieldLayout());
         
-        
+        AimAtTagPIDCommand aimAtTagR =
+            new AimAtTagPIDCommand(Constants.VisionConstants.TAG_TO_GOAL_RIGHT, drivetrain, vision);
+        AimAtTagPIDCommand aimAtTagL =
+            new AimAtTagPIDCommand(Constants.VisionConstants.TAG_TO_GOAL_LEFT, drivetrain, vision);
+                
+                
         NamedCommands.registerCommand("NewDefault", NewDefault);
         NamedCommands.registerCommand("NewL4", NewL4);
         NamedCommands.registerCommand("NewScoreL4", NewScoreL4);
@@ -462,25 +468,37 @@ public class RobotContainer {
         // begin of swerve drive bindings
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
+        // drivetrain.setDefaultCommand(
+        //         // Drivetrain will execute this command periodically
+
+                
+        //         drivetrain
+        //                 .applyRequest(() -> drive
+        //                         .withVelocityX(
+        //                                 -mathProfiles.exponentialDrive(m_driverController.getLeftY(), 3) * MaxSpeed)
+        //                         .withVelocityY(
+        //                                 -mathProfiles.exponentialDrive(m_driverController.getLeftX(), 3) * MaxSpeed)
+        //                         .withRotationalRate(-mathProfiles.exponentialDrive(m_driverController.getRightX(), 2)
+        //                                 * MaxAngularRate))
+
+
+        // // drivetrain.applyRequest(() ->
+        // // drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with
+        // // negative Y (forward)
+        // // .withVelocityY(-joystick.getLeftX()* MaxSpeed) // Drive left with negative X
+        // // (left)
+        // // .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive
+        // // counterclockwise with negative X (left)
+        // // )
+        // );
+
         drivetrain.setDefaultCommand(
-                // Drivetrain will execute this command periodically
-                drivetrain
-                        .applyRequest(() -> drive
-                                .withVelocityX(
-                                        -mathProfiles.exponentialDrive(m_driverController.getLeftY(), 3) * MaxSpeed)
-                                .withVelocityY(
-                                        -mathProfiles.exponentialDrive(m_driverController.getLeftX(), 3) * MaxSpeed)
-                                .withRotationalRate(-mathProfiles.exponentialDrive(m_driverController.getRightX(), 2)
-                                        * MaxAngularRate))
-        // drivetrain.applyRequest(() ->
-        // drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with
-        // negative Y (forward)
-        // .withVelocityY(-joystick.getLeftX()* MaxSpeed) // Drive left with negative X
-        // (left)
-        // .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive
-        // counterclockwise with negative X (left)
-        // )
+            drivetrain.applyRequest(() -> drive
+                .withVelocityX(-mathProfiles.exponentialDrive(m_driverController.getLeftY(), 3) * MaxSpeed)
+                .withVelocityY( mathProfiles.exponentialDrive(m_driverController.getLeftX(), 3) * MaxSpeed)
+                .withRotationalRate(-mathProfiles.exponentialDrive(m_driverController.getRightX(), 2) * MaxAngularRate))
         );
+
 
         m_driverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
         m_driverController.b().whileTrue(drivetrain
@@ -810,6 +828,11 @@ public class RobotContainer {
         //     System.out.println("Time Diff: " + timeDiff);
         //     return false;
         // }
+        double timeDiff = Timer.getFPGATimestamp() - estimate.timestamp();
+        if (timeDiff > 2) {
+            System.out.println("Time Diff: " + timeDiff);
+            return false;
+        }
         
         // Check if the pose is reasonable (not too far from current pose)
         // double distance = estimate.pose().getTranslation().getDistance(currentPose.getTranslation());

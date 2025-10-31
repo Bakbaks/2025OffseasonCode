@@ -101,6 +101,18 @@ public class VisionSubsystem extends SubsystemBase {
     this.redSide = redSide;
     this.drivetrain = drivetrain;
 
+    try {
+        if (redSide.getAsBoolean()) {
+            aprilTagFieldLayout.setOrigin(AprilTagFieldLayout.OriginPosition.kRedAllianceWallRightSide);
+            System.out.println("[VisionSubsystem] Set field origin to RED alliance side.");
+        } else {
+            aprilTagFieldLayout.setOrigin(AprilTagFieldLayout.OriginPosition.kBlueAllianceWallRightSide);
+            System.out.println("[VisionSubsystem] Set field origin to BLUE alliance side.");
+        }
+    } catch (Exception e) {
+        System.err.println("[VisionSubsystem] Failed to set field origin: " + e.getMessage());
+    }
+
     
     for (var x : camera.getAllUnreadResults()) {
       pipeline = x;
