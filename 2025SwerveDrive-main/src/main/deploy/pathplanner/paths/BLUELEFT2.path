@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.914,
+        "y": 5.204749999999999
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.31375,
+        "y": 6.404
+      },
+      "isLocked": false,
+      "linkedName": "BLUELEFTSCORE1"
+    },
+    {
+      "anchor": {
+        "x": 1.1895,
+        "y": 7.115749999999999
+      },
+      "prevControl": {
+        "x": 2.1255,
+        "y": 6.08225
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "BLUELEFTFEED1"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -142.69605172201656
+  },
+  "reversed": false,
+  "folder": "BLUELEFT",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -120.46554491945992
+  },
+  "useDefaultConstraints": true
+}

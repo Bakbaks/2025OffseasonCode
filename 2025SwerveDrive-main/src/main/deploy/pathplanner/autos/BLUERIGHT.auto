@@ -11,51 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "REDNEW"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "NewL4"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoAlignR"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "NewScoreL4"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "REDNEW2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "NewStationLoad"
+                  "pathName": "BLUERIGHT1"
                 }
               }
             ]
@@ -68,32 +24,46 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "REDNEW3"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "NewL4"
+                  "pathName": "BLUERIGHT2"
                 }
               }
             ]
           }
         },
         {
-          "type": "sequential",
+          "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "AutoAlignL"
+                  "pathName": "BLUERIGHT3"
                 }
-              },
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "NewScoreL4"
+                  "pathName": "BLUERIGHT4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "BLUERIGHT5"
                 }
               }
             ]
@@ -103,6 +73,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "REDAUTO",
+  "folder": null,
   "choreoAuto": false
 }

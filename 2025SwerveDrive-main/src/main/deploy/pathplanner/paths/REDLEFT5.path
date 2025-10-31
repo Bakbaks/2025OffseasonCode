@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 10.401069078947366,
-        "y": 2.119901315789474
+        "x": 16.42875,
+        "y": 0.8952499999999998
       },
       "prevControl": null,
       "nextControl": {
-        "x": 11.535719536050834,
-        "y": 1.9379769504080857
+        "x": 15.629250000000003,
+        "y": 1.8995000000000015
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "REDLEFTFEED1"
     },
     {
       "anchor": {
-        "x": 11.863569078947366,
-        "y": 2.119901315789474
+        "x": 13.884,
+        "y": 3.0499999999999994
       },
       "prevControl": {
-        "x": 11.497944078947366,
-        "y": 1.5714638157894738
+        "x": 14.67375,
+        "y": 1.9482499999999994
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "REDLEFTSCORE3"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.26451229807972
+    "rotation": 120.96375653207355
   },
   "reversed": false,
-  "folder": "R_REDPATH",
+  "folder": "REDLEFT",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 35.36246188706921
   },
   "useDefaultConstraints": true
 }
