@@ -33,7 +33,7 @@ public class Robot extends TimedRobot {
       System.gc();
     }
     // Vision fusion with CTRE Phoenix Kalman filter
-    //m_robotContainer.fuseVisionMeasurements();
+    m_robotContainer.fuseVisionMeasurements();
   }
 
   @Override

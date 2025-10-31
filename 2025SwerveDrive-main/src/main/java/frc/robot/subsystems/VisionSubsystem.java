@@ -26,6 +26,7 @@ import java.util.function.BooleanSupplier;
 
 import frc.robot.Constants;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.SwerveSubsystem.CommandSwerveDrivetrain;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -71,55 +72,45 @@ public class VisionSubsystem extends SubsystemBase {
 
   private static final Path fieldJsonPath =
       Filesystem.getDeployDirectory().toPath().resolve("2025-reefscape-andymark.json");
-  private static AprilTagFieldLayout fieldLayout;
+  private static AprilTagFieldLayout aprilTagFieldLayout;
 
   static {
     try {
-      fieldLayout = new AprilTagFieldLayout(fieldJsonPath);
+      aprilTagFieldLayout = new AprilTagFieldLayout(fieldJsonPath);
       System.out.println("Loaded PhtonVision field layout successfully.");
     } catch (Exception e) {
       System.err.println("Failed to load AprilTagFieldLayout: " + e.getMessage());
     }
-  }
-
-  //private static final Path jsonPath = Filesystem.getDeployDirectory().toPath().resolve("2025-reefscape-andymark.json");
-  
+ }
 
   
-  // AprilTagFieldLayout aprilTagFieldLayout =
-  //     AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
-
-//private final AprilTagFieldLayout aprilTagFieldLayout = FIELD_LAYOUT;
-
-  // AprilTagFieldLayout aprilTagFieldLayout =
-  //      AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
-
  
   PhotonPoseEstimator photonPoseEstimator;
-  //private CommandSwerveDrivetrain driveTrain = CommandSwerveDrivetrain.getInstance();
+  private CommandSwerveDrivetrain drivetrain;
   private BooleanSupplier redSide;
 
-  public VisionSubsystem(Constants.VisionConstants.Cameras cameraEnum, BooleanSupplier redSide) {
+  public VisionSubsystem(Constants.VisionConstants.Cameras cameraEnum, BooleanSupplier redSide, CommandSwerveDrivetrain drivetrain) {
     this.cameraEnum = cameraEnum;
     String name = cameraEnum.toString();
     int index = cameraEnum.ordinal();
     camera = new PhotonCamera(name);
-    /* 
+     
     photonPoseEstimator =
         new PhotonPoseEstimator(
             aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camToRobots[index]);
     this.redSide = redSide;
+    this.drivetrain = drivetrain;
 
-    */
+    
     for (var x : camera.getAllUnreadResults()) {
       pipeline = x;
     }
   }
   
   
-  // public AprilTagFieldLayout getAprilTagFieldLayout() {
-  //   return this.aprilTagFieldLayout;
-  // }
+  public AprilTagFieldLayout getAprilTagFieldLayout() {
+    return this.aprilTagFieldLayout;
+  }
 
   public PhotonPipelineResult getPipelineResult() {
     return pipeline;
@@ -141,25 +132,26 @@ public class VisionSubsystem extends SubsystemBase {
   public Pose2d getSaved() {
     return savedResult;
   }
-  /* 
-   public Double getDistance() {
+
+  
+  public Double getDistance() {
     return this.getAprilTagFieldLayout()
         .getTagPose(getPipelineResult().getBestTarget().getFiducialId())
         .get()
         .getTranslation()
         .getDistance(
             new Translation3d(
-                driveTrain.getState().Pose.getX(), driveTrain.getState().Pose.getY(), 0.0));
+                drivetrain.getState().Pose.getX(), drivetrain.getState().Pose.getY(), 0.0));
   }
 
-  public static VisionSystem getInstance(Constants.Vision.Cameras name, BooleanSupplier redSide) {
+  public static VisionSubsystem getInstance(Constants.VisionConstants.Cameras name, BooleanSupplier redSide, CommandSwerveDrivetrain drivetrain) {
     if (systemList[name.ordinal()] == null) {
-      systemList[name.ordinal()] = new VisionSystem(name, redSide);
+      systemList[name.ordinal()] = new VisionSubsystem(name, redSide, drivetrain);
     }
 
     return systemList[name.ordinal()];
   }
-   */
+   
 
   public boolean hasTarget(PhotonPipelineResult pipeline) {
     if (pipeline == null) {
@@ -178,42 +170,42 @@ public class VisionSubsystem extends SubsystemBase {
 
   public record VisionEstimate(Pose2d pose, double timestamp, Matrix<N3, N1> stdDevs) {}
 
-//   public Optional<VisionEstimate> getEstimatedPose() {
-//     PhotonPipelineResult pipelineResult = getPipelineResult();
+  public Optional<VisionEstimate> getEstimatedPose() {
+    PhotonPipelineResult pipelineResult = getPipelineResult();
 
-//     // Basic validity checks
-//     if (pipelineResult == null || !hasTarget(pipelineResult)) return Optional.empty();
+    // Basic validity checks
+    if (pipelineResult == null || !hasTarget(pipelineResult)) return Optional.empty();
 
-//     // Compute the estimated pose
-//     Optional<EstimatedRobotPose> estimated3d = getMultiTagPose3d(savedResult);
-//     if (estimated3d.isEmpty()) return Optional.empty();
+    // Compute the estimated pose
+    Optional<EstimatedRobotPose> estimated3d = getMultiTagPose3d(savedResult);
+    if (estimated3d.isEmpty()) return Optional.empty();
 
-//     Pose2d estimatedPose = estimated3d.get().estimatedPose.toPose2d();
-//     savedResult = estimatedPose; // keep track
+    Pose2d estimatedPose = estimated3d.get().estimatedPose.toPose2d();
+    savedResult = estimatedPose; // keep track
 
-//     // Calculate a default vision uncertainty matrix (can be tuned per camera)
-//     double distance = 1.0;
-//     try {
-//         int tagID = pipelineResult.getBestTarget().getFiducialId();
-//         distance = this.getAprilTagFieldLayout()
-//             .getTagPose(tagID)
-//             .get()
-//             .getTranslation()
-//             .getDistance(new Translation3d(estimated3d.get().estimatedPose.getTranslation().getX(),
-//                                            estimated3d.get().estimatedPose.getTranslation().getY(),
-//                                            0));
-//     } catch (Exception e) {
-//         // fallback if tag info not available
-//     }
+    // Calculate a default vision uncertainty matrix (can be tuned per camera)
+    double distance = 1.0;
+    try {
+        int tagID = pipelineResult.getBestTarget().getFiducialId();
+        distance = this.getAprilTagFieldLayout()
+            .getTagPose(tagID)
+            .get()
+            .getTranslation()
+            .getDistance(new Translation3d(estimated3d.get().estimatedPose.getTranslation().getX(),
+                                           estimated3d.get().estimatedPose.getTranslation().getY(),
+                                           0));
+    } catch (Exception e) {
+        // fallback if tag info not available
+    }
 
-//     // Decrease trust as distance increases
-//     double xStd = 0.1 + 0.2 * distance;
-//     double yStd = 0.1 + 0.2 * distance;
-//     double thetaStd = Math.toRadians(10); // ~10 degree uncertainty
-//     Matrix<N3, N1> stdDevs = VecBuilder.fill(xStd, yStd, thetaStd);
+    // Decrease trust as distance increases
+    double xStd = 0.1 + 0.2 * distance;
+    double yStd = 0.1 + 0.2 * distance;
+    double thetaStd = Math.toRadians(10); // ~10 degree uncertainty
+    Matrix<N3, N1> stdDevs = VecBuilder.fill(xStd, yStd, thetaStd);
 
-//     return Optional.of(new VisionEstimate(estimatedPose, pipelineResult.getTimestampSeconds(), stdDevs));
-// }
+    return Optional.of(new VisionEstimate(estimatedPose, pipelineResult.getTimestampSeconds(), stdDevs));
+}
 
 
 

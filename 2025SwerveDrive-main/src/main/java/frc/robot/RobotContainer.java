@@ -37,6 +37,7 @@ import frc.robot.commands.GroundIntakeCommands.SpinGroundIntakeCommand;
 import frc.robot.commands.GroundIntakeCommands.SwingGroundIntakeCommand;
 import frc.robot.commands.IntakeCommand.IntakeHoldPositionCommand;
 import frc.robot.commands.IntakeCommand.IntakeSpinCommand;
+import frc.robot.commands.AimAtTagPIDCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmState;
 import frc.robot.subsystems.ClimbSubsystem;
@@ -47,6 +48,7 @@ import frc.robot.subsystems.GroundIntakeSubsystem.SwingGroundIntakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem.CommandSwerveDrivetrain;
 import frc.robot.subsystems.SwerveSubsystem.TunerConstants;
 import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.VisionAim;
 import frc.robot.Constants.VisionConstants;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -90,6 +92,7 @@ public class RobotContainer {
     // Vision subsystems for fusion
     private final VisionSubsystem visionRight;
     private final VisionSubsystem visionLeft;
+    private final VisionAim vision = new VisionAim();
     PathConstraints lims = new PathConstraints(
     3.0,                     // max m/s
     1.0,                     // max m/s^2
@@ -100,6 +103,10 @@ public class RobotContainer {
     private final AimAtTagCommand aimAtTagL = new AimAtTagCommand(Constants.VisionConstants.TAG_TO_GOAL_LEFT, drivetrain, vision, lims, 0.1);
     private final AimAtTagCommand aimAtTagR = new AimAtTagCommand(Constants.VisionConstants.TAG_TO_GOAL_RIGHT, drivetrain, vision, lims, 0.1);
       */  
+
+    private final AimAtTagPIDCommand aimAtTagL = new AimAtTagPIDCommand(Constants.VisionConstants.TAG_TO_GOAL_LEFT, drivetrain, vision);
+    private final AimAtTagPIDCommand aimAtTagR = new AimAtTagPIDCommand(Constants.VisionConstants.TAG_TO_GOAL_RIGHT, drivetrain, vision);
+    
 
     private final Trigger auxY = m_auxController.y();
     private final Trigger auxA = m_auxController.a();
@@ -381,11 +388,11 @@ public class RobotContainer {
         
         visionRight = new VisionSubsystem(
             VisionConstants.Cameras.right, 
-            () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red
+            () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red, drivetrain
         );
         visionLeft = new VisionSubsystem(
             VisionConstants.Cameras.left, 
-            () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red
+            () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red, drivetrain
         );
          
         
@@ -495,76 +502,7 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
         // end of swerve drive bindings
 
-        /* 
-        driveRightTriggerArmed.onTrue(
-                Commands.runOnce(() -> {
-                        RobotState cur = sm.getState();
-                        RobotState target;
-
-                        if (cur == RobotState.INTAKE_DOWN) {
-                                target = RobotState.HANDOFF;
-                                } else {
-                                target = RobotState.INTAKE_DOWN;
-                                }
-
-                                System.out.println("------------------------------ ROBOT STATE : " + cur + " -> " + target);
-
-                                sm.setState(target);
-                                
-
-                })
-                .andThen(Commands.parallel(
-                new edu.wpi.first.wpilibj2.command.ProxyCommand(
-                () -> sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake)
-                        .withInterruptBehavior(edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior.kCancelSelf)
-                        .withName("SM:" + sm.getState())
-                ),
-                pulseGate(rtGate) // re-arm regardless of command duration
-        )));
         
-        */
-        /*
-        driveLeftTrigger.onTrue(
-        Commands.runOnce(() -> sm.setState(RobotState.HANDOFF))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        );
-
-        driveRightTrigger.onTrue(
-        Commands.runOnce(() -> sm.setState(RobotState.INTAKE_DOWN))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        ); 
-        */
-        /* 
-        driveRightTrigger.onTrue(
-            Commands.runOnce(() -> System.out.println("on True"))
- 
-        ); 
-
-        driveRightTrigger.onFalse(
-            Commands.runOnce(() -> System.out.println("on False"))
-          
-        ); 
-        */
-        
-        /* 
-        driveA.onTrue(
-        Commands.runOnce(() -> sm.setState(RobotState.SCOREL1))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        );
-        driveB.onTrue(
-        Commands.runOnce(() -> sm.setState(RobotState.SCORE2))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        );
-        driveX.onTrue(
-        Commands.runOnce(() -> sm.setState(RobotState.SCORE3))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        );
-        driveY.onTrue(
-        Commands.runOnce(() -> sm.setState(RobotState.SCORE4))
-                .andThen(sm.build(elevatorSubsystem, arm, SwingGroundIntake, spinGroundIntake, intake))
-        );
-        
-        */
         //reviewed and passed
         driveRightTrigger.onTrue(
                 Commands.runOnce(() -> {
@@ -587,6 +525,9 @@ public class RobotContainer {
         driveRightTrigger.onFalse(
             Commands.runOnce(() -> System.out.println("on False"))
         ); 
+
+        driveRightBumper.whileTrue(aimAtTagR);
+        driveLeftBumper.whileTrue(aimAtTagL);
     
         /* 
         driveRightTriggerArmed.onTrue(
@@ -787,7 +728,7 @@ public class RobotContainer {
      * This method should be called from Robot.robotPeriodic()
      */
 
-     /*
+     
     public void fuseVisionMeasurements() {
         try {
             // Get current robot pose for reference
@@ -864,26 +805,27 @@ public class RobotContainer {
     
     private boolean isValidVisionMeasurement(VisionSubsystem.VisionEstimate estimate, Pose2d currentPose) {
         // Check if the measurement is recent (within 0.5 seconds)
-        double timeDiff = System.currentTimeMillis() / 1000.0 - estimate.timestamp();
-        if (timeDiff > 0.5) {
-            return false;
-        }
+        // double timeDiff = System.currentTimeMillis() / 1000.0 - estimate.timestamp();
+        // if (timeDiff > 2) {
+        //     System.out.println("Time Diff: " + timeDiff);
+        //     return false;
+        // }
         
         // Check if the pose is reasonable (not too far from current pose)
-        double distance = estimate.pose().getTranslation().getDistance(currentPose.getTranslation());
-        if (distance > 2.0) { // 2 meter threshold
-            return false;
-        }
+        // double distance = estimate.pose().getTranslation().getDistance(currentPose.getTranslation());
+        // if (distance > 2.0) { // 2 meter threshold
+        //     return false;
+        // }
         
         // Check if the rotation is reasonable
-        double rotationDiff = Math.abs(estimate.pose().getRotation().minus(currentPose.getRotation()).getRadians());
-        if (rotationDiff > Math.PI / 2) { // 90 degree threshold
-            return false;
-        }
+        // double rotationDiff = Math.abs(estimate.pose().getRotation().minus(currentPose.getRotation()).getRadians());
+        // if (rotationDiff > Math.PI / 2) { // 90 degree threshold
+        //     return false;
+        // }
         
         return true;
     }
-    */
+    
 
     public void setZero(){
 
