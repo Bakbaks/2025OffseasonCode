@@ -250,7 +250,7 @@ public class RobotContainer {
 
     Command NewStationLoad = new SequentialCommandGroup(
         Commands.deadline(
-            Commands.waitSeconds(3),
+            Commands.waitSeconds(2),
             new ElevatorSetPositionCommand(elevatorSubsystem, ElevatorConstants.STAGE_0_HEIGHT_DELTA)
                 //.alongWith(Commands.print("Elevator default: " + ElevatorConstants.STAGE_4_HEIGHT_DELTA.in(Meters))),
             , new SwingGroundIntakeCommand(SwingGroundIntake, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
@@ -262,7 +262,7 @@ public class RobotContainer {
         ),
         
         Commands.deadline(
-                Commands.waitSeconds(0.3),
+                Commands.waitSeconds(0.5),
                         new SwingGroundIntakeCommand(SwingGroundIntake, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
                             //.alongWith(Commands.print("Swing LOWERED: " + GroundIntakeConstants.GroundIntake_LOWERED_ANGLE_VERTICAL.in(Degrees))),
                         , new ElevatorSetPositionCommand(elevatorSubsystem, ElevatorConstants.STAGE_0_HEIGHT_DELTA)

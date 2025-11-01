@@ -13,6 +13,31 @@
                 "data": {
                   "pathName": "REDCENTER1"
                 }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "NewL4"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "NewScoreL4"
+                      }
+                    }
+                  ]
+                }
               }
             ]
           }

@@ -13,6 +13,38 @@
                 "data": {
                   "pathName": "REDLEFT1"
                 }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.25
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "NewL4"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "NewScoreL4"
+                }
               }
             ]
           }
@@ -26,6 +58,25 @@
                 "data": {
                   "pathName": "REDLEFT2"
                 }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.25
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "NewStationLoad"
+                      }
+                    }
+                  ]
+                }
               }
             ]
           }
@@ -38,6 +89,12 @@
                 "type": "path",
                 "data": {
                   "pathName": "REDLEFT3"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": []
                 }
               }
             ]
