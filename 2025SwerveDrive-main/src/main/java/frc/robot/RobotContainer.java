@@ -137,6 +137,7 @@ public class RobotContainer {
 
     //Fake button shenanigans
     // Software gate for right trigger
+    /* 
     private final java.util.concurrent.atomic.AtomicBoolean rtGate = new java.util.concurrent.atomic.AtomicBoolean(true);
 
     private final Trigger driveRightTriggerArmed = driveRightTrigger.and(new Trigger(rtGate::get));
@@ -159,8 +160,7 @@ public class RobotContainer {
                 Commands.runOnce(()-> gate.set(true))
         );
     }
-
-
+    */
     Command NewL4 = new SequentialCommandGroup(
                     Commands.deadline(
                         Commands.waitSeconds(0.1),
