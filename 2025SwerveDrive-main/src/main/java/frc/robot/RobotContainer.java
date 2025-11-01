@@ -397,9 +397,9 @@ public class RobotContainer {
 
         vision = new VisionAim(visionRight.getAprilTagFieldLayout());
         
-        AimAtTagPIDCommand aimAtTagR =
+        aimAtTagR =
             new AimAtTagPIDCommand(Constants.VisionConstants.TAG_TO_GOAL_RIGHT, drivetrain, vision);
-        AimAtTagPIDCommand aimAtTagL =
+        aimAtTagL =
             new AimAtTagPIDCommand(Constants.VisionConstants.TAG_TO_GOAL_LEFT, drivetrain, vision);
                 
                 
@@ -495,7 +495,7 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
             drivetrain.applyRequest(() -> drive
                 .withVelocityX(-mathProfiles.exponentialDrive(m_driverController.getLeftY(), 3) * MaxSpeed)
-                .withVelocityY( mathProfiles.exponentialDrive(m_driverController.getLeftX(), 3) * MaxSpeed)
+                .withVelocityY(-mathProfiles.exponentialDrive(m_driverController.getLeftX(), 3) * MaxSpeed)
                 .withRotationalRate(-mathProfiles.exponentialDrive(m_driverController.getRightX(), 2) * MaxAngularRate))
         );
 
@@ -835,16 +835,16 @@ public class RobotContainer {
         }
         
         // Check if the pose is reasonable (not too far from current pose)
-        // double distance = estimate.pose().getTranslation().getDistance(currentPose.getTranslation());
-        // if (distance > 2.0) { // 2 meter threshold
-        //     return false;
-        // }
+        double distance = estimate.pose().getTranslation().getDistance(currentPose.getTranslation());
+        if (distance > 2.0) { // 2 meter threshold
+            return false;
+        }
         
         // Check if the rotation is reasonable
-        // double rotationDiff = Math.abs(estimate.pose().getRotation().minus(currentPose.getRotation()).getRadians());
-        // if (rotationDiff > Math.PI / 2) { // 90 degree threshold
-        //     return false;
-        // }
+        double rotationDiff = Math.abs(estimate.pose().getRotation().minus(currentPose.getRotation()).getRadians());
+        if (rotationDiff > Math.PI / 2) { // 90 degree threshold
+            return false;
+        }
         
         return true;
     }

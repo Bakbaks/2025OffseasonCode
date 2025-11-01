@@ -23,12 +23,6 @@
                       "data": {
                         "waitTime": 0.25
                       }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "NewL4"
-                      }
                     }
                   ]
                 }
@@ -39,14 +33,7 @@
         {
           "type": "sequential",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "NewScoreL4"
-                }
-              }
-            ]
+            "commands": []
           }
         },
         {
@@ -67,12 +54,6 @@
                       "type": "wait",
                       "data": {
                         "waitTime": 0.25
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "NewStationLoad"
                       }
                     }
                   ]

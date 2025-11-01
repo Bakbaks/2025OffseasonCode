@@ -5,26 +5,25 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "NewL4"
+                }
+              },
               {
                 "type": "path",
                 "data": {
                   "pathName": "BLUECENTER1"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
+              },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "BLUECENTER2"
+                  "name": "NewScoreL4"
                 }
               }
             ]
