@@ -13,18 +13,18 @@ import java.util.Optional;
 
 /**
  * Drives the robot toward the nearest AprilTag using odometry and field layout.
- * No vision required.
+ * No vision required. Includes rotation control and smooth slowdown.
  */
 public class AimAtTagPIDCommand extends Command {
     private final CommandSwerveDrivetrain drivetrain;
     private final VisionAim vision;
-    private final Transform2d robot2goal;
+    private final Transform2d tagOffset;
 
     private Pose2d goalPose;
     private boolean hasTarget = false;
 
-    public AimAtTagPIDCommand(Transform2d robot2goal, CommandSwerveDrivetrain drivetrain, VisionAim vision) {
-        this.robot2goal = robot2goal;
+    public AimAtTagPIDCommand(Transform2d tagOffset, CommandSwerveDrivetrain drivetrain, VisionAim vision) {
+        this.tagOffset = tagOffset;
         this.drivetrain = drivetrain;
         this.vision = vision;
         addRequirements(drivetrain);
@@ -35,7 +35,7 @@ public class AimAtTagPIDCommand extends Command {
         hasTarget = false;
 
         Pose2d robotPose = drivetrain.getPose();
-        Optional<Pose2d> goalOpt = vision.computeNearestGoalPose(robotPose, robot2goal);
+        Optional<Pose2d> goalOpt = vision.computeNearestGoalPose(robotPose, tagOffset);
 
         if (goalOpt.isEmpty()) {
             System.out.println("[AimAtTagPID] No tags found in field layout.");
@@ -45,7 +45,7 @@ public class AimAtTagPIDCommand extends Command {
         goalPose = goalOpt.get();
         hasTarget = true;
 
-        System.out.printf("[AimAtTagPID] Moving toward nearest tag goal at (%.2f, %.2f) deg=%.1f%n",
+        System.out.printf("[AimAtTagPID] Target tag goal at (%.2f, %.2f) deg=%.1f%n",
                 goalPose.getX(), goalPose.getY(), goalPose.getRotation().getDegrees());
     }
 
@@ -55,26 +55,44 @@ public class AimAtTagPIDCommand extends Command {
 
         Pose2d currentPose = drivetrain.getPose();
 
+        // Continuously visualize positions
+        // drivetrain.getField().getObject("RobotPose").setPose(currentPose);
+        // drivetrain.getField().getObject("GoalPose").setPose(goalPose);
+
+        // Compute translational error in robot frame
         double dx = goalPose.getX() - currentPose.getX();
         double dy = goalPose.getY() - currentPose.getY();
-
         Translation2d fieldError = new Translation2d(dx, dy);
         Translation2d robotError = fieldError.rotateBy(currentPose.getRotation().unaryMinus());
 
         double xErr = robotError.getX();
         double yErr = robotError.getY();
 
-        if (Math.abs(xErr) < VisionConstants.XY_DEADBAND_M) xErr = 0.0;
-        if (Math.abs(yErr) < VisionConstants.XY_DEADBAND_M) yErr = 0.0;
+        // Proportional control
+        double vx = VisionConstants.KP_XY * xErr;
+        double vy = VisionConstants.KP_XY * yErr;
 
-        double vx = MathUtil.clamp(VisionConstants.KP_XY * xErr,
-                -VisionConstants.MAX_VX_M_PER_S, VisionConstants.MAX_VX_M_PER_S);
-        double vy = MathUtil.clamp(VisionConstants.KP_XY * yErr,
-                -VisionConstants.MAX_VX_M_PER_S, VisionConstants.MAX_VX_M_PER_S);
+        // Orientation control (face tag)
+        double headingError = MathUtil.angleModulus(
+                goalPose.getRotation().minus(currentPose.getRotation()).getRadians());
+        double omega = VisionConstants.KP_THETA * headingError;
+
+        // Clamp speeds
+        vx = MathUtil.clamp(vx, -VisionConstants.MAX_VX_M_PER_S, VisionConstants.MAX_VX_M_PER_S);
+        vy = MathUtil.clamp(vy, -VisionConstants.MAX_VY_M_PER_S, VisionConstants.MAX_VY_M_PER_S);
+        omega = MathUtil.clamp(omega, -VisionConstants.MAX_OMEGA_RAD_PER_S, VisionConstants.MAX_OMEGA_RAD_PER_S);
+
+        // Gradual slowdown near goal
+        double distToGoal = currentPose.getTranslation().getDistance(goalPose.getTranslation());
+        if (distToGoal < 0.5) {
+            double scale = MathUtil.clamp(distToGoal / 0.5, 0.2, 1.0);
+            vx *= scale;
+            vy *= scale;
+        }
 
         drivetrain.setOperatorPerspectiveForward(Rotation2d.kZero);
         drivetrain.setControl(new SwerveRequest.ApplyRobotSpeeds()
-                .withSpeeds(new ChassisSpeeds(vx, vy, 0))
+                .withSpeeds(new ChassisSpeeds(vx, vy, omega))
                 .withCenterOfRotation(new Translation2d()));
     }
 
@@ -82,8 +100,9 @@ public class AimAtTagPIDCommand extends Command {
     public boolean isFinished() {
         if (!hasTarget) return true;
         Pose2d cur = drivetrain.getPose();
-        double dist = cur.getTranslation().getDistance(goalPose.getTranslation());
-        return dist < VisionConstants.GOAL_POS_EPS_M;
+        double posDist = cur.getTranslation().getDistance(goalPose.getTranslation());
+        double rotDist = Math.abs(goalPose.getRotation().minus(cur.getRotation()).getDegrees());
+        return posDist < VisionConstants.GOAL_POS_EPS_M && rotDist < 5.0;
     }
 
     @Override

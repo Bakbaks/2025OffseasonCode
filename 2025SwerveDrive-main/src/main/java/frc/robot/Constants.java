@@ -391,9 +391,9 @@ public final class Constants {
     public static final double KP_THETA = 2.0;    
   
   
-    public static final double MAX_OMEGA_RAD_PER_S = Math.toRadians(90);
+    public static final double MAX_OMEGA_RAD_PER_S = Math.toRadians(45);
     public static final double MAX_VX_M_PER_S = 2.5;
-    
+    public static final double MAX_VY_M_PER_S = 2.5;
     //tolerance
     public static final double GOAL_POS_EPS_M = 0.01; //meters
     public static final double GOAL_ANG_EPS_RAD = Math.toRadians(2.0);

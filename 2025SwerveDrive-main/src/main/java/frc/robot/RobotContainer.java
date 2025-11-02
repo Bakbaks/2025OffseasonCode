@@ -398,7 +398,7 @@ public class RobotContainer {
             () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red, drivetrain
         );
 
-        vision = new VisionAim(visionRight.getAprilTagFieldLayout());
+        vision = new VisionAim(visionRight.getAprilTagFieldLayout(), drivetrain);
         
         aimAtTagR =
             new AimAtTagPIDCommand(Constants.VisionConstants.TAG_TO_GOAL_RIGHT, drivetrain, vision);
