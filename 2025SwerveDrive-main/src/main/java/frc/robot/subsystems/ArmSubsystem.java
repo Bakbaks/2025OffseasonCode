@@ -48,7 +48,7 @@ public class ArmSubsystem extends SubsystemBase {
         fx_cfg.Feedback.FeedbackRemoteSensorID = m_armCANCoder.getDeviceID();
         fx_cfg.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
         fx_cfg.Feedback.SensorToMechanismRatio = 1;
-        fx_cfg.Feedback.RotorToSensorRatio = ArmConstant.ArmGearRatio;
+        fx_cfg.Feedback.RotorToSensorRatio = ArmConstant.SensorGearRatio;
         fx_cfg.Slot0.withKP(ArmConstant.kArmP);
         fx_cfg.Slot0.withKI(ArmConstant.kArmI);
         fx_cfg.Slot0.withKD(ArmConstant.kArmD);

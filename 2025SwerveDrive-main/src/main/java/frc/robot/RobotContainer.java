@@ -94,6 +94,9 @@ public class RobotContainer {
     private final VisionSubsystem visionRight;
     private final VisionSubsystem visionLeft;
     private final VisionAim vision;
+
+    private static boolean disableVis = false;
+
     PathConstraints lims = new PathConstraints(
     3.0,                     // max m/s
     1.0,                     // max m/s^2
@@ -171,7 +174,7 @@ public class RobotContainer {
                         , new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
                             //.alongWith(Commands.print("Arm BASE: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
                         , new SpinGroundIntakeCommand(spinGroundIntake, 0),
-                        new IntakeSpinCommand(intake, -0.3)
+                        new IntakeSpinCommand(intake, -0.4)
                     ),
                     Commands.deadline(
                         Commands.waitSeconds(0.3),
@@ -182,7 +185,7 @@ public class RobotContainer {
                         , new ArmSetPositionCommand(arm, ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))
                             //.alongWith(Commands.print("Arm BASE: " + ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))),
                         , new SpinGroundIntakeCommand(spinGroundIntake, 0),
-                        new IntakeSpinCommand(intake, -0.3)
+                        new IntakeSpinCommand(intake, -0.4)
                     )
                 );
     Command NewScoreL4 = new SequentialCommandGroup(
@@ -199,7 +202,7 @@ public class RobotContainer {
         ),
 
         Commands.deadline(
-            Commands.waitSeconds(0.15),
+            Commands.waitSeconds(0.2),
             new ElevatorSetPositionCommand(elevatorSubsystem, ElevatorConstants.SCORE_STAGE_4_HEIGHT_DELTA)
                 //.alongWith(Commands.print("Elevator default: " + ElevatorConstants.SCORE_STAGE_4_HEIGHT_DELTA.in(Meters))),
             , new SwingGroundIntakeCommand(SwingGroundIntake, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
@@ -213,15 +216,15 @@ public class RobotContainer {
 
         Commands.deadline(
             Commands.waitSeconds(0.2),
-            new ElevatorSetPositionCommand(elevatorSubsystem, ElevatorConstants.STAGE_0_HEIGHT_DELTA)
+            new ElevatorSetPositionCommand(elevatorSubsystem, ElevatorConstants.SCORE_STAGE_4_HEIGHT_DELTA)
                 //.alongWith(Commands.print("Elevator default: " + ElevatorConstants.SCORE_STAGE_4_HEIGHT_DELTA.in(Meters))),
             , new SwingGroundIntakeCommand(SwingGroundIntake, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))
                 //.alongWith(Commands.print("Swing FEED: " + GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees))),
-            , new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
+            , new ArmSetPositionCommand(arm, ArmConstant.SCORE_STAGE_4_ANGLE_VERTICAL.in(Degrees))
                 //.alongWith(Commands.print("Arm BASE: " + ArmConstant.STAGE_4_ANGLE_VERTICAL.in(Degrees))),
             , new SpinGroundIntakeCommand(spinGroundIntake, 0),
             //new IntakeSpinCommand(intake, 0.1).withTimeout(1.0)
-            new IntakeSpinCommand(intake, 0.3).withTimeout(1.0)
+            new IntakeSpinCommand(intake, -0.3).withTimeout(1.0)
         )
 
 
@@ -244,7 +247,7 @@ public class RobotContainer {
             , new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))
                 //.alongWith(Commands.print("Arm BASE: " + ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees))),
             , new SpinGroundIntakeCommand(spinGroundIntake, 0.2),
-            new IntakeSpinCommand(intake, -0.3)
+            new IntakeSpinCommand(intake, -0.4)
         )
     );
 
@@ -278,7 +281,7 @@ public class RobotContainer {
 
 
         Commands.deadline(
-                Commands.waitSeconds(0.3),
+                Commands.waitSeconds(0.2),
                         new SwingGroundIntakeCommand(SwingGroundIntake, GroundIntakeConstants.GroundIntake_FEED_ANGLE_VERTICAL.in(Degrees)),
                         new ArmSetPositionCommand(arm, ArmConstant.ARM_BASE_ANGLE_VERTICAL.in(Degrees)),
                         new ElevatorSetPositionCommand(elevatorSubsystem, ElevatorConstants.ELEVATOR_HANDOFF_DELTA)
@@ -546,7 +549,11 @@ public class RobotContainer {
 
         driveRightBumper.whileTrue(aimAtTagR);
         driveLeftBumper.whileTrue(aimAtTagL);
-    
+                
+        driveA.onTrue(
+            Commands.runOnce(() -> disableVis = true)
+        ); 
+        
         /* 
         driveRightTriggerArmed.onTrue(
                 Commands.runOnce(() -> {
@@ -822,29 +829,33 @@ public class RobotContainer {
     
     
     private boolean isValidVisionMeasurement(VisionSubsystem.VisionEstimate estimate, Pose2d currentPose) {
+
+        if(disableVis == true){
+            return false;
+        }
         // Check if the measurement is recent (within 0.5 seconds)
         // double timeDiff = System.currentTimeMillis() / 1000.0 - estimate.timestamp();
         // if (timeDiff > 2) {
         //     System.out.println("Time Diff: " + timeDiff);
         //     return false;
         // }
-        double timeDiff = Timer.getFPGATimestamp() - estimate.timestamp();
-        if (timeDiff > 2) {
-            System.out.println("Time Diff: " + timeDiff);
-            return false;
-        }
+        // double timeDiff = Timer.getFPGATimestamp() - estimate.timestamp();
+        // if (timeDiff > 2) {
+        //     System.out.println("Time Diff: " + timeDiff);
+        //     return false;
+        // }
         
-        // Check if the pose is reasonable (not too far from current pose)
-        double distance = estimate.pose().getTranslation().getDistance(currentPose.getTranslation());
-        if (distance > 2.0) { // 2 meter threshold
-            return false;
-        }
+        // // Check if the pose is reasonable (not too far from current pose)
+        // double distance = estimate.pose().getTranslation().getDistance(currentPose.getTranslation());
+        // if (distance > 2.0) { // 2 meter threshold
+        //     return false;
+        // }
         
-        // Check if the rotation is reasonable
-        double rotationDiff = Math.abs(estimate.pose().getRotation().minus(currentPose.getRotation()).getRadians());
-        if (rotationDiff > Math.PI / 2) { // 90 degree threshold
-            return false;
-        }
+        // // Check if the rotation is reasonable
+        // double rotationDiff = Math.abs(estimate.pose().getRotation().minus(currentPose.getRotation()).getRadians());
+        // if (rotationDiff > Math.PI / 2) { // 90 degree threshold
+        //     return false;
+        // }
         
         return true;
     }

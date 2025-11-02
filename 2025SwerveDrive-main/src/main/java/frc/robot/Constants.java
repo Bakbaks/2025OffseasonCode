@@ -67,6 +67,7 @@ public final class Constants {
     public static final double TOLERANCE = 0.01;
 
     public static final double ArmGearRatio = 52.09722 / 1; // 
+    public static final double SensorGearRatio = (ArmGearRatio * 7)/ 10;
 
     public static final Distance ArmLength = Inches.of(16.1);
 
@@ -81,7 +82,7 @@ public final class Constants {
 
     public static final Angle CORAL_STATION_ANGLE_VERTICAL  = Degrees.of(-15);
     public static final Angle STAGE_1_ANGLE_VERTICAL        = Degrees.of(0);
-    public static final Angle STAGE_2_ANGLE_VERTICAL        = Degrees.of(165);
+    public static final Angle STAGE_2_ANGLE_VERTICAL        = Degrees.of(145);
     public static final Angle STAGE_3_ANGLE_VERTICAL        = Degrees.of(185.7);
     public static final Angle STAGE_4_ANGLE_VERTICAL        = Degrees.of(200);
 
@@ -98,7 +99,7 @@ public final class Constants {
     public static final Angle ARM_SUPERSCORE_ANGLE_VERTICAL        = Degrees.of(251.43);
     public static final Angle ARM_BACKSWING_ANGLE_VERTICAL        = Degrees.of(290.57);
     public static final Angle ARM_SUPERSWING_ANGLE_VERTICAL        = Degrees.of(228.57);
-    public static final Angle ARM_LOLI_ANGLE_VERTICAL              = Degrees.of(78.29);
+    public static final Angle ARM_LOLI_ANGLE_VERTICAL              = Degrees.of(67.29);
 
     //public static final Angle SAD_CORAL_STATION_ANGLE_VERTICAL  = Degrees.of(CORAL_STATION_ANGLE_VERTICAL.in(Degrees) * -1);
     //public static final Angle SAD_CORAL_STATION_ANGLE_VERTICAL  = Degrees.of(CORAL_STATION_ANGLE_VERTICAL.in(Degrees) * -1);
@@ -110,9 +111,8 @@ public final class Constants {
     //random stuff
     public static final double test = 0.0;
     public static final double kArmP = 4;
-    public static final double kArmI = 0; // 0.003;
-    public static final double kArmD = 0.5; // 0.001;
-
+    public static final double kArmI = 0.003; // 0.003;
+    public static final double kArmD = 0;
     public static final double kMaxAngle = 225;
     public static final double kMinAngle = -225;
 
@@ -142,7 +142,7 @@ public final class Constants {
 
     public static final Angle GroundIntake_FEED_ANGLE_VERTICAL = Degrees.of(0);
     //public static final Angle GroundIntake_LOWERED_ANGLE_VERTICAL = Degrees.of(-145);
-    public static final Angle GroundIntake_LOWERED_ANGLE_VERTICAL = Degrees.of(-140);
+    public static final Angle GroundIntake_LOWERED_ANGLE_VERTICAL = Degrees.of(-145);
     public static final Angle GroundIntake_LEVEL1_ANGLE_VERTICAL = Degrees.of(-70);
 
     public static final double kGroundP = 0.05;
