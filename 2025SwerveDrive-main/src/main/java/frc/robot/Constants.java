@@ -135,7 +135,7 @@ public final class Constants {
     public static final int kGroundIntakeID = 51;
     public static final int kGroundSwingID = 50;
     public static final int kGroundIntakeSwingCurrentLimit = 70;
-    public static final int kGroundIntakeCurrentLimit = 80;
+    public static final int kGroundIntakeCurrentLimit =100;
 
     public static final double GroundIntakeGearRatio = 40.9090909090909090909090909090909090909090909090909090909090901 / 1.0000000; // need to set
 
@@ -143,7 +143,7 @@ public final class Constants {
     public static final Angle GroundIntake_FEED_ANGLE_VERTICAL = Degrees.of(0);
     //public static final Angle GroundIntake_LOWERED_ANGLE_VERTICAL = Degrees.of(-145);
     public static final Angle GroundIntake_LOWERED_ANGLE_VERTICAL = Degrees.of(-145);
-    public static final Angle GroundIntake_LEVEL1_ANGLE_VERTICAL = Degrees.of(-70);
+    public static final Angle GroundIntake_LEVEL1_ANGLE_VERTICAL = Degrees.of(-65);
 
     public static final double kGroundP = 0.05;
     public static final double kGroundI = 0; //0.003;
